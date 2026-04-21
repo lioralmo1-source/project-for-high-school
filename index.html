@@ -1585,7 +1585,7 @@ a { text-decoration:none; }
         <h2 class="section-title">
           🏷️ יחידה 2 — תצורת השם
         </h2>
-        <span class="section-badge">3 שיעורים</span>
+        <span class="section-badge">5 שיעורים</span>
       </div>
       <div class="lessons-grid" id="lessons-grid-u2">
 
@@ -1670,6 +1670,38 @@ a { text-decoration:none; }
           </div>
         </div>
 
+        <!-- U4 -->
+        <div class="lesson-card" data-lesson-id="U4" style="--card-color:#b45309" onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">📊<div class="card-check" style="display:none">✓</div></div>
+              <div class="card-status-wrap"><span class="card-num">שיעור 4</span><span class="card-status open">פתוח</span></div>
+            </div>
+            <div class="card-title">משמעויות המשקלים והסיומות</div>
+            <div class="card-desc">לכל משקל — משמעות; לכל סיומת — תפקיד</div>
+          </div>
+          <div class="card-footer"><span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">התחל ←</button>
+          </div>
+        </div>
+
+        <!-- U5 -->
+        <div class="lesson-card" data-lesson-id="U5" style="--card-color:#0f766e" onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">⭐<div class="card-check" style="display:none">✓</div></div>
+              <div class="card-status-wrap"><span class="card-num">שיעור 5</span><span class="card-status open">פתוח</span></div>
+            </div>
+            <div class="card-title">תרגול מסכם</div>
+            <div class="card-desc">סיכום דרכי התצורה — חזרה לקראת בגרות</div>
+          </div>
+          <div class="card-footer"><span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">התחל ←</button>
+          </div>
+        </div>
+
       </div><!-- /lessons-grid-u2 -->
     </div>
 
@@ -1678,43 +1710,26 @@ a { text-decoration:none; }
     ═══════════════════════════════ -->
     <div class="lessons-section" id="unit3-section" style="padding-top:.5rem">
       <div class="section-header">
-        <h2 class="section-title">
-          🔮 יחידה 3 — גזרות הפועל
-        </h2>
+        <h2 class="section-title">🔮 יחידה 3 — גזרות הפועל</h2>
         <span class="section-badge">שיעור מבוא פעיל</span>
       </div>
       <div class="lessons-grid" id="lessons-grid-u3">
-
-        <!-- V0 -->
-        <div class="lesson-card" data-lesson-id="V0"
-             style="--card-color:#4f46e5"
-             onclick="handleCardClick(this)">
+        <div class="lesson-card" data-lesson-id="V0" style="--card-color:#4f46e5" onclick="handleCardClick(this)">
           <div class="card-accent"></div>
           <div class="card-body">
             <div class="card-top">
-              <div class="card-em">
-                🔊
-                <div class="card-check" style="display:none">✓</div>
-              </div>
-              <div class="card-status-wrap">
-                <span class="card-num">שיעור 0</span>
-                <span class="card-status open">פתוח</span>
-              </div>
+              <div class="card-em">🔊<div class="card-check" style="display:none">✓</div></div>
+              <div class="card-status-wrap"><span class="card-num">שיעור 0</span><span class="card-status open">פתוח</span></div>
             </div>
             <div class="card-title">תורת ההגה</div>
             <div class="card-desc">מבוא לגזרות הפועל — גרוניות, שווא ודגש</div>
           </div>
-          <div class="card-footer">
-            <span class="card-mins">⏱ 45′</span>
-            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
-              התחל ←
-            </button>
+          <div class="card-footer"><span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">התחל ←</button>
           </div>
         </div>
-
         <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 1</span><span class="soon-badge">⏳ בקרוב</span></div>
         <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 2</span><span class="soon-badge">⏳ בקרוב</span></div>
-
       </div><!-- /lessons-grid-u3 -->
     </div>
 
@@ -1991,7 +2006,7 @@ function renderGrid() {
       <span class="sb-em">🏷️</span>
       <span>יחידה 2 — תצורת השם</span>
     </button>
-    <button class="sb-link" onclick="document.getElementById('unit3-section')?.scrollIntoView({behavior:'smooth'});closeSidebar())">
+    <button class="sb-link" onclick="document.getElementById('unit3-section')?.scrollIntoView({behavior:'smooth'});closeSidebar()" style="opacity:.6">
       <span class="sb-em">🔮</span>
       <span>יחידה 3 — גזרות הפועל</span>
     </button>
@@ -2022,17 +2037,18 @@ function buildGridLockList() {
     U1: {emoji:'🏷️', title:'שורש ומשקל',              short:'שיעור 1', unit:'יחידה 2'},
     U2: {emoji:'🔤', title:'בסיס וסיומת',              short:'שיעור 2', unit:'יחידה 2'},
     U3: {emoji:'🔀', title:'דרכי תצורה — השוואה',       short:'שיעור 3', unit:'יחידה 2'},
+    U4: {emoji:'📊', title:'משמעויות המשקלים והסיומות', short:'שיעור 4', unit:'יחידה 2'},
+    U5: {emoji:'⭐', title:'תרגול מסכם',                     short:'שיעור 5', unit:'יחידה 2'},
   };
   const UNIT3 = {
     V0: {emoji:'🔊', title:'תורת ההגה — מבוא לגזרות', short:'שיעור 0', unit:'יחידה 3'},
-
+  };
   const ALL_LESSONS = {...UNIT1, ...UNIT2, ...UNIT3};
 
   // Section dividers
   const sections = [
     {label:'📘 יחידה 1 — מערכת הפועל', keys: Object.keys(UNIT1)},
     {label:'🏷️ יחידה 2 — תצורת השם',   keys: Object.keys(UNIT2)},
-    {label:'🔮 יחידה 3 — גזרות הפועל',   keys: Object.keys(UNIT3)},
     {label:'🔮 יחידה 3 — גזרות הפועל',   keys: Object.keys(UNIT3)},
   ];
   sections.forEach(sec => {
@@ -2168,7 +2184,7 @@ function toast(msg){
 /* ════════════════════════
    PASSWORD
 ════════════════════════ */
-async function hashPass(raw){
+async async function hashPass(raw){
   if(!raw)return'';
   try{
     const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('lashon_v7_'+raw));
@@ -2179,7 +2195,7 @@ async function hashPass(raw){
     return'fb_'+(h>>>0).toString(16);
   }
 }
-async function verifyPass(raw){
+async async function verifyPass(raw){
   const s=LS.get('lashon_tpass','');
   if(!s)return raw===DEFAULT_PASS;
   return(await hashPass(raw))===s;
@@ -2238,7 +2254,7 @@ function doStudentLogin(){
   fadeOutLogin(()=>enterApp('student','תלמיד/ה'));
 }
 
-async function doTeacherLogin(){
+async async function doTeacherLogin(){
   const pi=document.getElementById('tpass');
   const pass=(pi.value||'').trim();
   if(!pass){
