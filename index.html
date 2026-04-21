@@ -1723,7 +1723,20 @@ a { text-decoration:none; }
             <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">התחל ←</button>
           </div>
         </div>
-        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 1</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card" data-lesson-id="V1" style="--card-color:#6d28d9" onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">🌳<div class="card-check" style="display:none">✓</div></div>
+              <div class="card-status-wrap"><span class="card-num">שיעור 1</span><span class="card-status open">פתוח</span></div>
+            </div>
+            <div class="card-title">גזרת השלמים</div>
+            <div class="card-desc">זיהוי שורשים שלמים ומרובעים, הבחנה בין אותיות שורש לאית"ן ומבוא לגזרות</div>
+          </div>
+          <div class="card-footer"><span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">התחל ←</button>
+          </div>
+        </div>
         <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 2</span><span class="soon-badge">⏳ בקרוב</span></div>
       </div><!-- /lessons-grid-u3 -->
     </div>
@@ -1854,7 +1867,7 @@ a { text-decoration:none; }
 /* ════════════════════════
    GRID — lesson file map
 ════════════════════════ */
-const GRID_LESSONS = {'L0': {'file': 'unit1_lesson0_intro.html', 'id': 'u1_l0'}, 'L1': {'file': 'lesson1_shoresh_binyamin_v3.html', 'id': 'u1_l1'}, 'L2': {'file': 'lesson2_binyan_kal_v3.html', 'id': 'u1_l2'}, 'L3': {'file': 'lesson3_binyanim_kvedim_v3.html', 'id': 'u1_l3'}, 'L4': {'file': 'lesson4_hifil_hufal_v3.html', 'id': 'u1_l4'}, 'L5': {'file': 'lesson5_summary_mruba_v3.html', 'id': 'u1_l5'}, 'L6': {'file': 'lesson6.html', 'id': 'u1_l6'}, 'U1': {'file': 'unit2_lesson1.html', 'id': 'u2_l1'}, 'U2': {'file': 'unit2_lesson2.html', 'id': 'u2_l2'}, 'U3': {'file': 'unit2_lesson3.html', 'id': 'u2_l3'}, 'U4': {'file': 'unit2_lesson4.html', 'id': 'u2_l4'}, 'U5': {'file': 'unit2_lesson5.html', 'id': 'u2_l5'}, 'V0': {'file': 'unit3_lesson0.html', 'id': 'u3_l0'}};
+const GRID_LESSONS = {'L0': {'file': 'unit1_lesson0_intro.html', 'id': 'u1_l0'}, 'L1': {'file': 'lesson1_shoresh_binyamin_v3.html', 'id': 'u1_l1'}, 'L2': {'file': 'lesson2_binyan_kal_v3.html', 'id': 'u1_l2'}, 'L3': {'file': 'lesson3_binyanim_kvedim_v3.html', 'id': 'u1_l3'}, 'L4': {'file': 'lesson4_hifil_hufal_v3.html', 'id': 'u1_l4'}, 'L5': {'file': 'lesson5_summary_mruba_v3.html', 'id': 'u1_l5'}, 'L6': {'file': 'lesson6.html', 'id': 'u1_l6'}, 'U1': {'file': 'unit2_lesson1.html', 'id': 'u2_l1'}, 'U2': {'file': 'unit2_lesson2.html', 'id': 'u2_l2'}, 'U3': {'file': 'unit2_lesson3.html', 'id': 'u2_l3'}, 'U4': {'file': 'unit2_lesson4.html', 'id': 'u2_l4'}, 'U5': {'file': 'unit2_lesson5.html', 'id': 'u2_l5'}, 'V0': {'file': 'unit3_lesson0.html', 'id': 'u3_l0'}, 'V1': {'file': 'unit3_lesson1.html', 'id': 'u3_l1'}};
 
 /* ════════════════════════
    GRID — lock storage (mirrors UNITS logic)
@@ -2037,6 +2050,7 @@ function buildGridLockList() {
   };
   const UNIT3 = {
     V0: {emoji:'🔊', title:'תורת ההגה', short:'שיעור 0', unit:'יחידה 3'},
+    V1: {emoji:'🌳', title:'גזרת השלמים', short:'שיעור 1', unit:'יחידה 3'},
   };
   const ALL_LESSONS = {...UNIT1, ...UNIT2, ...UNIT3};
 
@@ -2131,9 +2145,9 @@ const UNITS=[
        desc:'עיצורים גרוניים, תנועות, שווא ודגש — הכלים לגזרות',
        file:'unit3_lesson0_phonology_v3.html'},
       {id:'u3_l1',short:'שיעור 1',emoji:'🌳',color:'#16a34a',mins:45,locked:false,exam:false,
-       title:'מבוא למערכת הפועל וגזרת השלמים',
+       title:'גזרת השלמים',
        desc:'זיהוי שורשים שלמים ומרובעים, הבחנה בין אותיות שורש לאית"ן ומבוא לגזרות',
-       file:'unit3_lesson1_shelamim_v3.html'},
+       file:'unit3_lesson1.html'},
       {id:'u3_l2',short:'שיעור 2',emoji:'🔡',color:'#9d174d',mins:45,locked:false,exam:false,
        title:'גזרת הגרוניים',
        desc:'פעלים עם א ה ח ע — שינויי ניקוד, דגש חסר וחטף',
