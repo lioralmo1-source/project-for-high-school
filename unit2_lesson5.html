@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<!-- Firebase SDK (load in head if needed):
+// firebase-app-compat.js
+// firebase-firestore-compat.js
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>יחידה 2 שיעור 5 — תרגול מסכם | לשון עברית י׳</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f2f5; --surface:#ffffff; --s2:#f4f7fd; --border:#d0d7e3;
+  --navy:#1a3a6b; --navy-lt:#2563b8; --teal:#0d7a6a;
+  --earth:#8b5e3c; --sun:#e8a020; --danger:#c0392b;
+  --purple:#6b3aed; --green:#16a34a; --amber:#b45309;
+  --text:#1c2433; --mid:#3e4a5c; --muted:#6b7a8d;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;text-align:right;line-height:1.7}
+.tab-btn{transition:all .2s;border-bottom:3px solid transparent;white-space:nowrap;background:transparent;border-top:none;border-right:none;border-left:none;cursor:pointer;font-family:'Heebo',sans-serif}
+.tab-btn.active{border-bottom-color:var(--navy);color:var(--navy)!important;font-weight:700}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.hero{background:linear-gradient(160deg,#0c2040 0%,#1a3a6b 45%,#1a5080 100%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.6rem;margin-bottom:1.25rem;box-shadow:0 2px 8px rgba(26,58,107,.07);transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 20px rgba(26,58,107,.13)}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:1.1rem;box-shadow:0 2px 8px rgba(26,58,107,.07)}
+.ctable{width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden}
+.ctable th{background:var(--navy);color:#fff;padding:10px 14px;font-size:.85rem;font-weight:700}
+.ctable td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:.9rem;line-height:1.6}
+.ctable tr:nth-child(even) td{background:#f4f7fd}
+.ctable tr:hover td{background:#e3ecf8;transition:background .15s}
+.tb{border-right:5px solid var(--navy-lt);padding:1rem 1.25rem;background:#e7f3ff;border-radius:0 12px 12px 0;margin-bottom:1rem}
+.tb .bt{font-weight:800;color:var(--navy);font-size:.9rem;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.tb.tip{border-right-color:var(--sun);background:#fef9e7}.tb.tip .bt{color:#7a5200}
+.tb.danger{border-right-color:var(--danger);background:#fdecea}.tb.danger .bt{color:var(--danger)}
+.tb.teal{border-right-color:var(--teal);background:#e6f7f5}.tb.teal .bt{color:var(--teal)}
+.tb.purple{border-right-color:var(--purple);background:#f0ebff}.tb.purple .bt{color:var(--purple)}
+.tb.green{border-right-color:var(--green);background:#f0fdf4}.tb.green .bt{color:var(--green)}
+.tb.earth{border-right-color:var(--earth);background:#f7efe8}.tb.earth .bt{color:var(--earth)}
+.tb.amber{border-right-color:var(--amber);background:#fffbeb}.tb.amber .bt{color:var(--amber)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 11px;border-radius:100px;font-size:.75rem;font-weight:700;letter-spacing:.03em}
+.wchip{display:inline-block;background:#e7f3ff;color:var(--navy);border-radius:6px;padding:1px 9px;font-weight:700;font-size:.9rem}
+.wchip.teal{background:#e6f7f5;color:var(--teal)}
+.wchip.purple{background:#f0ebff;color:var(--purple)}
+.wchip.green{background:#d4f5e9;color:#0a4f30}
+.wchip.amber{background:#fffbeb;color:var(--amber)}
+.hl-n{background:#c8dff8;padding:1px 4px;border-radius:3px;color:#0d2a6b;font-weight:700}
+.hl-t{background:#c2ede8;padding:1px 4px;border-radius:3px;color:#0a4f45;font-weight:700}
+.hl-g{background:#d4f5e9;padding:1px 4px;border-radius:3px;color:#0a4f30;font-weight:700}
+.s-title{font-family:'Secular One',sans-serif;color:var(--navy);font-size:1.2rem;border-bottom:2px solid var(--border);padding-bottom:8px;margin-bottom:18px}
+.fb-ok{background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:.7rem 1rem;margin-top:.5rem;font-size:.88rem;color:#15803d;display:none}
+.fb-err{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:.7rem 1rem;margin-top:.5rem;font-size:.88rem;color:#b91c1c;display:none}
+.fb-ok.show,.fb-err.show{display:block}
+.mc-opt{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s;user-select:none;margin-bottom:.45rem;background:var(--surface);min-height:44px}
+.mc-opt:hover{border-color:var(--navy-lt);background:#e7f3ff}
+.mc-opt.correct{border-color:var(--green);background:#f0fdf4}
+.mc-opt.wrong{border-color:var(--danger);background:#fdecea}
+input[type=radio]{accent-color:var(--navy-lt);width:16px;height:16px;flex-shrink:0}
+/* Summary sign boxes */
+.sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1rem}
+.sign-box{border-radius:14px;padding:1.1rem 1.2rem;border:2px solid}
+.sign-box .sign-title{font-family:'Secular One',sans-serif;font-size:.95rem;margin-bottom:.5rem}
+.sign-box .sign-list{font-size:.88rem;line-height:1.9;color:var(--mid)}
+/* Progress bar in hero */
+.prog-wrap{height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#a8d4f0,#6dcbfa);border-radius:3px;transition:width .4s}
+#timer-display{font-family:'Secular One',sans-serif;font-size:2.1rem;color:#a8d4f0;letter-spacing:.04em}
+#timer-display.warning{color:#ff9f7f;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+/* Modal */
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center}
+#modal.show{display:flex}
+/* AI answer items */
+.ai{border-right:4px solid var(--navy-lt);padding:.65rem 1rem;margin-bottom:.75rem;background:#e7f3ff;border-radius:0 10px 10px 0;font-size:.9rem;line-height:1.7}
+.ai.teal{border-color:var(--teal);background:#e6f7f5}
+.ai.earth{border-color:var(--earth);background:#f7efe8}
+.ai.green{border-color:var(--green);background:#f0fdf4}
+.ai.purple{border-color:var(--purple);background:#f0ebff}
+.ai.danger{border-color:var(--danger);background:#fdecea}
+.ai.amber{border-color:var(--amber);background:#fffbeb}
+@media print{
+  @page{size:A4 portrait;margin:1.5cm 1.4cm 1.8cm}
+  *,*::before,*::after{print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
+  .no-print,nav,header,.hero,#modal,.fb-ok,.fb-err,.submit-card{display:none!important}
+  .tab-pane{display:block!important;page-break-after:always}
+  html,body{background:#fff!important;font-size:11pt;color:#111}
+  .card,.q-card{border:1pt solid #d1d6e5!important;box-shadow:none!important;break-inside:avoid}
+  .teacher-only{display:none!important}
+  body.teacher-mode .teacher-only{display:block!important;background:#fffbeb!important;border:1.5pt solid #fde68a!important;border-radius:5pt!important;padding:.28cm .42cm!important;margin-top:.3cm!important}
+}
+@media(max-width:640px){
+  .card,.q-card{padding:1rem!important}
+  .ctable{font-size:.8rem}.ctable th,.ctable td{padding:7px 8px}
+  #timer-display{font-size:1.5rem}
+  .sign-grid{grid-template-columns:1fr}
+}
+button,.tab-btn{min-height:44px;touch-action:manipulation}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero text-white py-10 px-5 no-print" style="position:relative;z-index:1">
+  <div class="max-w-5xl mx-auto relative" style="z-index:2">
+    <div class="flex items-start justify-between flex-wrap gap-4">
+      <div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <span class="badge" style="background:rgba(168,212,240,.2);color:#a8d4f0;border:1px solid rgba(168,212,240,.4)">כיתה י׳</span>
+          <span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15)">לשון עברית</span>
+          <span class="badge" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15)">יחידה 2 — מערכת השם</span>
+          <span class="badge" style="background:rgba(255,215,0,.25);color:#ffd700;border:1px solid rgba(255,215,0,.4);font-weight:800">⭐ שיעור מסכם</span>
+        </div>
+        <h1 style="font-family:'Secular One',sans-serif;font-size:clamp(1.6rem,4vw,2.7rem);line-height:1.15;margin-bottom:10px">
+          שיעור 5 — תרגול מסכם
+          <span style="display:block;font-size:clamp(1rem,2.5vw,1.5rem);color:#a8d4f0;margin-top:4px">סיכום כל דרכי התצורה · 15 שאלות מסכמות</span>
+        </h1>
+        <p style="color:rgba(255,255,255,.65);font-size:.97rem;max-width:520px">חזרה מקיפה על שורש+משקל, בסיס+סיומת ומשמעויות — הכנה לבגרות</p>
+      </div>
+      <div style="background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:16px 20px;min-width:185px;text-align:center" class="no-print">
+        <div style="font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:4px;letter-spacing:.1em">⏱ טיימר שיעור</div>
+        <div id="timer-display">45:00</div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+          <button onclick="startTimer()" style="background:#a8d4f0;color:#0c2040;border:none;border-radius:7px;padding:5px 14px;font-family:'Heebo',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer">▶ התחל</button>
+          <button onclick="resetTimer()" style="background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:5px 10px;font-family:'Heebo',sans-serif;font-size:.78rem;cursor:pointer">↺</button>
+        </div>
+        <div id="phase-ind" style="font-size:.74rem;color:#a8d4f0;margin-top:8px;min-height:1.2em"></div>
+      </div>
+    </div>
+    <div style="margin-top:22px" class="no-print">
+      <div style="display:flex;justify-content:space-between;font-size:.71rem;color:rgba(255,255,255,.45);margin-bottom:5px"><span>התקדמות השיעור</span><span id="prog-pct">0%</span></div>
+      <div class="prog-wrap"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="no-print sticky top-0 z-50" style="background:var(--surface);border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06)">
+  <div class="max-w-5xl mx-auto px-4" style="display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none">
+    <button class="tab-btn active px-4 py-3 text-sm" onclick="showTab('th',this)" style="color:var(--navy)">📚 סיכום</button>
+    <button class="tab-btn px-4 py-3 text-sm" onclick="showTab('tw',this)" style="color:var(--muted)">✏️ תרגול</button>
+    <button class="tab-btn px-4 py-3 text-sm teacher-only" onclick="showTab('ta',this)" style="display:none!important;color:var(--muted)">🔑 פתרונות</button>
+    <button class="tab-btn px-4 py-3 text-sm teacher-only" onclick="showTab('tq',this)" style="display:none!important;color:var(--muted)">📊 דשבורד</button>
+    <button onclick="window.location.href='index.html'" style="padding:6px 14px;font-size:.78rem;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:8px;cursor:pointer;white-space:nowrap;font-family:'Heebo',sans-serif;min-height:44px;margin-right:auto" class="no-print">🏠 תפריט</button>
+    <button onclick="window.print()" style="padding:8px 16px;font-size:.8rem;color:var(--muted);background:transparent;border:none;cursor:pointer;white-space:nowrap" class="no-print">🖨️ הדפס</button>
+  </div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-4 py-8">
+
+<!-- ════════════════════════════════
+     TAB: סיכום (th)
+════════════════════════════════ -->
+<div id="th" class="tab-pane active">
+
+  <div class="card" style="border-top:4px solid var(--navy)">
+    <h2 class="s-title">⭐ סיכום יחידה 2 — כל מה שצריך לדעת לבגרות</h2>
+    <p style="font-size:.95rem;color:var(--mid);margin-bottom:1.1rem">שתי דרכי תצורה עיקריות ומשמעויותיהן — כרטיס חזרה קומפקטי:</p>
+
+    <div class="sign-grid">
+      <div class="sign-box" style="background:#e7f3ff;border-color:#bfdbfe">
+        <div class="sign-title" style="color:var(--navy)">🔷 שורש + משקל</div>
+        <div class="sign-list">
+          <strong>מהו:</strong> שורש (3–4 עיצורים) + תבנית ניקוד קבועה<br>
+          <strong>זיהוי:</strong> אי אפשר לקצץ ולקבל מילה עצמאית<br>
+          <strong>מבחן:</strong> האם יש שורש ברור + אותיות שירות (מ/ת/ה)?<br>
+          <strong>דוגמה:</strong> מַצְלֵמָה (צ-ל-מ + מַקְטֵלָה)
+        </div>
+      </div>
+      <div class="sign-box" style="background:#e6f7f5;border-color:#99f6e4">
+        <div class="sign-title" style="color:var(--teal)">🔶 בסיס + סיומת</div>
+        <div class="sign-list">
+          <strong>מהו:</strong> מילה שלמה + תוספת בסוף<br>
+          <strong>זיהוי:</strong> קיצוץ הסוף → מילה עצמאית!<br>
+          <strong>מבחן:</strong> האם אנחנו מכירים את המילה שנשארת?<br>
+          <strong>דוגמה:</strong> עִתּוֹנַאי (עיתון + -ַאי)
+        </div>
+      </div>
+    </div>
+
+    <div class="tb tip">
+      <div class="bt">💡 טריק הזיהוי המנצח — 3 שאלות בסדר</div>
+      <p style="font-size:.9rem;line-height:2">
+        ① האם המילה "זרה" לחלוטין? → ייתכן השאלה (טֶלֶפוֹן, רָדִיוֹ)<br>
+        ② האם קיצוץ הסוף נותן מילה קיימת? → <strong>בסיס + סיומת</strong><br>
+        ③ האם יש שורש ברור + תבנית ניקוד? → <strong>שורש + משקל</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="s-title">📋 טבלת סיכום — משקלים וסיומות לפי קטגוריה</h2>
+    <div style="overflow-x:auto">
+      <table class="ctable">
+        <thead>
+          <tr><th>קטגוריה</th><th>שורש + משקל</th><th>בסיס + סיומת</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>בעל מקצוע</strong></td><td><span class="wchip">קַטָּל</span> ← סַפָּר, נַגָּר</td><td><span class="wchip teal">-ַאי / -ָן</span> ← עִתּוֹנַאי, כַּדּוּרְגְּלָן</td></tr>
+          <tr><td><strong>מכשיר/כלי</strong></td><td><span class="wchip">מַקְטֵל/ָה</span> ← מַחְשֵׁב, מַצְלֵמָה</td><td><span class="wchip teal">-ִיָּה</span> (לפעמים) ← שְׁקִיפִיָּה</td></tr>
+          <tr><td><strong>מקום</strong></td><td><span class="wchip">מִקְטָלָה</span> ← מִסְפָּרָה, מִסְעָדָה</td><td><span class="wchip teal">-ִיָּה / -ָנִיָּה</span> ← סִפְרִיָּה, צַלְמָנִיָּה</td></tr>
+          <tr><td><strong>תכונה מופשטת</strong></td><td>—</td><td><span class="wchip teal">-וּת</span> ← יַלְדוּת, חַבְרוּת</td></tr>
+          <tr><td><strong>שם פעולה</strong></td><td><span class="wchip">קְטִילָה</span> ← כְּתִיבָה, שְׁמִירָה</td><td>—</td></tr>
+          <tr><td><strong>מחלה</strong></td><td><span class="wchip">קַטֶּלֶת</span> ← שַׁעֶלֶת, דַּלֶּקֶת</td><td>—</td></tr>
+          <tr><td><strong>מכשיר טכני</strong></td><td><span class="wchip">תַּקְטִיל</span> ← תַּקְלִיט, תַּסְרִיט</td><td>—</td></tr>
+          <tr><td><strong>הקטנה</strong></td><td>—</td><td><span class="wchip teal">-וֹן</span> ← מַחְשְׁבוֹן, יַלְדּוֹן</td></tr>
+          <tr><td><strong>שם תואר</strong></td><td>—</td><td><span class="wchip teal">-ִי</span> ← יִשְׂרְאֵלִי, מַדְעִי</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="s-title">⚠️ מלכודות נפוצות בבגרות</h2>
+    <div class="tb danger">
+      <div class="bt">מלכודת 1 — מִסְפָּרָה ≠ בסיס+סיומת</div>
+      <p style="font-size:.88rem">מִסְפָּרָה נראית כמו "מספר + ה" אבל היא <strong>שורש+משקל</strong> (ס-פ-ר + מִקְטָלָה). "מספר" אינה הבסיס כי המ׳ היא אות משקל.</p>
+    </div>
+    <div class="tb danger" style="margin-top:.5rem">
+      <div class="bt">מלכודת 2 — מַדְפֶּסֶת ≠ "מדף + סת"</div>
+      <p style="font-size:.88rem">שורש ד-פ-ס + משקל מַקְטֶלֶת. אין קשר ל"מדף" — הדגש הוא על פ׳׳פ (דגש בפ).</p>
+    </div>
+    <div class="tb danger" style="margin-top:.5rem">
+      <div class="bt">מלכודת 3 — גַּנָּן ≠ "גנן + ה"</div>
+      <p style="font-size:.88rem">שורש ג-נ-נ + משקל קַטָּל (מכופל). הנ׳׳ן האחרונה היא אות שורש, לא סיומת.</p>
+    </div>
+    <div class="tb danger" style="margin-top:.5rem">
+      <div class="bt">מלכודת 4 — מַחְשְׁבוֹן — שתי שכבות</div>
+      <p style="font-size:.88rem">מַחְשֵׁב (שורש+משקל: ח-שׁ-ב + מַקְטֵל) + סיומת -וֹן = שילוב <em>שתי</em> דרכי תצורה. בבגרות: יש לפרק בשני שלבים.</p>
+    </div>
+  </div>
+
+</div><!-- /th -->
+
+<!-- ════════════════════════════════
+     TAB: תרגול (tw)
+════════════════════════════════ -->
+<div id="tw" class="tab-pane">
+
+  <div class="card" style="border-top:4px solid var(--navy)">
+    <h2 class="s-title">✏️ תרגול מסכם — 15 שאלות</h2>
+    <div style="background:#e7f3ff;border-radius:10px;padding:.85rem 1.1rem;margin-bottom:1.2rem;font-size:.88rem;color:var(--navy)">
+      <strong>הוראות:</strong> בחרו תשובה — תקבלו פידבק מיידי. השאלות מכסות את כל יחידה 2.
+    </div>
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div><label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:3px">שם:</label>
+        <input type="text" id="sname" placeholder="שמכם/ן" style="font-family:'Heebo',sans-serif;direction:rtl;background:#fafdff;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;width:100%;font-size:1rem;color:var(--text)"></div>
+      <div><label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:3px">כיתה:</label>
+        <input type="text" id="sclass" placeholder="כיתה" style="font-family:'Heebo',sans-serif;direction:rtl;background:#fafdff;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;width:100%;font-size:1rem;color:var(--text)"></div>
+      <div><label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:3px">תאריך:</label>
+        <input type="text" id="sdate" placeholder="תאריך" style="font-family:'Heebo',sans-serif;direction:rtl;background:#fafdff;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;width:100%;font-size:1rem;color:var(--text)"></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 1 — <span class="wchip">טַבָּח</span> — דרך תצורה</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">הטכניק של בדיקת "האם קיצוץ הסוף נותן מילה?" — מה מסקנתנו לגבי <strong>טַבָּח</strong>?</p>
+    <div onclick="pickMC('q1','a','correct')" class="mc-opt"><input type="radio" name="q1" value="a">שורש+משקל — קַטָּל (ט-ב-ח) | קיצוץ "טב" לא נותן מילה עצמאית</div>
+    <div onclick="pickMC('q1','b','wrong')" class="mc-opt"><input type="radio" name="q1" value="b">בסיס+סיומת — "טב" + סיומת "-ח"</div>
+    <div onclick="pickMC('q1','c','wrong')" class="mc-opt"><input type="radio" name="q1" value="c">השאלה — מילה לועזית</div>
+    <div id="q1-ok" class="fb-ok">✅ נכון! טַבָּח = שורש ט-ב-ח + משקל קַטָּל (בעל מקצוע). קיצוץ לא נותן מילה → שורש+משקל.</div>
+    <div id="q1-err" class="fb-err">❌ לא נכון. טַבָּח = שורש ט-ב-ח + משקל קַטָּל. "טב" אינה מילה עצמאית → לא בסיס+סיומת.</div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 2 — <span class="wchip teal">חַשְׁמַלַּאי</span> — בסיס וסיומת</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">מהו הבסיס ומהי הסיומת?</p>
+    <div onclick="pickMC('q2','a','correct')" class="mc-opt"><input type="radio" name="q2" value="a">בסיס: חַשְׁמַל + סיומת: -ַאי (בעל מקצוע)</div>
+    <div onclick="pickMC('q2','b','wrong')" class="mc-opt"><input type="radio" name="q2" value="b">בסיס: חַשְׁמַלַּ + סיומת: -אִי</div>
+    <div onclick="pickMC('q2','c','wrong')" class="mc-opt"><input type="radio" name="q2" value="c">שורש ח-שׁ-מ + משקל קַטָּל</div>
+    <div id="q2-ok" class="fb-ok">✅ נכון! חַשְׁמַל (מילה קיימת) + -ַאי = בעל מקצוע. כמו: עִתּוֹנַאי, חַקְלַאי.</div>
+    <div id="q2-err" class="fb-err">❌ לא נכון. הבסיס = חַשְׁמַל (מילה שלמה!). הסיומת = -ַאי (בעל מקצוע).</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 3 — <span class="wchip">מִסְעָדָה</span> — משמעות משקל</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">מה משמעות המשקל מִקְטָלָה במילה מִסְעָדָה?</p>
+    <div onclick="pickMC('q3','a','wrong')" class="mc-opt"><input type="radio" name="q3" value="a">בעל מקצוע</div>
+    <div onclick="pickMC('q3','b','wrong')" class="mc-opt"><input type="radio" name="q3" value="b">מכשיר</div>
+    <div onclick="pickMC('q3','c','correct')" class="mc-opt"><input type="radio" name="q3" value="c">מקום / מוסד</div>
+    <div onclick="pickMC('q3','d','wrong')" class="mc-opt"><input type="radio" name="q3" value="d">שם פעולה</div>
+    <div id="q3-ok" class="fb-ok">✅ נכון! מִקְטָלָה = מקום/מוסד. שורש ס-ע-ד. כמוה: מִסְפָּרָה, מִרְפָּאָה, מִמְשָׁלָה.</div>
+    <div id="q3-err" class="fb-err">❌ לא נכון. מִקְטָלָה = מקום/מוסד תמיד. מִסְעָדָה = המקום שבו סועדים.</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 4 — מלכודת! <span class="wchip">מִסְפָּרָה</span></div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">תלמיד אמר: "מִסְפָּרָה = בסיס מספר + סיומת -ה". האם הוא צודק?</p>
+    <div onclick="pickMC('q4','a','wrong')" class="mc-opt"><input type="radio" name="q4" value="a">כן, בדיוק כך</div>
+    <div onclick="pickMC('q4','b','correct')" class="mc-opt"><input type="radio" name="q4" value="b">לא — מִסְפָּרָה = שורש ס-פ-ר + משקל מִקְטָלָה</div>
+    <div onclick="pickMC('q4','c','wrong')" class="mc-opt"><input type="radio" name="q4" value="c">לא — היא השאלה מלועזית</div>
+    <div id="q4-ok" class="fb-ok">✅ נכון, הוא טועה! מִסְפָּרָה = שורש ס-פ-ר + מִקְטָלָה (מקום). המ׳ בתחילה היא אות משקל, לא בסיס. "מספר" עצמו הוא שורש+משקל!</div>
+    <div id="q4-err" class="fb-err">❌ לא נכון. "מספר" אינה בסיס כשר כי גם היא שורש+משקל. מִסְפָּרָה = שורש ס-פ-ר + מִקְטָלָה.</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 5 — <span class="wchip teal">יַלְדוּת</span> — תפקיד סיומת</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">מה תפקיד הסיומת -וּת?</p>
+    <div onclick="pickMC('q5','a','wrong')" class="mc-opt"><input type="radio" name="q5" value="a">מקצוע</div>
+    <div onclick="pickMC('q5','b','wrong')" class="mc-opt"><input type="radio" name="q5" value="b">הקטנה</div>
+    <div onclick="pickMC('q5','c','correct')" class="mc-opt"><input type="radio" name="q5" value="c">תכונה / מצב מופשט</div>
+    <div onclick="pickMC('q5','d','wrong')" class="mc-opt"><input type="radio" name="q5" value="d">מקום</div>
+    <div id="q5-ok" class="fb-ok">✅ נכון! -וּת = תכונה/מצב מופשט. יַלְדוּת, חַבְרוּת, עַצְמָאוּת, אֶזְרָחוּת.</div>
+    <div id="q5-err" class="fb-err">❌ לא נכון. -וּת = תכונה/מצב מופשט. "יַלְדוּת" = מצב של היות ילד.</div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 6 — <span class="wchip">שְׁמִירָה</span> — זיהוי משקל</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">שְׁמִירָה שייכת למשקל קְטִילָה. מה קטגוריית המשמעות?</p>
+    <div onclick="pickMC('q6','a','wrong')" class="mc-opt"><input type="radio" name="q6" value="a">בעל מקצוע</div>
+    <div onclick="pickMC('q6','b','correct')" class="mc-opt"><input type="radio" name="q6" value="b">שם פעולה</div>
+    <div onclick="pickMC('q6','c','wrong')" class="mc-opt"><input type="radio" name="q6" value="c">מקום</div>
+    <div onclick="pickMC('q6','d','wrong')" class="mc-opt"><input type="radio" name="q6" value="d">מחלה</div>
+    <div id="q6-ok" class="fb-ok">✅ נכון! קְטִילָה = שם פעולה. שורש שׁ-מ-ר. כמוה: כְּתִיבָה, בְּנִיָּה, נְסִיעָה.</div>
+    <div id="q6-err" class="fb-err">❌ לא נכון. קְטִילָה = שם פעולה. שְׁמִירָה = פעולת השמירה.</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 7 — <span class="wchip teal">סִפְרִיָּה</span> לעומת <span class="wchip">מִסְפָּרָה</span></div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">שתי מקומות. מה ההבדל בין דרכי התצורה שלהן?</p>
+    <div onclick="pickMC('q7','a','wrong')" class="mc-opt"><input type="radio" name="q7" value="a">שתיהן שורש+משקל</div>
+    <div onclick="pickMC('q7','b','wrong')" class="mc-opt"><input type="radio" name="q7" value="b">שתיהן בסיס+סיומת</div>
+    <div onclick="pickMC('q7','c','correct')" class="mc-opt"><input type="radio" name="q7" value="c">סִפְרִיָּה = בסיס+סיומת | מִסְפָּרָה = שורש+משקל</div>
+    <div onclick="pickMC('q7','d','wrong')" class="mc-opt"><input type="radio" name="q7" value="d">מִסְפָּרָה = בסיס+סיומת | סִפְרִיָּה = שורש+משקל</div>
+    <div id="q7-ok" class="fb-ok">✅ נכון! סִפְרִיָּה: ספר + -ִיָּה (בסיס ברור). מִסְפָּרָה: ס-פ-ר + מִקְטָלָה (המ׳ = אות משקל). שני מקומות — שתי דרכי תצורה!</div>
+    <div id="q7-err" class="fb-err">❌ לא נכון. סִפְרִיָּה = בסיס ספר + -ִיָּה. מִסְפָּרָה = שורש ס-פ-ר + מִקְטָלָה.</div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 8 — שאלה חדשה: <span class="wchip">מַטְחֵנָה</span></div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">מילה חדשה מהשורש ט-ח-נ. בעזרת הכלים שלמדתם — מה משמעותה?</p>
+    <div onclick="pickMC('q8','a','wrong')" class="mc-opt"><input type="radio" name="q8" value="a">בעל מקצוע — מי שטוחן</div>
+    <div onclick="pickMC('q8','b','correct')" class="mc-opt"><input type="radio" name="q8" value="b">מכשיר/כלי לטחינה (מַקְטֵלָה)</div>
+    <div onclick="pickMC('q8','c','wrong')" class="mc-opt"><input type="radio" name="q8" value="c">מקום — בית הטחינה</div>
+    <div onclick="pickMC('q8','d','wrong')" class="mc-opt"><input type="radio" name="q8" value="d">פעולת הטחינה</div>
+    <div id="q8-ok" class="fb-ok">✅ נכון! מַקְטֵלָה = כלי/מכשיר (נקבה). שורש ט-ח-נ + מַקְטֵלָה = מכשיר לטחינה. כמו: מַצְלֵמָה, מַכְבֵּסָה.</div>
+    <div id="q8-err" class="fb-err">❌ לא נכון. המשקל מַקְטֵלָה = מכשיר/כלי. מַטְחֵנָה = מכשיר שטוחן.</div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 9 — <span class="wchip teal">מַחְשְׁבוֹן</span> — שני שלבים</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">מַחְשְׁבוֹן נוצר בשני שלבים. מה הנכון?</p>
+    <div onclick="pickMC('q9','a','wrong')" class="mc-opt"><input type="radio" name="q9" value="a">שורש ח-שׁ-ב + סיומת -וֹן בלבד</div>
+    <div onclick="pickMC('q9','b','wrong')" class="mc-opt"><input type="radio" name="q9" value="b">בסיס "מחשב" + סיומת -וֹן בלבד</div>
+    <div onclick="pickMC('q9','c','correct')" class="mc-opt"><input type="radio" name="q9" value="c">שלב א׳: מַחְשֵׁב (ח-שׁ-ב + מַקְטֵל) → שלב ב׳: + סיומת -וֹן (הקטנה)</div>
+    <div onclick="pickMC('q9','d','wrong')" class="mc-opt"><input type="radio" name="q9" value="d">השאלה מלועזית</div>
+    <div id="q9-ok" class="fb-ok">✅ נכון! שילוב שתי דרכי תצורה: מַחְשֵׁב (שורש+משקל) → בסיס → מַחְשְׁבוֹן (+סיומת -וֹן). בבגרות: יש לפרק בשני שלבים!</div>
+    <div id="q9-err" class="fb-err">❌ לא נכון. מַחְשְׁבוֹן = שתי שכבות: (1) מַחְשֵׁב = שורש+משקל, (2) + -וֹן = הקטנה.</div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 10 — <span class="wchip">תַּקְלִיט</span> — משקל תַּקְטִיל</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">תַּקְלִיט, תַּסְרִיט, תַּקְלִיטוֹר — כולם במשקל תַּקְטִיל. מה מציין משקל זה?</p>
+    <div onclick="pickMC('q10','a','wrong')" class="mc-opt"><input type="radio" name="q10" value="a">בעל מקצוע</div>
+    <div onclick="pickMC('q10','b','wrong')" class="mc-opt"><input type="radio" name="q10" value="b">מחלה</div>
+    <div onclick="pickMC('q10','c','correct')" class="mc-opt"><input type="radio" name="q10" value="c">מכשיר/תוצר טכני מודרני</div>
+    <div onclick="pickMC('q10','d','wrong')" class="mc-opt"><input type="radio" name="q10" value="d">מקום</div>
+    <div id="q10-ok" class="fb-ok">✅ נכון! תַּקְטִיל = מכשיר/תוצר טכני. בעברית המודרנית: תַּקְלִיט (ק-ל-ט), תַּסְרִיט (ס-ר-ט), תַּקְלִיטוֹר.</div>
+    <div id="q10-err" class="fb-err">❌ לא נכון. תַּקְטִיל = מכשיר/תוצר טכני מודרני.</div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 11 — <span class="wchip teal">צַלְמָנִיָּה</span> לעומת <span class="wchip">מַצְלֵמָה</span></div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">שניהם מהשורש צ-ל-מ. מה ההבדל?</p>
+    <div onclick="pickMC('q11','a','wrong')" class="mc-opt"><input type="radio" name="q11" value="a">מַצְלֵמָה = מקום; צַלְמָנִיָּה = כלי</div>
+    <div onclick="pickMC('q11','b','correct')" class="mc-opt"><input type="radio" name="q11" value="b">מַצְלֵמָה = כלי (שורש+מַקְטֵלָה); צַלְמָנִיָּה = מקום (בסיס צַלָּם + -ָנִיָּה)</div>
+    <div onclick="pickMC('q11','c','wrong')" class="mc-opt"><input type="radio" name="q11" value="c">שתיהן כלים בלבד</div>
+    <div onclick="pickMC('q11','d','wrong')" class="mc-opt"><input type="radio" name="q11" value="d">אין הבדל — הן מילים נרדפות</div>
+    <div id="q11-ok" class="fb-ok">✅ נכון! מַצְלֵמָה = הכלי. צַלְמָנִיָּה = המקום. אותו שורש, משמעויות שונות — כי דרכי התצורה שונות!</div>
+    <div id="q11-err" class="fb-err">❌ לא נכון. מַצְלֵמָה = כלי (שורש+משקל), צַלְמָנִיָּה = מקום (בסיס+סיומת).</div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 12 — זיהוי בטקסט</div>
+    <p style="font-size:.95rem;color:var(--mid);margin-bottom:.8rem;line-height:1.9">
+      "הַ<strong>נַּגָּר</strong> פָּתַח <strong>נַגָּרִיָּה</strong> חֲדָשָׁה וְרָכַשׁ <strong>מַסּוּר</strong> חֲדָשׁ."
+    </p>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:.7rem">מה דרך התצורה של <strong>נַגָּרִיָּה</strong>?</p>
+    <div onclick="pickMC('q12','a','wrong')" class="mc-opt"><input type="radio" name="q12" value="a">שורש נ-ג-ר + משקל מִקְטָלָה</div>
+    <div onclick="pickMC('q12','b','correct')" class="mc-opt"><input type="radio" name="q12" value="b">בסיס נַגָּר + סיומת -ִיָּה (מקום)</div>
+    <div onclick="pickMC('q12','c','wrong')" class="mc-opt"><input type="radio" name="q12" value="c">שורש נ-ג-ר + משקל קַטָּל</div>
+    <div id="q12-ok" class="fb-ok">✅ נכון! נַגָּרִיָּה = בסיס נַגָּר (מילה עצמאית!) + סיומת -ִיָּה = המקום שבו עובד הנגר. שימו לב: נַגָּר עצמו = שורש+משקל, אבל נַגָּרִיָּה = בסיס+סיומת.</div>
+    <div id="q12-err" class="fb-err">❌ לא נכון. נַגָּרִיָּה = בסיס נַגָּר + -ִיָּה. ה"בסיס" כאן הוא מילה שלמה (נגר), לא שורש עירום.</div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 13 — <span class="wchip">דַּלֶּקֶת</span> — משמעות</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">דַּלֶּקֶת שייכת למשקל קַטֶּלֶת. מה קטגוריית המשמעות?</p>
+    <div onclick="pickMC('q13','a','wrong')" class="mc-opt"><input type="radio" name="q13" value="a">בעל מקצוע</div>
+    <div onclick="pickMC('q13','b','wrong')" class="mc-opt"><input type="radio" name="q13" value="b">מקום</div>
+    <div onclick="pickMC('q13','c','correct')" class="mc-opt"><input type="radio" name="q13" value="c">מחלה / קבוצה</div>
+    <div onclick="pickMC('q13','d','wrong')" class="mc-opt"><input type="radio" name="q13" value="d">מכשיר</div>
+    <div id="q13-ok" class="fb-ok">✅ נכון! קַטֶּלֶת = מחלה/קבוצה. דַּלֶּקֶת (ד-ל-ק), שַׁעֶלֶת (שׁ-ע-ל), חֲצֶבֶת, שַׁפַּעַת.</div>
+    <div id="q13-err" class="fb-err">❌ לא נכון. קַטֶּלֶת = מחלה/קבוצה. דַּלֶּקֶת = מחלת דלקת.</div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 14 — יצירת מילה</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">רוצים ליצור מילה שתסמן "מקום לשחייה". איזו דרך מתאימה?</p>
+    <div onclick="pickMC('q14','a','correct')" class="mc-opt"><input type="radio" name="q14" value="a">שַׁחְיָן + -ִיָּה = שַׂחְיָנִיָּה (בסיס+סיומת)</div>
+    <div onclick="pickMC('q14','b','correct')" class="mc-opt"><input type="radio" name="q14" value="b">שורש שׂ-ח-י + מִקְטָלָה = מִשְׂחִיָּה (שורש+משקל)</div>
+    <div onclick="pickMC('q14','c','wrong')" class="mc-opt"><input type="radio" name="q14" value="c">רק אפשרות א׳ נכונה</div>
+    <div onclick="pickMC('q14','d','wrong')" class="mc-opt"><input type="radio" name="q14" value="d">אי אפשר ליצור מילה כזו בעברית</div>
+    <div id="q14-ok" class="fb-ok">✅ נכון! שתי הדרכים תקינות — זה בדיוק כוחה של עברית המודרנית: אפשר ליצור את אותו מושג בשתי דרכים שונות. בפועל קיימת: בְּרֵכָה (מִבְרָכָה בישן).</div>
+    <div id="q14-err" class="fb-err">❌ לא נכון. שתי הדרכים — א׳ וב׳ — תקינות. בעברית ניתן ליצור "מקום" הן בשורש+משקל מִקְטָלָה והן בבסיס+סיומת -ִיָּה.</div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-card">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:.5rem">שאלה 15 — שאלת סיכום</div>
+    <p style="font-size:.9rem;color:var(--mid);margin-bottom:.8rem">איזו היגד שגוי?</p>
+    <div onclick="pickMC('q15','a','wrong')" class="mc-opt"><input type="radio" name="q15" value="a">המשקל מַקְטֵל מציין מכשירים/כלים</div>
+    <div onclick="pickMC('q15','b','wrong')" class="mc-opt"><input type="radio" name="q15" value="b">הסיומת -וּת יוצרת שמות מופשטים</div>
+    <div onclick="pickMC('q15','c','correct')" class="mc-opt"><input type="radio" name="q15" value="c">כל מילה שמתחילה במ׳ היא שורש+משקל</div>
+    <div onclick="pickMC('q15','d','wrong')" class="mc-opt"><input type="radio" name="q15" value="d">המשקל קַטָּל מציין בעלי מקצוע</div>
+    <div id="q15-ok" class="fb-ok">✅ נכון — ג׳ שגוי! לא כל מילה במ׳ היא שורש+משקל. למשל: <strong>מִדְרָכָה</strong> = שורש ד-ר-כ + מִקְטָלָה, אבל <strong>מַאֲפִיָּה</strong> = בסיס "אופה" + סיומת. המ׳ יכולה להיות חלק מהבסיס גם בבסיס+סיומת.</div>
+    <div id="q15-err" class="fb-err">❌ לא נכון. ההיגד השגוי הוא ג׳ — לא כל מילה במ׳ היא שורש+משקל. מַאֲפִיָּה, למשל, היא בסיס+סיומת.</div>
+  </div>
+
+  <!-- Score + submit -->
+  <div class="card" id="score-preview" style="background:var(--s2);border:2px dashed var(--border);text-align:center;margin-top:.5rem">
+    <div style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:.3rem">ציון זמני</div>
+    <div id="live-score" style="font-family:'Secular One',sans-serif;font-size:2.5rem;color:var(--navy)">0/15</div>
+    <div style="font-size:.82rem;color:var(--muted);margin-top:.25rem">יעודכן אחרי כל תשובה</div>
+  </div>
+
+  <div class="card submit-card" style="border-top:4px solid var(--green);text-align:center">
+    <p style="font-size:.95rem;color:var(--mid);margin-bottom:1rem">סיימת? שלח את התשובות למורה.</p>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+      <button onclick="submitWS()" style="padding:.75rem 2rem;background:var(--navy);color:#fff;border:none;border-radius:10px;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(26,58,107,.28)">✅ הגש ושמור</button>
+    </div>
+  </div>
+
+</div><!-- /tw -->
+
+<!-- ════════════════════════════════
+     TAB: פתרונות (ta) — teacher only
+════════════════════════════════ -->
+<div id="ta" class="tab-pane teacher-only" style="display:none!important">
+<div id="solutions-content">
+
+  <div class="card" style="border-top:4px solid var(--purple)">
+    <h2 class="s-title">🔑 מפתח תשובות — שיעור 5 מסכם</h2>
+    <div class="tb purple"><div class="bt">📌 הוראות</div>
+    <p style="font-size:.88rem">15 שאלות MC. תשובות נכונות + הסבר פדגוגי + שגיאות נפוצות.</p></div>
+  </div>
+
+  <div class="card">
+    <h3 style="font-family:'Secular One',sans-serif;color:var(--navy);font-size:1rem;margin-bottom:1rem;border-bottom:2px solid var(--border);padding-bottom:6px">שאלות 1–8</h3>
+
+    <div class="ai"><strong>שאלה 1 — טַבָּח:</strong> א׳ — שורש+משקל קַטָּל (ט-ב-ח). קיצוץ "טב" לא נותן מילה → לא בסיס+סיומת.<br><em style="font-size:.82rem;color:var(--muted)">נקודה פדגוגית: הטריק המנצח עובד כאן בצורה מושלמת.</em></div>
+
+    <div class="ai teal"><strong>שאלה 2 — חַשְׁמַלַּאי:</strong> א׳ — בסיס חַשְׁמַל + סיומת -ַאי. "חשמל" = מילה עצמאית!<br><em style="font-size:.82rem;color:var(--muted)">שגיאה נפוצה: לחלק ל"חשמלל + אי" — שגוי.</em></div>
+
+    <div class="ai"><strong>שאלה 3 — מִסְעָדָה:</strong> ג׳ — מקום/מוסד (מִקְטָלָה). שורש ס-ע-ד.<br><em style="font-size:.82rem;color:var(--muted)">מִקְטָלָה = מקום תמיד. כמוה: מִסְפָּרָה, מִרְפָּאָה.</em></div>
+
+    <div class="ai danger"><strong>שאלה 4 — מִסְפָּרָה (מלכודת):</strong> ב׳ — שורש ס-פ-ר + מִקְטָלָה, לא בסיס+סיומת.<br><em style="font-size:.82rem;color:var(--muted)">שגיאה נפוצה ביותר! הדגישו שהמ׳ = אות משקל.</em></div>
+
+    <div class="ai purple"><strong>שאלה 5 — יַלְדוּת:</strong> ג׳ — תכונה/מצב מופשט (-וּת).<br><em style="font-size:.82rem;color:var(--muted)">-וּת = קטגוריה מיוחדת: עצם מופשט. לא ניתן "לגעת" ביַלְדוּת.</em></div>
+
+    <div class="ai"><strong>שאלה 6 — שְׁמִירָה:</strong> ב׳ — שם פעולה (קְטִילָה). שורש שׁ-מ-ר.<br><em style="font-size:.82rem;color:var(--muted)">קְטִילָה = הפעולה עצמה, לא מי שמבצע.</em></div>
+
+    <div class="ai teal"><strong>שאלה 7 — סִפְרִיָּה vs מִסְפָּרָה:</strong> ג׳ — סִפְרִיָּה = בסיס+סיומת; מִסְפָּרָה = שורש+משקל.<br><em style="font-size:.82rem;color:var(--muted)">שניהם מקומות, שתי דרכי תצורה. שורש ס-פ-ר נמצא בשניהם!</em></div>
+
+    <div class="ai amber"><strong>שאלה 8 — מַטְחֵנָה (חדשה):</strong> ב׳ — כלי (מַקְטֵלָה). שורש ט-ח-נ.<br><em style="font-size:.82rem;color:var(--muted)">שאלה יישומית: הידע מאפשר ניחוש מילה לא מוכרת!</em></div>
+  </div>
+
+  <div class="card">
+    <h3 style="font-family:'Secular One',sans-serif;color:var(--navy);font-size:1rem;margin-bottom:1rem;border-bottom:2px solid var(--border);padding-bottom:6px">שאלות 9–15</h3>
+
+    <div class="ai green"><strong>שאלה 9 — מַחְשְׁבוֹן:</strong> ג׳ — שני שלבים: מַחְשֵׁב (שורש+משקל) + -וֹן (הקטנה).<br><em style="font-size:.82rem;color:var(--muted)">שאלה חשובה: מפגישה עם שילוב שתי הדרכים.</em></div>
+
+    <div class="ai"><strong>שאלה 10 — תַּקְלִיט:</strong> ג׳ — מכשיר/תוצר טכני (תַּקְטִיל).<br><em style="font-size:.82rem;color:var(--muted)">משקל תַּקְטִיל מייצג את הטכנולוגיה המודרנית בעברית.</em></div>
+
+    <div class="ai teal"><strong>שאלה 11 — מַצְלֵמָה vs צַלְמָנִיָּה:</strong> ב׳ — מַצְלֵמָה = כלי; צַלְמָנִיָּה = מקום.<br><em style="font-size:.82rem;color:var(--muted)">דוגמה קלאסית: אותו שורש, שתי דרכים, שתי משמעויות.</em></div>
+
+    <div class="ai"><strong>שאלה 12 — נַגָּרִיָּה בטקסט:</strong> ב׳ — בסיס נַגָּר + -ִיָּה.<br><em style="font-size:.82rem;color:var(--muted)">הבסיס (נגר) עצמו שורש+משקל — אבל נגרייה היא בסיס+סיומת!</em></div>
+
+    <div class="ai danger"><strong>שאלה 13 — דַּלֶּקֶת:</strong> ג׳ — מחלה/קבוצה (קַטֶּלֶת).<br><em style="font-size:.82rem;color:var(--muted)">קַטֶּלֶת = קטגוריה ייחודית לעברית. שׁ-ע-ל → שַׁעֶלֶת.</em></div>
+
+    <div class="ai green"><strong>שאלה 14 — יצירת מילה:</strong> א׳ וב׳ שתיהן נכונות.<br><em style="font-size:.82rem;color:var(--muted)">שאלה פתוחה מכוונת — מראה שעברית גמישה!</em></div>
+
+    <div class="ai danger"><strong>שאלה 15 — היגד שגוי:</strong> ג׳ — לא כל מ׳ = שורש+משקל.<br><em style="font-size:.82rem;color:var(--muted)">מַאֲפִיָּה מתחילה במ׳ אבל היא בסיס+סיומת. הזהרו!</em></div>
+  </div>
+
+</div><!-- /solutions-content -->
+</div><!-- /ta -->
+
+<!-- ════════════════════════════════
+     TAB: דשבורד (tq) — teacher only
+════════════════════════════════ -->
+<div id="tq" class="tab-pane teacher-only" style="display:none!important">
+  <div class="card" style="border-top:4px solid var(--teal)">
+    <h2 class="s-title">📊 דשבורד — סיכום הגשה</h2>
+    <div id="assessment-content" style="display:none"></div>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem">
+      <button onclick="calcAssessment()" style="padding:.65rem 1.4rem;background:var(--navy-lt);color:#fff;border:none;border-radius:9px;font-family:'Heebo',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer">🔄 חשב הגשה</button>
+      <button onclick="sendWorkToTeacher(gatherAllAnswers(),'תרגול מסכם יחידה 2 — שיעור 5')" style="padding:.65rem 1.4rem;background:linear-gradient(135deg,#25d366,#1ebe5d);color:#fff;border:none;border-radius:9px;font-family:'Heebo',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer">📤 שלח בוואטסאפ</button>
+      <button onclick="sendByEmail()" style="padding:.65rem 1.4rem;background:var(--surface);color:var(--navy-lt);border:1.5px solid var(--navy-lt);border-radius:9px;font-family:'Heebo',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer">📧 שלח במייל</button>
+    </div>
+  </div>
+</div><!-- /tq -->
+
+</main>
+
+<!-- MODAL -->
+<div id="modal">
+  <div style="background:#fff;border-radius:16px;padding:1.8rem;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;direction:rtl">
+    <h3 style="font-family:'Secular One',sans-serif;color:var(--navy);font-size:1.1rem;margin-bottom:1rem">📋 סיכום הגשה</h3>
+    <div id="modal-sum"></div>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.2rem">
+      <button onclick="submitFinal()" style="padding:.65rem 1.4rem;background:var(--navy);color:#fff;border:none;border-radius:9px;font-family:'Heebo',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;flex:1">✅ אישור וסיום</button>
+      <button onclick="closeModal()" style="padding:.65rem 1rem;background:var(--s2);color:var(--muted);border:1px solid var(--border);border-radius:9px;font-family:'Heebo',sans-serif;font-size:.88rem;cursor:pointer">ביטול</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const lessonId = 'L10';
+const LS = {
+  get(k,fb){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):fb;}catch(e){return fb;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active');b.style.color='var(--muted)';});
+  const el=document.getElementById(id);
+  if(el){el.classList.add('active');el.style.removeProperty('display');}
+  if(btn){btn.classList.add('active');btn.style.color='var(--navy)';}
+}
+
+// Live score tracking
+let correctAnswers = {};
+const CORRECT = {q1:'a',q2:'a',q3:'c',q4:'b',q5:'c',q6:'b',q7:'c',q8:'b',q9:'c',q10:'c',q11:'b',q12:'b',q13:'c',q14:'a',q15:'c'};
+function updateScore(){
+  let cnt=0;
+  Object.entries(correctAnswers).forEach(([q,ok])=>{if(ok)cnt++;});
+  document.getElementById('live-score').textContent=cnt+'/15';
+  document.getElementById('live-score').style.color=cnt>=12?'var(--green)':cnt>=8?'var(--amber)':'var(--navy)';
+}
+
+function pickMC(qname,val,type){
+  document.querySelectorAll('[onclick*="pickMC(\''+qname+'\'"]').forEach(el=>{
+    el.classList.remove('correct','wrong');
+    const inp=el.querySelector('input[type=radio]');
+    if(inp)inp.checked=false;
+  });
+  const clicked=document.querySelector('[onclick="pickMC(\''+qname+'\',\''+val+'\',\''+type+'\')"]');
+  if(clicked){
+    clicked.classList.add(type==='correct'?'correct':'wrong');
+    const inp=clicked.querySelector('input[type=radio]');
+    if(inp)inp.checked=true;
+  }
+  const okEl=document.getElementById(qname+'-ok');
+  const errEl=document.getElementById(qname+'-err');
+  if(okEl)okEl.classList.toggle('show',type==='correct');
+  if(errEl)errEl.classList.toggle('show',type==='wrong');
+  correctAnswers[qname]=(type==='correct');
+  updateScore();
+}
+
+// Timer
+let tInt=null,elapsed=0,total=45*60;
+function startTimer(){
+  if(tInt)return;
+  tInt=setInterval(()=>{
+    elapsed++;
+    const rem=total-elapsed;
+    if(rem<=0){clearInterval(tInt);tInt=null;document.getElementById('timer-display').textContent='00:00';return;}
+    const m=Math.floor(rem/60),s=rem%60;
+    document.getElementById('timer-display').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    if(rem<=5*60)document.getElementById('timer-display').classList.add('warning');
+    const pct=Math.round((elapsed/total)*100);
+    document.getElementById('prog-fill').style.width=pct+'%';
+    document.getElementById('prog-pct').textContent=pct+'%';
+    const phases=[[5,'פתיחה'],[15,'חזרה'],[25,'תרגול'],[40,'הגשה'],[45,'סיכום']];
+    const min=Math.floor(elapsed/60);
+    for(const[t,lbl]of phases){if(min<t){document.getElementById('phase-ind').textContent='📍 '+lbl;break;}}
+  },1000);
+}
+function resetTimer(){
+  clearInterval(tInt);tInt=null;elapsed=0;
+  document.getElementById('timer-display').textContent='45:00';
+  document.getElementById('timer-display').classList.remove('warning');
+  document.getElementById('prog-fill').style.width='0%';
+  document.getElementById('prog-pct').textContent='0%';
+  document.getElementById('phase-ind').textContent='';
+}
+
+function gatherAllAnswers(){
+  const name=(document.getElementById('sname')||{}).value||'לא הוזן';
+  const lines=['שם: '+name,'תאריך: '+new Date().toLocaleDateString('he-IL'),'סיכום יחידה 2 — שאלות מסכמות',''];
+  for(let i=1;i<=15;i++){
+    const inp=document.querySelector('input[name="q'+i+'"]:checked');
+    const correct=correctAnswers['q'+i];
+    lines.push('שאלה '+i+': '+(inp?inp.value:'לא נענתה')+(correct?' ✅':inp?' ❌':''));
+  }
+  let score=Object.values(correctAnswers).filter(Boolean).length;
+  lines.push('','ציון: '+score+'/15');
+  return lines.join('\n');
+}
+
+function submitWS(){
+  const name=(document.getElementById('sname')||{}).value||'לא הוזן';
+  let answered=Object.keys(correctAnswers).length;
+  let correct=Object.values(correctAnswers).filter(Boolean).length;
+  document.getElementById('modal-sum').innerHTML='<p style="font-size:.9rem;color:var(--mid)"><strong>תלמיד/ה:</strong> '+name+'<br><strong>שאלות שנענו:</strong> '+answered+'/15<br><strong>נכונות:</strong> '+correct+'/15</p>';
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+function submitFinal(){
+  const name=LS.get('lashon_uname','')||'תלמיד/ה';
+  const score=Object.values(correctAnswers).filter(Boolean).length;
+  const prog=LS.get('lashon_prog_'+name,{});
+  prog[lessonId]={done:true,date:new Date().toLocaleDateString('he-IL'),score:Math.round(score/15*100),content:gatherAllAnswers()};
+  LS.set('lashon_prog_'+name,prog);
+  if(window.opener){try{window.opener.postMessage({type:'lessonDone',id:lessonId},'*');}catch(e){}}
+  closeModal();
+  if(typeof saveScoreToCloud==='function')saveScoreToCloud(lessonId,Math.round(score/15*100),name,{content:gatherAllAnswers()});
+  alert('✅ הוגש בהצלחה! ציון: '+score+'/15');
+}
+
+window.calcAssessment=function(){
+  const ac=document.getElementById('assessment-content');
+  if(!ac)return;
+  let score=Object.values(correctAnswers).filter(Boolean).length;
+  const pct=Math.round(score/15*100);
+  const bc=pct>=80?'#2ecc71':pct>=50?'#f39c12':'#e74c3c';
+  const bg=pct>=80?'#e8f8f0':pct>=50?'#fef9e7':'#fdecea';
+  ac.innerHTML='<div style="background:'+bg+';color:'+bc+';padding:12px 16px;border-radius:8px;text-align:center;font-weight:900;font-size:1.05rem;margin-bottom:12px;border:1px solid '+bc+'33">'+score+'/15 נכונות — '+pct+'%</div>';
+  ac.style.display='block';
+};
+
+function sendWorkToTeacher(content,title){
+  const email=LS.get('teacher_email','')||'';
+  const wa=LS.get('teacher_whatsapp','')||'';
+  if(!email&&!wa){alert('לא הוגדרו פרטי מורה. כנסו לדף הראשי ← הגדרות (⚙️).');return;}
+  const student=LS.get('lashon_uname','')||'תלמיד/ה';
+  const msg='📚 '+title+'\n👤 '+student+'\n\n'+content;
+  if(wa)window.open('https://wa.me/972'+wa.replace(/^0/,'')+'?text='+encodeURIComponent(msg),'_blank');
+  else window.open('mailto:'+email+'?subject='+encodeURIComponent('📚 '+title+' — '+student)+'&body='+encodeURIComponent(msg),'_blank');
+}
+function sendByEmail(){
+  const email=LS.get('teacher_email','')||'';
+  if(!email){alert('לא הוגדר מייל מורה.');return;}
+  const student=LS.get('lashon_uname','')||'תלמיד/ה';
+  const content=gatherAllAnswers();
+  window.open('mailto:'+email+'?subject='+encodeURIComponent('📚 תרגול מסכם יחידה 2 — '+student)+'&body='+encodeURIComponent(content),'_blank');
+}
+
+// Role check
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  const isT=params.get('role')==='teacher';
+  if(!isT){
+    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active');b.style.color='var(--muted)';});
+    const def=document.getElementById('th');
+    if(def)def.classList.add('active');
+    const defBtn=document.querySelector('[onclick*="\'th\'"]');
+    if(defBtn){defBtn.classList.add('active');defBtn.style.color='var(--navy)';}
+    return;
+  }
+  document.querySelectorAll('.teacher-only').forEach(el=>{el.style.removeProperty('display');el.classList.remove('teacher-only');});
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active');b.style.color='var(--muted)';});
+  const taEl=document.getElementById('ta');
+  if(taEl){taEl.classList.add('active');taEl.style.removeProperty('display');}
+  const taBtn=document.querySelector('[onclick*="\'ta\'"]');
+  if(taBtn){taBtn.classList.add('active');taBtn.style.color='var(--navy)';}
+  document.body.classList.add('teacher-mode');
+})();
+
+// Firebase stub
+const FIREBASE_CONFIG={apiKey:'YOUR_API_KEY',authDomain:'lashon-lesson.firebaseapp.com',projectId:'lashon-lesson',storageBucket:'lashon-lesson.appspot.com',messagingSenderId:'YOUR_SENDER_ID',appId:'YOUR_APP_ID'};
+let _db=null;
+function getDb(){if(_db)return _db;try{if(typeof firebase==='undefined')return null;if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);_db=firebase.firestore();return _db;}catch(e){return null;}}
+async function saveScoreToCloud(lId,score,studentName,extra){const db=getDb();if(!db)return;try{await db.collection('student_scores').add({lessonId:lId,score:score??null,studentName:studentName||'תלמיד/ה',ts:firebase.firestore.FieldValue.serverTimestamp(),date:new Date().toLocaleDateString('he-IL'),...extra});}catch(e){console.error(e);}}
+</script>
+</body>
+</html>
