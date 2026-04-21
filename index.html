@@ -1284,7 +1284,7 @@ a { text-decoration:none; }
   </div>
 
   <div class="ls-cards" id="ls-cards">
-    <button class="lc lc-student" onclick="doStudentLogin()">
+    <button class="lc lc-student" onclick="(function(){try{localStorage.setItem('lashon_role',JSON.stringify('student'));localStorage.setItem('lashon_uname',JSON.stringify('תלמיד/ה'));}catch(e){}var ls=document.getElementById('login-screen');if(ls)ls.style.display='none';enterApp('student','תלמיד/ה');})()">
       <div class="lc-icon-wrap">🎓</div>
       <div class="lc-text">
         <span class="lc-label">כניסת תלמיד/ה</span>
@@ -2245,13 +2245,14 @@ function hideTCP(){
 }
 
 function doStudentLogin(){
-  LS.del('lashon_tpass');LS.del('lashon_tname');
-  window.history.replaceState({},'',window.location.pathname);
+  try{LS.del('lashon_tpass');}catch(e){}
+  try{LS.del('lashon_tname');}catch(e){}
   LS.set('lashon_role','student');
   LS.set('lashon_uname','תלמיד/ה');
-  // sync legacy key used by lesson pages
   localStorage.setItem('userRole','student');
-  fadeOutLogin(()=>enterApp('student','תלמיד/ה'));
+  const ls=document.getElementById('login-screen');
+  if(ls)ls.style.display='none';
+  enterApp('student','תלמיד/ה');
 }
 
 async async function doTeacherLogin(){
