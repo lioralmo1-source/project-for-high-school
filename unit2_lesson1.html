@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>יחידה 2 · שיעור 1 — שורש ומשקל | לשון Lesson</title>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Firebase SDK — הוסיפו לפני שימוש:
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+-->
+<style>
+/* ══════════════════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════════════════ */
+:root {
+  --bg:#f5f6f8; --surface:#fff; --surface2:#f8f9fb; --surface3:#eef0f5;
+  --border:#e4e7ef; --border2:#d1d6e5;
+  --text:#0d1424; --text-mid:#3d4660; --muted:#6b7594; --subtle:#9aa3be;
+  --blue:#1a56db; --blue-lt:#eff4ff; --blue-dk:#1340b0;
+  --green:#15803d; --green-lt:#f0fdf4;
+  --amber:#b45309; --amber-lt:#fffbeb;
+  --red:#dc2626; --red-lt:#fef2f2;
+  --gold:#ca8a04; --gold-lt:#fefce8;
+  --sh1:0 1px 3px rgba(13,20,36,.06),0 1px 2px rgba(13,20,36,.04);
+  --sh2:0 4px 16px rgba(13,20,36,.07),0 1px 4px rgba(13,20,36,.04);
+  --sh3:0 12px 36px rgba(13,20,36,.10),0 3px 8px rgba(13,20,36,.05);
+  --r-sm:10px; --r:16px; --r-lg:20px; --r-xl:28px; --r-pill:999px;
+  --lc:#4f46e5; --lc-lt:#eef2ff;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0b0f17; --surface:#131924; --surface2:#192030; --surface3:#1f2840;
+    --border:#252f47; --border2:#313d5c;
+    --text:#d8dfe8; --text-mid:#a0adc5; --muted:#7a8aaa; --subtle:#50607e;
+    --blue:#4d8aff; --blue-lt:#162040; --blue-dk:#6aa0ff;
+    --green:#34d875; --green-lt:#0c2618;
+    --amber:#f5a623; --amber-lt:#28200c;
+    --red:#fc8080; --red-lt:#281414;
+    --gold:#f5a623; --gold-lt:#28200c;
+    --lc:#818cf8; --lc-lt:#1e1b4b;
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);
+  scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{line-height:1.6;}
+button,input,a,textarea,select{font-family:'Heebo',sans-serif;}
+a{text-decoration:none;}
+
+/* ══════════════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════════════ */
+.lesson-topbar{
+  position:sticky;top:0;z-index:200;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:.6rem 1rem;display:flex;align-items:center;gap:.55rem;
+  box-shadow:var(--sh1);min-height:52px;
+}
+.btn-back{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  font-size:1.1rem;color:var(--muted);
+  cursor:pointer;transition:all .12s;flex-shrink:0;padding:0;
+}
+.btn-back:hover{background:var(--surface3);color:var(--text);}
+.lesson-topbar-title{
+  flex:1;min-width:0;font-family:'Secular One',sans-serif;
+  font-size:.88rem;color:var(--text);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.topbar-title-wrap{
+  flex:1;min-width:0;overflow:hidden;
+}
+.lesson-topbar-sub{font-size:.6rem;color:var(--subtle);margin-top:.04rem;}
+.topbar-actions{display:flex;align-items:center;gap:.4rem;flex-shrink:0;}
+.btn-print{
+  display:inline-flex;align-items:center;gap:.25rem;
+  padding:.45rem .8rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  font-size:.76rem;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:all .12s;min-height:40px;
+}
+.btn-print:hover{background:var(--surface3);color:var(--text);}
+/* btn-answer-key removed — access via teacher tab only */
+
+/* ══════════════════════════════════════════════════
+   TABS BAR — visible to all; solutions+dashboard hidden from students
+══════════════════════════════════════════════════ */
+.tabs-bar{
+  display:flex;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs-bar::-webkit-scrollbar{display:none;}
+/* Hide פתרונות + דשבורד tabs from students by default */
+#tab-btn-ta,#tab-btn-td{ display:none; }
+/* Show all tabs to teacher */
+.is-teacher #tab-btn-ta,
+.is-teacher #tab-btn-td{ display:flex; }
+.tab-btn{
+  padding:.65rem 1.15rem;border:none;border-bottom:2.5px solid transparent;
+  background:none;font-size:.82rem;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all .14s;white-space:nowrap;min-height:44px;
+  margin-bottom:-1px;flex-shrink:0;
+}
+.tab-btn:hover{color:var(--lc);}
+.tab-btn.active{color:var(--lc);border-bottom-color:var(--lc);font-weight:800;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* ══════════════════════════════════════════════════
+   LESSON HEADER
+══════════════════════════════════════════════════ */
+.lesson-header{
+  background:linear-gradient(135deg,var(--lc-lt) 0%,var(--surface) 70%);
+  border-bottom:1px solid var(--border);
+  padding:1.6rem 1.4rem 1.4rem;
+  position:relative;overflow:hidden;cursor:default;user-select:none;
+}
+.lesson-header::before{
+  content:'';position:absolute;top:0;right:0;bottom:0;width:5px;
+  background:var(--lc);opacity:.8;
+}
+.lh-unit-badge{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.62rem;font-weight:800;color:var(--lc);
+  text-transform:uppercase;letter-spacing:.06em;
+  background:var(--lc-lt);border:1.5px solid var(--lc);
+  border-radius:var(--r-pill);padding:.22rem .75rem;margin-bottom:.85rem;opacity:.85;
+}
+.lh-emoji{font-size:2.2rem;line-height:1;margin-bottom:.55rem;display:block;}
+.lh-title{
+  font-family:'Secular One',sans-serif;
+  font-size:clamp(1.3rem,4vw,1.65rem);
+  color:var(--text);line-height:1.2;margin-bottom:.4rem;
+}
+.lh-desc{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:540px;}
+.lh-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:.9rem;}
+.lh-chip{
+  font-size:.65rem;font-weight:700;padding:.22rem .7rem;
+  border-radius:var(--r-pill);border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);
+}
+.lh-chip.time{color:var(--amber);background:var(--amber-lt);border-color:#fde68a;}
+#role-chip{display:none;background:var(--gold-lt);color:var(--gold);border-color:#fde68a;}
+.is-teacher #role-chip{display:inline-flex;}
+#lp-bar-wrap{position:absolute;bottom:0;right:0;left:0;height:3px;display:none;overflow:hidden;}
+#lp-bar{height:100%;width:0%;background:var(--gold);transition:width 3s linear;}
+
+/* ══════════════════════════════════════════════════
+   LESSON CONTENT
+══════════════════════════════════════════════════ */
+.lesson-content{max-width:780px;margin:0 auto;padding:1.4rem 1.2rem 3rem;}
+.section-title{
+  font-family:'Secular One',sans-serif;font-size:1.05rem;color:var(--lc);
+  display:flex;align-items:center;gap:.5rem;
+  margin-bottom:.9rem;margin-top:2rem;
+  padding-bottom:.45rem;border-bottom:2px solid var(--lc-lt);
+}
+.section-title:first-child{margin-top:0;}
+.st-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--lc);color:#fff;
+  font-size:.75rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-weight:900;
+}
+.content-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.2rem 1.3rem;
+  box-shadow:var(--sh1);margin-bottom:1rem;
+}
+.content-card p{font-size:.9rem;line-height:1.75;color:var(--text-mid);}
+.content-card p+p{margin-top:.65rem;}
+.content-card h4{font-size:.88rem;font-weight:800;margin-bottom:.4rem;color:var(--text);}
+.content-card ul,.content-card ol{padding-right:1.2rem;margin-top:.4rem;}
+.content-card li{font-size:.9rem;line-height:1.75;color:var(--text-mid);}
+.tip-box{
+  background:var(--blue-lt);border:1.5px solid #bfdbfe;
+  border-radius:var(--r);padding:1rem 1.15rem;
+  font-size:.85rem;line-height:1.7;color:var(--text-mid);margin-bottom:1rem;
+}
+.tip-box strong{color:var(--blue);}
+.warning-box{
+  background:var(--amber-lt);border:1.5px solid #fde68a;
+  border-radius:var(--r);padding:1rem 1.15rem;
+  font-size:.85rem;line-height:1.7;color:var(--text-mid);margin-bottom:1rem;
+}
+.warning-box strong{color:var(--amber);}
+
+/* ── TABLE (mobile scroll) ── */
+.binyan-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:1rem;}
+.binyan-table{
+  width:100%;min-width:380px;border-collapse:collapse;font-size:.82rem;
+  background:var(--surface);border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);box-shadow:var(--sh1);
+}
+.binyan-table th{
+  background:var(--lc);color:#fff;font-weight:800;
+  padding:.55rem .8rem;text-align:center;font-size:.78rem;
+}
+.binyan-table td{
+  padding:.5rem .8rem;border-bottom:1px solid var(--border);
+  text-align:center;vertical-align:middle;
+}
+.binyan-table tr:last-child td{border-bottom:none;}
+.binyan-table tr:nth-child(even) td{background:var(--surface2);}
+.binyan-table td:first-child{font-weight:800;color:var(--lc);}
+.binyan-table td.heb{font-size:.95rem;letter-spacing:.03em;}
+
+/* ══════════════════════════════════════════════════
+   EXERCISE BLOCKS
+══════════════════════════════════════════════════ */
+.exercise-block{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--sh1);margin-bottom:1.1rem;
+}
+.ex-header{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+  background:var(--surface2);
+}
+.ex-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--lc);color:#fff;
+  font-size:.75rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ex-title{font-size:.88rem;font-weight:700;flex:1;}
+.ex-points{
+  font-size:.62rem;font-weight:700;padding:.15rem .55rem;
+  border-radius:var(--r-pill);background:var(--lc-lt);
+  color:var(--lc);border:1px solid var(--lc);opacity:.8;white-space:nowrap;
+}
+.ex-body{padding:1rem 1.1rem;}
+.ex-question{font-size:.9rem;line-height:1.7;margin-bottom:.85rem;}
+.answer-area{
+  width:100%;min-height:90px;padding:.8rem 1rem;
+  border:1.5px solid var(--border);border-radius:var(--r);
+  font-family:'Heebo',sans-serif;font-size:.9rem;
+  background:var(--surface);color:var(--text);
+  resize:vertical;outline:none;direction:rtl;
+  transition:border-color .14s,box-shadow .16s;line-height:1.6;
+}
+.answer-area:focus{border-color:var(--lc);box-shadow:0 0 0 3px rgba(79,70,229,.08);}
+.answer-area::placeholder{color:var(--subtle);}
+.mc-options{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.6rem;}
+.mc-option{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.7rem .9rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);cursor:pointer;
+  transition:all .14s;user-select:none;
+  -webkit-tap-highlight-color:transparent;min-height:48px;background:var(--surface);
+}
+.mc-option:hover{border-color:var(--lc);background:var(--lc-lt);}
+.mc-option input[type=radio]{accent-color:var(--lc);width:16px;height:16px;flex-shrink:0;}
+.mc-option-label{font-size:.88rem;flex:1;cursor:pointer;}
+.mc-option.selected{border-color:var(--lc);background:var(--lc-lt);font-weight:600;}
+.fill-blank{
+  display:inline-block;min-width:80px;padding:.2rem .5rem;
+  border:none;border-bottom:2px solid var(--lc);
+  background:transparent;font-family:'Heebo',sans-serif;
+  font-size:.9rem;color:var(--text);outline:none;text-align:center;
+}
+.fill-blank:focus{border-color:var(--blue);}
+
+/* ── TEACHER-ONLY ANSWERS ── */
+.teacher-only{
+  display:none;
+  background:var(--gold-lt);border:1.5px solid #fde68a;
+  border-radius:var(--r);padding:.85rem 1rem;
+  font-size:.84rem;color:var(--text-mid);line-height:1.7;margin-top:.6rem;
+}
+.teacher-only strong{
+  color:var(--gold);font-size:.7rem;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:.35rem;
+}
+.is-teacher .teacher-only{display:block;}
+
+/* ── PLACEHOLDER for questions 6-15 ── */
+.exercises-more-placeholder{
+  border:2px dashed var(--border2);border-radius:var(--r-lg);
+  padding:2.5rem 1.5rem;text-align:center;margin-top:1.5rem;margin-bottom:1rem;
+  background:var(--surface2);
+}
+.exercises-more-placeholder .placeholder-title{
+  font-family:'Secular One',sans-serif;font-size:.95rem;color:var(--muted);
+  margin-bottom:.45rem;display:block;
+}
+.exercises-more-placeholder .placeholder-sub{
+  font-size:.76rem;color:var(--subtle);line-height:1.6;
+}
+
+/* ── SUBMIT & SCORE ── */
+.btn-submit{
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  width:100%;padding:.9rem;margin-top:1.4rem;
+  background:var(--lc);color:#fff;
+  border:none;border-radius:var(--r-sm);
+  font-size:.92rem;font-weight:700;cursor:pointer;
+  transition:all .15s;min-height:52px;font-family:'Heebo',sans-serif;
+  box-shadow:0 3px 12px rgba(79,70,229,.25);
+}
+.btn-submit:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.btn-submit:active{transform:scale(.98);}
+.score-display{
+  display:none;background:var(--green-lt);border:1.5px solid #86efac;
+  border-radius:var(--r-lg);padding:1.2rem 1.4rem;
+  text-align:center;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);margin-top:1rem;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.score-display.show{display:block;}
+.score-num{font-family:'Secular One',sans-serif;font-size:2.4rem;color:var(--green);line-height:1;}
+.score-label{font-size:.82rem;color:var(--muted);margin-top:.25rem;}
+
+/* ══════════════════════════════════════════════════
+   SINGLE SEND FOOTER — bottom only
+══════════════════════════════════════════════════ */
+.lesson-footer{
+  border-top:1px solid var(--border);
+  padding:1.5rem 1.2rem 2.5rem;
+  max-width:780px;margin:0 auto;
+}
+.footer-send-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.3rem 1.4rem;
+  box-shadow:var(--sh2);text-align:center;
+}
+.footer-send-card h3{
+  font-family:'Secular One',sans-serif;font-size:1rem;
+  margin-bottom:.4rem;color:var(--text);
+}
+.footer-send-card p{font-size:.78rem;color:var(--muted);margin-bottom:1.15rem;line-height:1.55;}
+.footer-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+.btn-send-wa{
+  display:inline-flex;align-items:center;gap:.42rem;
+  padding:.78rem 1.4rem;border:none;border-radius:var(--r-sm);
+  background:linear-gradient(135deg,#25d366,#1ebe5d);
+  color:#fff;font-size:.88rem;font-weight:800;cursor:pointer;
+  transition:all .14s;min-height:50px;font-family:'Heebo',sans-serif;
+  box-shadow:0 3px 12px rgba(37,211,102,.32);
+}
+.btn-send-wa:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(37,211,102,.42);}
+.btn-send-email{
+  display:inline-flex;align-items:center;gap:.42rem;
+  padding:.78rem 1.4rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  color:var(--text-mid);font-size:.88rem;font-weight:700;
+  cursor:pointer;transition:all .14s;min-height:50px;font-family:'Heebo',sans-serif;
+}
+.btn-send-email:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);}
+
+/* ══════════════════════════════════════════════════
+   TEACHER PANEL (tabs: פתרונות + דשבורד)
+══════════════════════════════════════════════════ */
+.teacher-panel{max-width:780px;margin:0 auto;padding:1.4rem 1.2rem 3rem;}
+.teacher-panel-header{
+  background:linear-gradient(135deg,#3b0764,#6d28d9);
+  border-radius:var(--r-lg);padding:1.1rem 1.3rem;margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.tph-icon{font-size:1.8rem;flex-shrink:0;}
+.tph-text h2{font-family:'Secular One',sans-serif;font-size:.98rem;color:#e9d5ff;margin:0;}
+.tph-text p{font-size:.72rem;color:rgba(233,213,255,.6);margin-top:.1rem;}
+.ak-answer-item{
+  background:var(--gold-lt);border:1px solid #fde68a;border-right:4px solid var(--gold);
+  border-radius:var(--r);padding:.85rem 1rem;
+  font-size:.84rem;color:var(--text-mid);line-height:1.75;margin-bottom:.8rem;
+}
+.ak-answer-item strong{
+  color:var(--gold);font-size:.7rem;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:.38rem;
+}
+.teacher-section-title{
+  font-family:'Secular One',sans-serif;font-size:.9rem;color:var(--lc);
+  display:flex;align-items:center;gap:.4rem;
+  margin:1.6rem 0 .75rem;padding-bottom:.38rem;
+  border-bottom:2px solid var(--lc-lt);
+}
+.dashboard-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.2rem 1.3rem;box-shadow:var(--sh1);
+  margin-bottom:1rem;
+}
+.dashboard-card h3{
+  font-family:'Secular One',sans-serif;font-size:.88rem;color:var(--text);
+  margin-bottom:.85rem;display:flex;align-items:center;gap:.38rem;
+}
+#dashboard-content{
+  font-size:.82rem;color:var(--muted);line-height:1.65;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:1rem;min-height:58px;
+}
+.btn-refresh{
+  margin-top:.75rem;padding:.55rem 1rem;
+  border:1.5px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface2);font-size:.78rem;font-weight:700;
+  color:var(--muted);cursor:pointer;transition:all .12s;min-height:38px;
+}
+.btn-refresh:hover{background:var(--surface3);color:var(--text);}
+
+/* answer-key modal CSS removed — solutions via teacher tab only */
+
+/* ══════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════ */
+#toast{
+  position:fixed;bottom:1.4rem;right:1.2rem;z-index:10000;
+  background:var(--text);color:var(--surface);
+  border-radius:var(--r);padding:.65rem 1.15rem;
+  font-size:.82rem;font-weight:600;
+  opacity:0;transform:translateY(6px);
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;box-shadow:var(--sh3);
+}
+#toast.show{opacity:1;transform:translateY(0);}
+
+/* ══════════════════════════════════════════════════
+   PRINT — teacher-aware
+══════════════════════════════════════════════════ */
+@media print{
+  @page{size:A4 portrait;margin:1.6cm 1.4cm 1.8cm;}
+  @page :first{margin-top:1.2cm;}
+  *,*::before,*::after{print-color-adjust:exact !important;-webkit-print-color-adjust:exact !important;}
+  .lesson-topbar,.tabs-bar,.topbar-actions,.btn-back,.btn-print,.btn-answer-key,
+  .lesson-footer,.btn-submit,.score-display,
+  #toast,.teacher-panel,.btn-refresh{display:none !important;}
+  html,body{background:#fff !important;font-size:11pt;color:#111;}
+  .tab-pane{display:block !important;}
+  .lesson-header{background:#f5f7ff !important;border:1pt solid #c7d2fe !important;
+    padding:.65cm .8cm !important;margin-bottom:.55cm;break-inside:avoid;}
+  .lesson-header::before{display:none !important;}
+  .lh-title{font-size:17pt !important;}
+  .lh-desc{font-size:10pt !important;color:#444 !important;}
+  .lesson-content{padding:0 !important;max-width:100% !important;}
+  .section-title{font-size:12pt !important;border-bottom:1.5pt solid #4f46e5 !important;
+    color:#3730a3 !important;break-after:avoid;}
+  .st-num{background:#4f46e5 !important;color:#fff !important;
+    width:20pt !important;height:20pt !important;font-size:8pt !important;}
+  .content-card{border:1pt solid #d1d6e5 !important;box-shadow:none !important;
+    break-inside:avoid;page-break-inside:avoid;}
+  .tip-box{background:#eff6ff !important;border:1pt solid #93c5fd !important;break-inside:avoid;}
+  .warning-box{background:#fffbeb !important;border:1pt solid #fde68a !important;break-inside:avoid;}
+  .exercise-block{border:1pt solid #cbd5e1 !important;box-shadow:none !important;
+    break-inside:avoid;page-break-inside:avoid;margin-bottom:.45cm;}
+  .ex-header{background:#f1f5f9 !important;padding:.28cm .42cm !important;
+    border-bottom:1pt solid #e2e8f0 !important;}
+  .ex-num{background:#4f46e5 !important;color:#fff !important;
+    width:20pt !important;height:20pt !important;}
+  .answer-area{border:none !important;border-bottom:1pt solid #999 !important;
+    background:transparent !important;min-height:2.4cm !important;
+    background-image:repeating-linear-gradient(transparent,transparent 1.4em,#e5e7eb 1.4em,#e5e7eb calc(1.4em + .5pt)) !important;}
+  .fill-blank{border:none !important;border-bottom:1.5pt solid #4f46e5 !important;
+    min-width:1.8cm;background:transparent !important;}
+  .mc-option{border:1pt solid #d1d6e5 !important;padding:.22cm .4cm !important;
+    background:#fff !important;break-inside:avoid;min-height:auto !important;}
+  .binyan-table{border:1pt solid #d1d6e5 !important;box-shadow:none !important;break-inside:avoid;}
+  .binyan-table th{background:#4f46e5 !important;color:#fff !important;}
+  .teacher-only{display:none !important;}
+  body.is-teacher .teacher-only{display:block !important;background:#fffbeb !important;
+    border:1.5pt solid #fde68a !important;border-radius:5pt !important;
+    padding:.28cm .42cm !important;margin-top:.3cm !important;}
+  body.is-teacher .teacher-only strong{color:#92400e !important;}
+  .lesson-header::after{content:'לשון Lesson · לשון עברית כיתה י׳ · ' attr(data-print-date);
+    display:block !important;font-size:7pt;color:#aaa;margin-top:.3cm;
+    padding-top:.18cm;border-top:.5pt solid #e0e0e0;}
+  .exercises-more-placeholder{display:none !important;}
+}
+
+/* ══════════════════════════════════════════════════
+   MOBILE ≤660px
+══════════════════════════════════════════════════ */
+@media(max-width:660px){
+  .lesson-header{padding:1.2rem .95rem 1.1rem;}
+  .lesson-content{padding:1rem .85rem 3rem;}
+  .lesson-footer{padding:1rem .85rem 2rem;}
+  /* btn-back is 38×38 icon-only square — no span to hide, no overlap */
+  .lesson-topbar-sub{display:none;}
+  .footer-btns{flex-direction:column;}
+  .btn-send-wa,.btn-send-email{justify-content:center;width:100%;}
+  #toast{bottom:1.6rem;right:.7rem;left:.7rem;text-align:center;}
+  .btn-print .print-label{display:none;}
+  .tab-btn{font-size:.76rem;padding:.6rem .85rem;}
+  /* Responsive tables — full bleed on mobile */
+  .binyan-table-wrap{margin-left:-.85rem;margin-right:-.85rem;border-radius:0;}
+  .binyan-table{min-width:320px;font-size:.76rem;}
+  .binyan-table th,.binyan-table td{padding:.4rem .6rem;}
+  /* Exercise blocks */
+  .exercise-block{border-radius:var(--r);}
+  .ex-body{padding:.85rem .9rem;}
+  .mc-option{padding:.65rem .75rem;}
+  .footer-send-card{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- answer key modal removed — solutions accessible via teacher tab only -->
+
+<!-- ════════════════════════════════════════════════
+     TOPBAR — single instance
+════════════════════════════════════════════════ -->
+<div class="lesson-topbar">
+  <button class="btn-back" onclick="window.location.href='index.html'" aria-label="חזרה לדף הבית">🔙</button>
+  <div class="topbar-title-wrap">
+    <div class="lesson-topbar-title">יחידה 2 · שיעור 1 — שורש ומשקל</div>
+    <div class="lesson-topbar-sub">יחידה 2 · מערכת השם</div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-print" onclick="window.print()">🖨️<span class="print-label"> הדפסה</span></button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TABS BAR — shown only to teacher via CSS (.is-teacher)
+════════════════════════════════════════════════ -->
+<div class="tabs-bar" id="tabs-bar">
+  <button class="tab-btn" id="tab-btn-th" onclick="showTab('th',this)">📚 תיאוריה</button>
+  <button class="tab-btn" id="tab-btn-tw" onclick="showTab('tw',this)">✏️ תרגול</button>
+  <button class="tab-btn" id="tab-btn-ta" onclick="showTab('ta',this)">🔑 פתרונות</button>
+  <button class="tab-btn" id="tab-btn-td" onclick="showTab('td',this)">📊 דשבורד</button>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     LESSON HEADER — long-press → answer key
+════════════════════════════════════════════════ -->
+<div class="lesson-header">
+  <div class="lh-unit-badge">🏷️ יחידה 2 · מערכת השם</div>
+  <span class="lh-emoji">🏷️</span>
+  <h1 class="lh-title">שורש ומשקל — דרכי תצורת השם</h1>
+  <p class="lh-desc">הכרת דרכי יצירת שמות עצם בעברית: שורש ומשקל לעומת בסיס וסיומת — זיהוי, פירוק ודוגמאות</p>
+  <div class="lh-meta">
+    <span class="lh-chip time">⏱ 45 דקות</span>
+    <span class="lh-chip">שיעור 1</span>
+    <span class="lh-chip" id="role-chip">👑 מצב מורה</span>
+  </div>
+  <div id="lp-bar-wrap" style="display:none"><div id="lp-bar"></div></div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TAB: THEORY (th)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-th">
+<div class="lesson-content">
+
+  <!-- ── סעיף 1: מבוא ── -->
+  <div class="section-title">
+    <div class="st-num">1</div>
+    <span>מבוא — כיצד נוצרים שמות עצם בעברית?</span>
+  </div>
+
+  <div class="content-card">
+    <p>בעברית קיימות <strong>שתי דרכי תצורה</strong> עיקריות ליצירת שמות עצם חדשים. לכל דרך יש מנגנון שונה, מאפיינים שונים, וחשוב לדעת להבחין ביניהן — זה נושא מרכזי בבגרות.</p>
+    <ul>
+      <li><strong>שורש ומשקל</strong> — הדרך "הקלאסית": לוקחים שורש (3–4 אותיות) ו"שותלים" אותו בתוך תבנית ניקוד קבועה (משקל).</li>
+      <li><strong>בסיס וסיומת</strong> — הדרך ה"מודרנית": לוקחים מילה שלמה (בסיס) ומוסיפים לה סיומת שמשנה את משמעותה או קטגוריתה.</li>
+    </ul>
+    <p style="margin-top:.65rem">הדוגמה הקלאסית: שני שמות של מקום לצילום —<br>
+    <strong>מַצְלֵמָה</strong> (שורש צ-ל-מ + משקל מַקְטֵלָה) | <strong>צַלְמָנִיָּה</strong> (בסיס "צַלָּם" + סיומת "-ָנִיָּה").</p>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>שאלת מפתח:</strong> האם במילה נותרו אותיות "מפזרות" (תחיליות, תוספות או סיומות)? אם כן — זו כנראה בסיס+סיומת. אם כל האותיות שייכות לשורש ולמשקל — זו שורש+משקל.
+  </div>
+
+  <!-- ── סעיף 2: שורש ומשקל ── -->
+  <div class="section-title">
+    <div class="st-num">2</div>
+    <span>דרך א׳ — שורש + משקל</span>
+  </div>
+
+  <div class="content-card">
+    <p><strong>השורש</strong> הוא רצף של 3 (או 4) עיצורים הנושאים משמעות בסיסית. <strong>המשקל</strong> הוא תבנית ניקוד קבועה עם אותיות "שירות" (מ, ת, ה) שנוספות בעמדות קבועות. השורש "נשתל" לתוך המשקל.</p>
+
+    <h4 style="margin-top:.7rem">כללי זיהוי מילה במשקל:</h4>
+    <ul>
+      <li>כל אותיות השורש מופיעות <strong>בתוך</strong> המילה בסדר הנכון</li>
+      <li>יש <strong>דפוס ניקוד קבוע</strong> (לדוגמה: מַ_ְ_ֵ_ָה)</li>
+      <li>אותיות "שירות" (מ/ת/ה) מופיעות במיקומים ספציפיים</li>
+      <li>שמות אחרים מאותו שורש + משקל — בעלי דפוס זהה</li>
+    </ul>
+
+    <h4 style="margin-top:.7rem">משקלים נפוצים ומשמעותם:</h4>
+  </div>
+
+  <div class="binyan-table-wrap">
+    <table class="binyan-table">
+      <thead>
+        <tr>
+          <th>משקל</th>
+          <th>משמעות / שימוש</th>
+          <th>דוגמה (שורש)</th>
+          <th>דוגמה שנייה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="heb">מַקְטֵלָה</td><td>מכשיר / כלי (נקבה)</td><td class="heb">מַצְלֵמָה (צ-ל-מ)</td><td class="heb">מַכְבֵּסָה (כ-ב-ס)</td></tr>
+        <tr><td class="heb">מִקְטָל</td><td>מכשיר / מקום</td><td class="heb">מִכְתָּב (כ-ת-ב)</td><td class="heb">מִשְׁקָל (שׁ-ק-ל)</td></tr>
+        <tr><td class="heb">קְטִילָה</td><td>שם פעולה</td><td class="heb">כְּתִיבָה (כ-ת-ב)</td><td class="heb">שְׁמִירָה (שׁ-מ-ר)</td></tr>
+        <tr><td class="heb">קַטָּל</td><td>בעל מקצוע</td><td class="heb">צַלָּם (צ-ל-מ)</td><td class="heb">סַפָּר (ס-פ-ר)</td></tr>
+        <tr><td class="heb">מִקְטָלָה</td><td>מקום</td><td class="heb">מִסְעָדָה (ס-ע-ד)</td><td class="heb">מִמְשָׁלָה (מ-שׁ-ל)</td></tr>
+        <tr><td class="heb">תַּקְטִיל</td><td>מכשיר טכני</td><td class="heb">תַּקְלִיט (ק-ל-ט)</td><td class="heb">תַּסְרִיט (ס-ר-ט)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="content-card">
+    <h4>דוגמה מפורקת — <strong>מַצְלֵמָה</strong>:</h4>
+    <ul>
+      <li>השורש: <strong>צ-ל-מ</strong> (קשור לצילום, צֶלֶם, תמונה)</li>
+      <li>המשקל: <strong>מַקְטֵלָה</strong> — משקל מכשירים נקביים</li>
+      <li>ה-מ׳ בתחילה + ה-ה׳ בסוף = <strong>אותיות המשקל</strong>, לא חלק מהשורש</li>
+      <li>משמעות: מכשיר לצילום</li>
+    </ul>
+    <p style="margin-top:.65rem">מילים נוספות באותו משקל: <strong>מַכְבֵּסָה, מַכְתֵּבָה, מַסְגֵּרָה, מַזְלֵגָה</strong> — כולן כלים/מקומות.</p>
+  </div>
+
+  <div class="warning-box">
+    ⚠️ <strong>מלכודת נפוצה:</strong> מילים כמו <strong>מַחְשֵׁב</strong> נראות כאילו המ׳ חלק מהשורש. חלצו את הפועל: "חישב" (ח-שׁ-ב) — השורש הוא ח-שׁ-ב והמ׳ היא <em>אות משקל</em> (משקל מַקְטֵל).
+  </div>
+
+  <!-- ── סעיף 3: בסיס וסיומת ── -->
+  <div class="section-title">
+    <div class="st-num">3</div>
+    <span>דרך ב׳ — בסיס + סיומת</span>
+  </div>
+
+  <div class="content-card">
+    <p><strong>הבסיס</strong> הוא מילה קיימת בעברית (לרוב שם עצם או שם תואר) והסיומת היא תוספת קבועה בסוף המילה שיוצרת מילה חדשה. הבסיס נשאר מזוהה בתוך המילה החדשה.</p>
+
+    <h4 style="margin-top:.7rem">כללי זיהוי מילה עם סיומת:</h4>
+    <ul>
+      <li>ניתן "להוריד" את הסוף ולקבל מילה עצמאית בעלת משמעות</li>
+      <li>הבסיס (המילה המקורית) מופיע כמעט בשלמותו בתחילת המילה</li>
+      <li>הסיומת קבועה ויוצרת קטגוריה משמעותית (מקום, מקצוע, תואר...)</li>
+    </ul>
+
+    <h4 style="margin-top:.7rem">סיומות נפוצות ומשמעותן:</h4>
+  </div>
+
+  <div class="binyan-table-wrap">
+    <table class="binyan-table">
+      <thead>
+        <tr>
+          <th>סיומת</th>
+          <th>משמעות</th>
+          <th>דוגמה (בסיס + סיומת)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="heb">-ִיָּה</td><td>מקום (עסק/חנות)</td><td class="heb">סִפְרִיָּה (ספר + -ייה) | גְּלִידִיָּה (גלידה + -ייה)</td></tr>
+        <tr><td class="heb">-ָנִיָּה</td><td>מקום/עסק מקצועי</td><td class="heb">צַלְמָנִיָּה (צלם + -נייה) | מַאֲפִיָּה</td></tr>
+        <tr><td class="heb">-ָן</td><td>בעל מקצוע / תכונה</td><td class="heb">שַׂחְקָן (שחק + -ן) | עִתּוֹנָאי</td></tr>
+        <tr><td class="heb">-ָאִי / -אִי</td><td>בעל מקצוע</td><td class="heb">עִתּוֹנַאי (עיתון + -אי) | חַשְׁמַלַּאי</td></tr>
+        <tr><td class="heb">-וּת</td><td>תכונה מופשטת</td><td class="heb">יַלְדוּת (ילד + -ות) | חֲבֵרוּת</td></tr>
+        <tr><td class="heb">-ִי</td><td>שם תואר</td><td class="heb">יִשְׂרְאֵלִי (ישראל + -י) | מַדְעִי</td></tr>
+        <tr><td class="heb">-ן</td><td>הקטנה / חיבה</td><td class="heb">יַלְדּוֹן (ילד + -ון) | שֻׁלְחָנוֹן</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="content-card">
+    <h4>דוגמה מפורקת — <strong>צַלְמָנִיָּה</strong>:</h4>
+    <ul>
+      <li>הבסיס: <strong>צַלָּם</strong> (בעל המקצוע שמצלם)</li>
+      <li>הסיומת: <strong>-ָנִיָּה</strong> (סיומת של עסק/מקום)</li>
+      <li>משמעות: המקום שבו הצלם עובד</li>
+      <li>אותיות השורש נשמרו (צ-ל-מ) + תוספת הסיומת נ-י-ה</li>
+    </ul>
+    <p style="margin-top:.65rem">דוגמאות נוספות: <strong>מַלְכָּה → מַלְכוּת, ידיד → ידידות, חלב → חלבן, כדור → כדרן</strong>.</p>
+  </div>
+
+  <!-- ── סעיף 4: השוואה וזיהוי ── -->
+  <div class="section-title">
+    <div class="st-num">4</div>
+    <span>השוואה — שורש+משקל לעומת בסיס+סיומת</span>
+  </div>
+
+  <div class="binyan-table-wrap">
+    <table class="binyan-table">
+      <thead>
+        <tr>
+          <th>קריטריון</th>
+          <th>שורש + משקל</th>
+          <th>בסיס + סיומת</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>מבנה</td><td>שורש "נשתל" בתבנית קבועה</td><td>מילה שלמה + תוספת בסוף</td></tr>
+        <tr><td>אותיות נוספות</td><td>בתוך המילה (מ/ת/ה)</td><td>רק בסוף המילה</td></tr>
+        <tr><td>מבחן זיהוי</td><td>האם אפשר לזהות משקל עם שורש אחר?</td><td>האם אפשר "להוריד" את הסוף ולקבל מילה?</td></tr>
+        <tr><td>דוגמה — מכשיר צילום</td><td class="heb">מַצְלֵמָה (צ-ל-מ + מַקְטֵלָה)</td><td class="heb">—</td></tr>
+        <tr><td>דוגמה — עסק לצילום</td><td class="heb">—</td><td class="heb">צַלְמָנִיָּה (צַלָּם + -ָנִיָּה)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>שלוש שאלות לבדיקה מהירה:</strong><br>
+    ① האם בסוף המילה יש סיומת קבועה מוכרת (-ייה, -ן, -ות, -י)? → <strong>בסיס+סיומת</strong><br>
+    ② האם אותיות השורש פזורות בתוך המילה עם מ׳/ת׳ לפניהן? → <strong>שורש+משקל</strong><br>
+    ③ האם "הורדת הסוף" נותנת מילה עצמאית הגיונית? → <strong>בסיס+סיומת</strong>
+  </div>
+
+  <div class="warning-box">
+    ⚠️ <strong>מלכודת משולבת:</strong> יש מילים שנוצרו ב<em>שילוב</em> שתי הדרכים — למשל <strong>מַחְשְׁבוֹן</strong> = (מ + ח-שׁ-ב + משקל מַקְטֵל) + סיומת <strong>-וֹן</strong>. בבגרות: פרקו את המילה שלב אחר שלב.
+  </div>
+
+</div><!-- /lesson-content theory -->
+</div><!-- /tab-th -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: WORKSHEET (tw) — default active for all users
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-tw">
+<div class="lesson-content" id="lesson-content">
+
+  <div class="section-title" style="margin-top:0">
+    <div class="st-num">✍</div>
+    <span>תרגול — 12 שאלות ברמת בגרות</span>
+  </div>
+
+  <!-- ═══ שאלה 1 — פירוק מילה: שורש+משקל ═══ -->
+  <div class="exercise-block" id="ex-1">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-title">פירוק מילה — שורש ומשקל</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">פרקו את המילה <strong>מַצְלֵמָה</strong>: ציינו את השורש, את המשקל ואת אותיות השירות.</p>
+      <textarea class="answer-area" id="ans-1" placeholder="שורש: ___&#10;משקל: ___&#10;אותיות השירות: ___&#10;משמעות המשקל: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        שורש: <strong>צ-ל-מ</strong> | משקל: <strong>מַקְטֵלָה</strong> | אותיות שירות: <strong>מ׳ בתחילה + ה׳ בסוף</strong> | משמעות: מכשיר/כלי (נקבה).
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 2 — פירוק: בסיס+סיומת ═══ -->
+  <div class="exercise-block" id="ex-2">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-title">פירוק מילה — בסיס וסיומת</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">פרקו את המילה <strong>צַלְמָנִיָּה</strong>: ציינו את הבסיס ואת הסיומת, והסבירו את המשמעות שנוצרה.</p>
+      <textarea class="answer-area" id="ans-2" placeholder="בסיס: ___&#10;סיומת: ___&#10;משמעות: ___" rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        בסיס: <strong>צַלָּם</strong> (בעל המקצוע) | סיומת: <strong>-ָנִיָּה</strong> (סיומת של עסק/מקום) | משמעות: המקום/העסק שבו הצלם עובד.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 3 — זיהוי דרך תצורה במשפט ═══ -->
+  <div class="exercise-block" id="ex-3">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-title">זיהוי דרך תצורה — במשפט</div>
+      <span class="ex-points">10 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">קראו את המשפט וציינו לכל מילה מודגשת: האם נוצרה ב<strong>שורש+משקל</strong> או ב<strong>בסיס+סיומת</strong>?</p>
+      <p class="ex-question" style="margin-top:.5rem;font-size:.95rem;line-height:1.9">
+        "הַ<strong>סַּפָּר</strong> הֶחְדָשׁ פָּתַח <strong>מִסְפָּרָה</strong> בְּפִנַּת הָרְחוֹב, וּבִתּוֹ — בַּעֲלַת תֹּאַר <strong>רִאשׁוֹנִי</strong> — עוֹזֶרֶת לוֹ ב<strong>סִפְרוּת</strong>."
+      </p>
+      <textarea class="answer-area" id="ans-3" placeholder="סַפָּר = ___&#10;מִסְפָּרָה = ___&#10;רִאשׁוֹנִי = ___&#10;סִפְרוּת = ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        סַפָּר — <strong>שורש+משקל</strong> (ס-פ-ר + משקל קַטָּל — בעל מקצוע)<br>
+        מִסְפָּרָה — <strong>שורש+משקל</strong> (ס-פ-ר + משקל מִקְטָלָה — מקום)<br>
+        רִאשׁוֹנִי — <strong>בסיס+סיומת</strong> (ראשון + -ִי = שם תואר)<br>
+        סִפְרוּת — <strong>בסיס+סיומת</strong> (ספר + -וּת = תחום/תכונה מופשטת)
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 4 — בחירה מרובה ═══ -->
+  <div class="exercise-block" id="ex-4">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-title">בחירה מרובה — המילה "מִכְתָּבָה"</div>
+      <span class="ex-points">6 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">המילה <strong>"מַכְתֵּבָה"</strong> (שולחן עבודה) נוצרה ב:</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc4" value="a"><span class="mc-option-label">בסיס "מכתב" + סיומת "-ה"</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="b"><span class="mc-option-label">שורש כ-ת-ב + משקל מַקְטֵלָה ✓</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="c"><span class="mc-option-label">בסיס "כתב" + סיומת "-ָבָה"</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="d"><span class="mc-option-label">שורש מ-כ-ת + משקל קַטְבָה</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ב׳: שורש כ-ת-ב + משקל מַקְטֵלָה</strong>
+        המ׳ בתחילה והה׳ בסוף הן אותיות שירות של המשקל. השורש הוא כ-ת-ב (כתיבה). המשקל מַקְטֵלָה מציין מכשיר/כלי נקבה.
+        תשובה א׳ שגויה: "מכתב" אינו בסיס לכלי — הוא תוצר של הכתיבה, לא מקום/כלי.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 5 — השלמות ═══ -->
+  <div class="exercise-block" id="ex-5">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-title">השלמות — שם המשקל או הסיומת</div>
+      <span class="ex-points">10 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">השלימו: איזה משקל או סיומת יוצרים את כל המילים?</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. סִפְרִיָּה, גְּלִידִיָּה, שְׁקִיפִיָּה → סיומת <input class="fill-blank" id="fill-5a" placeholder="______" size="8"><br><br>
+        ב. מַצְלֵמָה, מַכְבֵּסָה, מַכְתֵּבָה → משקל <input class="fill-blank" id="fill-5b" placeholder="______" size="12"><br><br>
+        ג. עִתּוֹנָאי, חַשְׁמַלַּאי → סיומת <input class="fill-blank" id="fill-5c" placeholder="______" size="8"><br><br>
+        ד. כְּתִיבָה, שְׁמִירָה, פְּתִיחָה → משקל <input class="fill-blank" id="fill-5d" placeholder="______" size="10">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. סיומת <strong>-ִיָּה</strong> (מקום/עסק)<br>
+        ב. משקל <strong>מַקְטֵלָה</strong> (מכשירים נקביים)<br>
+        ג. סיומת <strong>-ָאי/-אי</strong> (בעל מקצוע)<br>
+        ד. משקל <strong>קְטִילָה</strong> (שמות פעולה)
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 6 — זיהוי במשפט מורכב ═══ -->
+  <div class="exercise-block" id="ex-6">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-title">ניתוח מילים במשפט</div>
+      <span class="ex-points">12 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">לכל מילה מודגשת במשפט — ציינו דרך תצורה, ואם שורש+משקל: פרקו לשורש ולמשקל. אם בסיס+סיומת: פרקו לבסיס ולסיומת.</p>
+      <p class="ex-question" style="margin-top:.5rem;font-size:.95rem;line-height:1.9">
+        "בְּ<strong>מִסְעָדָה</strong> חֲדָשָׁה בָּעִיר, הַ<strong>טַּבָּח</strong> מִזְמִין אֶת הַ<strong>לַּקּוֹחוֹת</strong> לִטְעֹם מִ<strong>מַּאֲפֵה</strong> צָרְפָתִי וּ<strong>סַלָטִים</strong>."
+      </p>
+      <textarea class="answer-area" id="ans-6" placeholder="מִסְעָדָה — ___&#10;טַבָּח — ___&#10;לַקּוֹחוֹת — ___&#10;מַאֲפֵה — ___&#10;סַלָטִים — ___" rows="7"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        מִסְעָדָה — <strong>שורש+משקל</strong> (ס-ע-ד + מִקְטָלָה — מקום)<br>
+        טַבָּח — <strong>שורש+משקל</strong> (ט-ב-ח + קַטָּל — בעל מקצוע)<br>
+        לַקּוֹחוֹת — <strong>שורש+משקל</strong> (ל-ק-ח + משקל פְּעוּל ברבים נקבה "לַקּוֹחַ"; ריבוי = -וֹת)<br>
+        מַאֲפֵה — <strong>שורש+משקל</strong> (א-פ-ה + משקל מַקְטֵה)<br>
+        סַלָטִים — <strong>לא מבני העברית</strong> (מילה שאולה — סלט + ריבוי), אבל ניתן לזהות בסיס+סיומת (סלט + -ים)
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 7 — MC שורש במשקל ═══ -->
+  <div class="exercise-block" id="ex-7">
+    <div class="ex-header">
+      <div class="ex-num">7</div>
+      <div class="ex-title">זיהוי שורש בתוך משקל</div>
+      <span class="ex-points">6 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">מהו השורש של המילה <strong>"תַּקְלִיט"</strong>?</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc7" value="a"><span class="mc-option-label">ת-ק-ל (וה-יט סיומת)</span></label>
+        <label class="mc-option"><input type="radio" name="mc7" value="b"><span class="mc-option-label">ק-ל-ט ✓ (משקל תַּקְטִיל)</span></label>
+        <label class="mc-option"><input type="radio" name="mc7" value="c"><span class="mc-option-label">ת-ק-ל-ט (שורש מרובע)</span></label>
+        <label class="mc-option"><input type="radio" name="mc7" value="d"><span class="mc-option-label">תק-ליט (בסיס+סיומת)</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ב׳: ק-ל-ט</strong>
+        המשקל תַּקְטִיל (תַּ + ק + ל + יִ + ט) משמש למכשירים טכניים. התַ׳ בתחילה והיו״ד בסוף הם אותיות משקל — לא שורש. השורש ק-ל-ט = קלט, קלטת, קליטה.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 8 — תיקון שגיאה ═══ -->
+  <div class="exercise-block" id="ex-8">
+    <div class="ex-header">
+      <div class="ex-num">8</div>
+      <div class="ex-title">תיקון ניתוח שגוי</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">תלמיד ניתח את המילה <strong>"מַחְשֵׁב"</strong> כ: "בסיס מַח + סיומת שֵׁב". תקנו ונמקו.</p>
+      <textarea class="answer-area" id="ans-8" placeholder="הניתוח הנכון: ___&#10;נימוק: ___" rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        הניתוח הנכון: <strong>שורש ח-שׁ-ב + משקל מַקְטֵל</strong>.<br>
+        נימוק: "מַח" איננה מילה עצמאית ולכן איננה בסיס. "שֵׁב" איננה סיומת מוכרת בעברית. לעומת זאת — ניתן לחלץ את הפועל "חִשֵּׁב" (חשב במחשב) ושם הפעולה "חִשּׁוּב" → השורש הוא ח-שׁ-ב. המ׳ בתחילה היא אות משקל (משקל מַקְטֵל = מכשיר).
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 9 — חיבור משקל-סיומת ═══ -->
+  <div class="exercise-block" id="ex-9">
+    <div class="ex-header">
+      <div class="ex-num">9</div>
+      <div class="ex-title">מילה משולבת — שני שלבים</div>
+      <span class="ex-points">10 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">פרקו את המילה <strong>"מַחְשְׁבוֹן"</strong> (מחשב קטן) בשני שלבים:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        שלב א׳ — הבסיס: <input class="fill-blank" id="fill-9a" placeholder="______" size="10"><br><br>
+        שלב ב׳ — הסיומת הנוספת: <input class="fill-blank" id="fill-9b" placeholder="______" size="6"><br><br>
+        מהו השורש שבתוך הבסיס? <input class="fill-blank" id="fill-9c" placeholder="______" size="8"><br><br>
+        מה משמעות הסיומת -וֹן? <input class="fill-blank" id="fill-9d" placeholder="______" size="14">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        הבסיס: <strong>מַחְשֵׁב</strong> (עצמו שורש+משקל) | הסיומת: <strong>-וֹן</strong><br>
+        השורש בתוך הבסיס: <strong>ח-שׁ-ב</strong> (במשקל מַקְטֵל)<br>
+        משמעות הסיומת -וֹן: <strong>הקטנה</strong> (מחשב → מחשבון קטן)<br>
+        <em style="font-size:.8rem;color:var(--muted)">דוגמה לשילוב שתי דרכי תצורה: משקל + סיומת.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 10 — MC סיומת ═══ -->
+  <div class="exercise-block" id="ex-10">
+    <div class="ex-header">
+      <div class="ex-num">10</div>
+      <div class="ex-title">משמעות הסיומת -וּת</div>
+      <span class="ex-points">6 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">מה המשמעות הכללית של הסיומת <strong>-וּת</strong> במילים כמו "יַלְדוּת, חֲבֵרוּת, עַצְמָאוּת"?</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc10" value="a"><span class="mc-option-label">מקום או עסק</span></label>
+        <label class="mc-option"><input type="radio" name="mc10" value="b"><span class="mc-option-label">בעל מקצוע</span></label>
+        <label class="mc-option"><input type="radio" name="mc10" value="c"><span class="mc-option-label">תכונה או מצב מופשט ✓</span></label>
+        <label class="mc-option"><input type="radio" name="mc10" value="d"><span class="mc-option-label">הקטנה או חיבה</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ג׳: תכונה או מצב מופשט</strong>
+        הסיומת -וּת יוצרת שמות עצם מופשטים: ילדוּת = מצב של היות ילד; חברוּת = מצב של היות חבר; עצמאוּת = תכונה של היות עצמאי.
+        בסיסים אחרים: ספרוּת (ספר + -וּת), יהדוּת (יהודי + -וּת).
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 11 — תיקון שגיאות במשפט ═══ -->
+  <div class="exercise-block" id="ex-11">
+    <div class="ex-header">
+      <div class="ex-num">11</div>
+      <div class="ex-title">זיהוי שגיאות — 4 מילים בקטע</div>
+      <span class="ex-points">12 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">תלמיד ניתח את כל המילים כ"בסיס+סיומת". מצאו 2 מילים שבהן טעה (הן שורש+משקל). ציינו אותן ונמקו.</p>
+      <p class="ex-question" style="margin-top:.5rem;font-size:.95rem;line-height:1.9">
+        הרשימה: <strong>סִפְרִיָּה · מַכְבֵּסָה · חַשְׁמַלַּאי · תַּחֲנָה · יַלְדוּת</strong>
+      </p>
+      <textarea class="answer-area" id="ans-11" placeholder="מילה 1: ___ נימוק: ___&#10;מילה 2: ___ נימוק: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        2 המילים שהן <strong>שורש+משקל</strong> (לא בסיס+סיומת):<br>
+        1. <strong>מַכְבֵּסָה</strong> — שורש כ-ב-ס + משקל מַקְטֵלָה (המ׳ בתחילה היא אות משקל, לא בסיס)<br>
+        2. <strong>תַּחֲנָה</strong> — שורש ח-נ-ה + משקל תַּקְטְלָה (התַ׳ היא אות משקל)<br>
+        <em style="font-size:.8rem;color:var(--muted)">3 האחרות הן בסיס+סיומת: סִפְרִיָּה (ספר+-ייה), חַשְׁמַלַּאי (חשמל+-אי), יַלְדוּת (ילד+-ות).</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ שאלה 12 — שאלת סיכום יצירה ═══ -->
+  <div class="exercise-block" id="ex-12">
+    <div class="ex-header">
+      <div class="ex-num">12</div>
+      <div class="ex-title">יצירת מילים — שאלת סיכום</div>
+      <span class="ex-points">14 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">יצרו מילים לפי ההוראות. פרקו כל מילה להראות את התהליך (שורש+משקל או בסיס+סיומת).</p>
+      <ol class="ex-question" style="padding-right:1.2rem;margin-top:.4rem">
+        <li>מקום שבו אופים — מהשורש א-פ-ה (במשקל מַקְטֵלָה או סיומת -ִיָּה)</li>
+        <li>בעל מקצוע שמכין לחם — מהשורש א-פ-ה (משקל קַטָּל)</li>
+        <li>תכונה של ידידות — מבסיס "ידיד" + סיומת</li>
+        <li>מקום שבו עובד העיתונאי — מבסיס + סיומת מקום</li>
+      </ol>
+      <textarea class="answer-area" id="ans-12" placeholder="1. ___ (פירוק: ___)&#10;2. ___ (פירוק: ___)&#10;3. ___ (פירוק: ___)&#10;4. ___ (פירוק: ___)" rows="6"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        1. <strong>מַאֲפִיָּה</strong> (בסיס "אופה" + סיומת -ִיָּה) — או גם <strong>מַאֲפֵה</strong> (שורש א-פ-ה + משקל מַקְטֵה)<br>
+        2. <strong>אוֹפֶה</strong> (שורש א-פ-ה + משקל קוֹטֵל — לא קַטָּל; שניהם יתקבלו)<br>
+        3. <strong>יְדִידוּת</strong> (בסיס "ידיד" + סיומת -וּת — תכונה מופשטת)<br>
+        4. <strong>מַעֲרֶכֶת הָעִיתּוֹן</strong> או <strong>עִתּוֹנוּת</strong> (בסיס "עיתון" + סיומת -וּת) — תחום/עיסוק
+      </div>
+    </div>
+  </div>
+
+  <!-- כפתור הגשה -->
+  <button class="btn-submit" onclick="submitLesson()">✅ סיים ושמור תשובות</button>
+  <div class="score-display" id="score-display">
+    <div class="score-num">✓</div>
+    <div class="score-label">התשובות נשמרו! עכשיו שלחו למורה:</div>
+  </div>
+
+  <div class="footer-send-card" style="margin-top:1.5rem;">
+    <h3>📤 סיימת? שלח את התשובות למורה</h3>
+    <p>בחרו את אמצעי השליחה המועדף עליכם:<br>
+    <small style="opacity:.7;font-size:.7rem">הפרטים מוגדרים בדף הראשי ← הגדרות (⚙️)</small></p>
+    <div class="footer-btns">
+      <button class="btn-send-wa" onclick="sendViaWhatsApp()">שליחה בוואטסאפ 🟢</button>
+      <button class="btn-send-email" onclick="sendViaEmail()">שליחה במייל ✉️</button>
+    </div>
+  </div>
+
+</div><!-- /lesson-content -->
+</div><!-- /tab-tw -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: ANSWERS — teacher only (ta)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-ta">
+<div class="teacher-panel">
+
+  <div class="teacher-panel-header">
+    <span class="tph-icon">🔑</span>
+    <div class="tph-text">
+      <h2>פתרונות — לשימוש מורה בלבד</h2>
+      <p>יחידה 2 · שיעור 1 — שורש ומשקל / בסיס וסיומת</p>
+    </div>
+  </div>
+
+  <div class="teacher-section-title"><span>1</span> פירוק מַצְלֵמָה</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 1</strong>
+    שורש: <strong>צ-ל-מ</strong> (קשור ל"צילום", "צֶלֶם")<br>
+    משקל: <strong>מַקְטֵלָה</strong> (משקל של מכשירים/כלים נקביים)<br>
+    אותיות שירות: <strong>מ׳ בתחילה + ה׳ בסוף</strong><br>
+    משמעות: מכשיר לצילום.<br>
+    <em style="font-size:.8rem;color:var(--muted)">מילים דומות: מַכְבֵּסָה (כ-ב-ס), מַכְתֵּבָה (כ-ת-ב), מַסְגֵּרָה (ס-ג-ר).</em>
+  </div>
+
+  <div class="teacher-section-title"><span>2</span> פירוק צַלְמָנִיָּה</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 2</strong>
+    בסיס: <strong>צַלָּם</strong> (בעל המקצוע שמצלם)<br>
+    סיומת: <strong>-ָנִיָּה</strong> (סיומת של עסק/מקום מקצועי)<br>
+    משמעות: המקום/העסק שבו הצלם עובד.<br>
+    <em style="font-size:.8rem;color:var(--muted)">הבחנה חשובה: צלמנייה ≠ מצלמה. מצלמה = כלי; צלמנייה = מקום.</em>
+  </div>
+
+  <div class="teacher-section-title"><span>3</span> ניתוח במשפט</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 3</strong>
+    סַפָּר — <strong>שורש+משקל</strong>: ס-פ-ר + קַטָּל (בעל מקצוע)<br>
+    מִסְפָּרָה — <strong>שורש+משקל</strong>: ס-פ-ר + מִקְטָלָה (מקום)<br>
+    רִאשׁוֹנִי — <strong>בסיס+סיומת</strong>: ראשון + -ִי (שם תואר)<br>
+    סִפְרוּת — <strong>בסיס+סיומת</strong>: ספר + -וּת (תחום/תכונה מופשטת)<br>
+    <em style="font-size:.8rem;color:var(--muted)">הערה: "סַפָּר" ו"מִסְפָּרָה" חולקים את השורש ס-פ-ר אך נוצרים במשקלים שונים — זוהי דוגמה ברורה לשני משקלים על אותו שורש.</em>
+  </div>
+
+  <div class="teacher-section-title"><span>4</span> MC — מַכְתֵּבָה</div>
+  <div class="ak-answer-item">
+    <strong>🔑 תשובה נכונה — ב׳: שורש כ-ת-ב + משקל מַקְטֵלָה</strong>
+    המ׳ בתחילה והה׳ בסוף הן אותיות שירות של המשקל. השורש כ-ת-ב (כתיבה). המשקל מַקְטֵלָה מציין מכשיר/כלי נקבה.<br>
+    <em style="font-size:.8rem;color:var(--muted)">שגיאה נפוצה: "בסיס מכתב + סיומת" — שגוי, כי "מכתב" אינו כלי/מקום.</em>
+  </div>
+
+  <div class="teacher-section-title"><span>5</span> השלמות משקל/סיומת</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 5</strong>
+    א. סיומת <strong>-ִיָּה</strong> (מקום/עסק)<br>
+    ב. משקל <strong>מַקְטֵלָה</strong> (מכשירים נקביים)<br>
+    ג. סיומת <strong>-ָאי/-אי</strong> (בעל מקצוע)<br>
+    ד. משקל <strong>קְטִילָה</strong> (שמות פעולה)
+  </div>
+
+  <div class="teacher-section-title"><span>6</span> ניתוח מילים במסעדה</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 6</strong>
+    מִסְעָדָה — <strong>שורש+משקל</strong>: ס-ע-ד + מִקְטָלָה (מקום)<br>
+    טַבָּח — <strong>שורש+משקל</strong>: ט-ב-ח + קַטָּל (בעל מקצוע)<br>
+    לַקּוֹחוֹת — <strong>שורש+משקל</strong> ברבים: ל-ק-ח (לַקּוֹחַ + ריבוי נקבה)<br>
+    מַאֲפֵה — <strong>שורש+משקל</strong>: א-פ-ה + מַקְטֵה (מאפה, מאכל מאפייה)<br>
+    סַלָטִים — מילה שאולה מלעזית; בתוך העברית ניתן לזהות בסיס "סלט" + סיומת ריבוי -ים.
+  </div>
+
+  <div class="teacher-section-title"><span>7</span> MC — שורש תַּקְלִיט</div>
+  <div class="ak-answer-item">
+    <strong>🔑 תשובה נכונה — ב׳: ק-ל-ט</strong>
+    משקל תַּקְטִיל: ת־+ 3 עיצורי שורש + י+אחרון. השורש ק-ל-ט = קלט, קלטת, קליטה. התַ׳ והיו״ד אותיות משקל.
+  </div>
+
+  <div class="teacher-section-title"><span>8</span> תיקון ניתוח "מַחְשֵׁב"</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 8</strong>
+    הניתוח הנכון: <strong>שורש ח-שׁ-ב + משקל מַקְטֵל</strong>.<br>
+    נימוק: "מַח" אינה מילה עצמאית ולכן אינה בסיס תקף. "שֵׁב" אינה סיומת ידועה בעברית.<br>
+    ניתן לחלץ את הפועל "חִשֵּׁב" ואת שם הפעולה "חִשּׁוּב" — השורש ח-שׁ-ב. המ׳ בתחילה היא אות משקל (משקל מַקְטֵל = מכשיר/גורם).
+  </div>
+
+  <div class="teacher-section-title"><span>9</span> שילוב דרכים — מַחְשְׁבוֹן</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 9</strong>
+    הבסיס: <strong>מַחְשֵׁב</strong> (עצמו נוצר משורש+משקל: ח-שׁ-ב + מַקְטֵל)<br>
+    הסיומת: <strong>-וֹן</strong><br>
+    השורש בתוך הבסיס: <strong>ח-שׁ-ב</strong><br>
+    משמעות הסיומת -וֹן: <strong>הקטנה</strong> (מחשב גדול → מחשבון קטן)<br>
+    <em style="font-size:.8rem;color:var(--muted)">דוגמה מעולה לשילוב שני תהליכי תצורה: קודם שורש+משקל, ואז עליו בסיס+סיומת.</em>
+  </div>
+
+  <div class="teacher-section-title"><span>10</span> משמעות הסיומת -וּת</div>
+  <div class="ak-answer-item">
+    <strong>🔑 תשובה נכונה — ג׳: תכונה או מצב מופשט</strong>
+    ילדוּת = מצב של היות ילד; חברוּת = מצב/תכונה של היות חבר; עצמאוּת = תכונת העצמאי.<br>
+    <em style="font-size:.8rem;color:var(--muted)">הסיומת -וּת היא אחת הפרודוקטיביות ביותר בעברית המודרנית: ספרוּת, יהדוּת, ילדוּת, חברוּת, זכאוּת.</em>
+  </div>
+
+  <div class="teacher-section-title"><span>11</span> זיהוי שגיאות ברשימה</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 11</strong>
+    2 המילים שהן <strong>שורש+משקל</strong> (ולא בסיס+סיומת):<br>
+    1. <strong>מַכְבֵּסָה</strong> — שורש כ-ב-ס + משקל מַקְטֵלָה. המ׳ בתחילה היא אות משקל, לא בסיס.<br>
+    2. <strong>תַּחֲנָה</strong> — שורש ח-נ-ה + משקל תַּקְטְלָה. התַ׳ בתחילה היא אות משקל.<br>
+    <em style="font-size:.8rem;color:var(--muted)">3 האחרות הן אמנם בסיס+סיומת: סִפְרִיָּה (ספר+-ייה), חַשְׁמַלַּאי (חשמל+-אי), יַלְדוּת (ילד+-וּת).</em>
+  </div>
+
+  <div class="teacher-section-title"><span>12</span> יצירת מילים</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח תשובות לדוגמה — שאלה 12</strong>
+    1. <strong>מַאֲפִיָּה</strong> (בסיס "אופה" + סיומת -ִיָּה) — מקום האפייה<br>
+    2. <strong>אוֹפֶה</strong> (שורש א-פ-ה + משקל קוֹטֵל) — בעל המקצוע<br>
+    3. <strong>יְדִידוּת</strong> (בסיס "ידיד" + סיומת -וּת) — תכונה מופשטת<br>
+    4. <strong>עִתּוֹנוּת</strong> (בסיס "עיתון" + סיומת -וּת) — תחום העיסוק<br>
+    <em style="font-size:.8rem;color:var(--muted)">שאלה זו בודקת את היכולת ליצור מילים אקטיבית תוך הבחנה בין שתי דרכי התצורה — מיומנות גבוהה.</em>
+  </div>
+
+</div><!-- /teacher-panel answers -->
+</div><!-- /tab-ta -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: DASHBOARD (td)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-td">
+<div class="teacher-panel">
+
+  <div class="teacher-panel-header">
+    <span class="tph-icon">📊</span>
+    <div class="tph-text">
+      <h2>דשבורד — נתוני הגשות</h2>
+      <p>Firebase Firestore · ניתוח ומעקב</p>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <h3>📋 הגשות אחרונות (Firebase)</h3>
+    <div id="dashboard-content" style="font-size:.82rem;color:var(--muted);
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:1rem;min-height:58px">
+      ⏳ טוען נתונים מ-Firebase...
+    </div>
+    <button class="btn-refresh" onclick="loadFirebaseDashboard()" style="margin-top:.75rem">🔄 רענן מ-Firebase</button>
+  </div>
+
+  <div class="dashboard-card">
+    <h3>📈 סטטיסטיקה מקומית (localStorage)</h3>
+    <div id="local-stats-content" style="font-size:.82rem;color:var(--muted);
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:1rem;min-height:58px">
+      ⏳ טוען נתונים מקומיים...
+    </div>
+    <button class="btn-refresh" onclick="loadLocalStats()">🔄 רענן סטטיסטיקה</button>
+  </div>
+
+</div><!-- /teacher-panel dashboard -->
+</div><!-- /tab-td -->
+
+<!-- footer removed — send area is now inside the worksheet tab -->
+
+<div id="toast"></div>
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT — single clean block
+════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ════════════════════
+   FIREBASE CONFIG
+════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            'YOUR_API_KEY',
+  authDomain:        'lashon-lesson.firebaseapp.com',
+  projectId:         'lashon-lesson',
+  storageBucket:     'lashon-lesson.appspot.com',
+  messagingSenderId: 'YOUR_SENDER_ID',
+  appId:             'YOUR_APP_ID'
+};
+let _db = null;
+function getDb() {
+  if (_db) return _db;
+  try {
+    if (typeof firebase === 'undefined') return null;
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    _db = firebase.firestore();
+    return _db;
+  } catch(e) { console.warn('[Firebase]', e); return null; }
+}
+async function saveScoreToCloud(lessonId, score, studentName, extra = {}) {
+  const db = getDb(); if (!db) return false;
+  try {
+    const ref = await db.collection('student_scores').add({
+      lessonId,
+      lessonTitle: LESSON_META.title,
+      unitId:      LESSON_META.unit,
+      score:       score ?? null,
+      studentName: studentName || 'תלמיד/ה',
+      date:        new Date().toLocaleDateString('he-IL'),
+      ts:          firebase.firestore.FieldValue.serverTimestamp(),
+      ...extra
+    });
+    console.log('[Firebase] ✅ saved', ref.id);
+    return true;
+  } catch(e) { console.error('[Firebase] ❌', e); return false; }
+}
+
+/* ════════════════════
+   LESSON METADATA
+════════════════════ */
+const LESSON_META = {
+  id:    'u2_l1',
+  unit:  'u2',
+  title: 'שורש ומשקל — דרכי תצורת השם',
+  short: 'שיעור 1',
+  emoji: '🏷️',
+  mins:  45,
+};
+
+/* ════════════════════
+   STORAGE HELPER
+════════════════════ */
+const LS = {
+  get(k, fb = null) {
+    try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : fb; }
+    catch(e) { return fb; }
+  },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+};
+
+/* ════════════════════
+   ROLE DETECTION
+   Priority: URL ?role=teacher > lashon_role > userRole (legacy)
+════════════════════ */
+const _params = new URLSearchParams(window.location.search);
+const isTeacher = (
+  _params.get('role') === 'teacher' ||
+  LS.get('lashon_role', '') === 'teacher' ||
+  localStorage.getItem('userRole') === 'teacher'
+);
+
+/* Apply is-teacher class immediately (before DOM ready) */
+if (isTeacher) {
+  document.body.classList.add('is-teacher');
+}
+
+/* ════════════════════
+   window.onload
+════════════════════ */
+window.onload = function () {
+  /* ── stamp print date ── */
+  const h = document.querySelector('.lesson-header');
+  if (h) h.setAttribute('data-print-date', new Date().toLocaleDateString('he-IL'));
+
+  attachMcListeners();
+
+  if (isTeacher) {
+    /* ── מורה: כל הטאבים גלויים (CSS כבר מציג #tab-btn-ta/td),
+       פתח פתרונות כברירת מחדל, טען דשבורד ── */
+    const taBtn = document.getElementById('tab-btn-ta');
+    showTab('ta', taBtn);
+    loadLocalStats();
+    loadFirebaseDashboard();
+    return;
+  }
+
+  /* ── תלמיד: פתח תיאוריה, טאבי פתרונות/דשבורד כבר מוסתרים ב-CSS ── */
+  const thBtn = document.getElementById('tab-btn-th');
+  showTab('th', thBtn);
+};
+
+/* ════════════════════
+   TABS
+════════════════════ */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const pane = document.getElementById('tab-' + id);
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+/* ════════════════════
+   TOAST
+════════════════════ */
+let _tt;
+function toast(msg, dur = 2800) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+/* answer-key modal + long-press JS removed — solutions via teacher tab only */
+
+/* ════════════════════
+   MC HIGHLIGHT
+════════════════════ */
+function attachMcListeners() {
+  document.querySelectorAll('.mc-option').forEach(opt => {
+    opt.addEventListener('click', function () {
+      const name = this.querySelector('input[type=radio]')?.name;
+      if (name) {
+        document.querySelectorAll(`input[name="${name}"]`)
+          .forEach(r => r.closest('.mc-option')?.classList.remove('selected'));
+      }
+      this.classList.add('selected');
+    });
+  });
+}
+/* Attach immediately for teacher path too */
+attachMcListeners();
+
+/* ════════════════════
+   COLLECT ANSWERS
+════════════════════ */
+function collectAnswers() {
+  const lines = [
+    `📚 ${LESSON_META.title}`,
+    `📅 ${new Date().toLocaleDateString('he-IL')}`,
+    `👤 ${LS.get('lashon_uname', '') || 'תלמיד/ה'}`,
+    ''
+  ];
+  document.querySelectorAll('.answer-area').forEach(ta => {
+    const title = ta.closest('.exercise-block')?.querySelector('.ex-title')?.textContent?.trim() || '—';
+    lines.push(`❓ ${title}`);
+    lines.push(ta.value.trim() || '(ללא תשובה)');
+    lines.push('');
+  });
+  const mcSeen = new Set();
+  document.querySelectorAll('.mc-options input[type=radio]:checked').forEach(r => {
+    if (mcSeen.has(r.name)) return;
+    mcSeen.add(r.name);
+    const block = r.closest('.exercise-block');
+    const title = block?.querySelector('.ex-title')?.textContent?.trim() || r.name;
+    const label = r.closest('.mc-option')?.querySelector('.mc-option-label')?.textContent?.trim() || r.value;
+    lines.push(`❓ ${title}`);
+    lines.push(`✔️ ${label}`);
+    lines.push('');
+  });
+  const blanks = [...document.querySelectorAll('.fill-blank')];
+  if (blanks.length) {
+    lines.push('✏️ השלמות:');
+    blanks.forEach((inp, i) => lines.push(`  ${i + 1}. ${inp.value.trim() || '(ריק)'}`));
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+/* ════════════════════
+   SUBMIT
+════════════════════ */
+async function submitLesson() {
+  const studentName = LS.get('lashon_uname', '') || 'תלמיד/ה';
+  const content     = collectAnswers();
+  const prog = LS.get('lashon_prog_' + studentName, {});
+  prog[LESSON_META.id] = { done: true, date: new Date().toLocaleDateString('he-IL') };
+  LS.set('lashon_prog_' + studentName, prog);
+  const btn = document.querySelector('.btn-submit');
+  if (btn) { btn.textContent = '⏳ שומר...'; btn.disabled = true; }
+  const saved = await saveScoreToCloud(LESSON_META.id, null, studentName, { content });
+  if (btn) { btn.textContent = saved ? '✅ הוגש ונשמר!' : '✅ הוגש'; btn.disabled = false; }
+  if (window.opener) {
+    try { window.opener.postMessage({ type: 'lessonDone', id: LESSON_META.id }, '*'); } catch(e) {}
+  }
+  const scoreEl = document.getElementById('score-display');
+  if (scoreEl) scoreEl.classList.add('show');
+  toast('✅ השיעור הוגש בהצלחה!');
+}
+
+/* ════════════════════
+   SEND — single footer only
+   reads from localStorage (set by index.html settings)
+════════════════════ */
+function sendViaWhatsApp() {
+  const wa = LS.get('teacher_whatsapp', '') || LS.get('lashon_teacher_phone', '') || '';
+  if (!wa) {
+    alert('⚠️ לא הוגדר מספר וואטסאפ של המורה.\nנא להגדיר בהגדרות בדף הבית (⚙️).');
+    return;
+  }
+  const content = collectAnswers();
+  const student = LS.get('lashon_uname', '') || 'תלמיד/ה';
+  const msg = `📚 ${LESSON_META.title}\n👤 ${student}\n\n${content}`;
+  window.open(`https://wa.me/972${wa.replace(/^0/, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+function sendViaEmail() {
+  const email = LS.get('teacher_email', '') || LS.get('lashon_teacher_email', '') || '';
+  if (!email) {
+    alert('⚠️ לא הוגדר מייל של המורה.\nנא להגדיר בהגדרות בדף הבית (⚙️).');
+    return;
+  }
+  const content = collectAnswers();
+  const student = LS.get('lashon_uname', '') || 'תלמיד/ה';
+  window.open(
+    `mailto:${email}?subject=${encodeURIComponent('📚 ' + LESSON_META.title + ' — ' + student)}&body=${encodeURIComponent('📚 ' + LESSON_META.title + '\n👤 ' + student + '\n\n' + content)}`,
+    '_blank'
+  );
+}
+
+/* ════════════════════
+   FIREBASE DASHBOARD — loads submissions table
+════════════════════ */
+async function loadFirebaseDashboard() {
+  const el = document.getElementById('dashboard-content');
+  if (!el) return;
+  const db = getDb();
+  if (!db) {
+    el.innerHTML = `<div style="padding:.5rem 0;line-height:1.7">
+      <strong style="color:var(--amber)">⚠️ Firebase לא מחובר</strong><br>
+      כדי לראות הגשות בזמן אמת:<br>
+      1. הסירו את ה-comment מה-SDK scripts בתגית &lt;head&gt;<br>
+      2. החליפו את <code>YOUR_API_KEY</code> ו-<code>YOUR_APP_ID</code> בפרטי הפרויקט שלכם<br>
+      3. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--blue)">console.firebase.google.com</a>
+    </div>`;
+    return;
+  }
+  try {
+    el.innerHTML = '<em style="color:var(--muted)">⏳ טוען...</em>';
+    const snap = await db.collection('student_scores')
+      .where('lessonId', '==', LESSON_META.id)
+      .orderBy('ts', 'desc')
+      .limit(50)
+      .get();
+    if (snap.empty) {
+      el.innerHTML = '<p style="color:var(--muted)">אין הגשות עדיין לשיעור זה.</p>';
+      return;
+    }
+    let rows = '';
+    snap.forEach(doc => {
+      const d = doc.data();
+      rows += `<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:6px 10px">${d.studentName || '—'}</td>
+        <td style="padding:6px 10px;text-align:center">${d.date || '—'}</td>
+        <td style="padding:6px 10px;text-align:center;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.content ? '✅ יש תוכן' : '—'}</td>
+      </tr>`;
+    });
+    el.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.8rem">
+      <tr style="background:var(--surface3)">
+        <th style="padding:6px 10px;text-align:right;font-weight:700">תלמיד/ה</th>
+        <th style="padding:6px 10px;font-weight:700">תאריך</th>
+        <th style="padding:6px 10px;font-weight:700">סטטוס</th>
+      </tr>${rows}</table>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:.5rem">סה״כ: ${snap.size} הגשות</p>`;
+  } catch(e) {
+    el.innerHTML = `<span style="color:var(--red)">❌ שגיאה בטעינה: ${e.message}</span>`;
+  }
+}
+
+/* ════════════════════
+   LOCAL STATS (dashboard)
+════════════════════ */
+function loadLocalStats() {
+  const el = document.getElementById('local-stats-content');
+  if (!el) return;
+  try {
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('lashon_prog_'));
+    if (!keys.length) {
+      el.innerHTML = '<p style="color:var(--muted);font-size:.82rem">אין נתוני הגשות שמורים מקומית.</p>';
+      return;
+    }
+    let rows = '';
+    keys.forEach(k => {
+      const name = k.replace('lashon_prog_', '');
+      const prog = LS.get(k, {});
+      Object.entries(prog).forEach(([lid, data]) => {
+        if (data.done) {
+          rows += `<tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:5px 10px">${name}</td>
+            <td style="padding:5px 10px;text-align:center">${lid}</td>
+            <td style="padding:5px 10px;text-align:center">${data.date || '—'}</td>
+          </tr>`;
+        }
+      });
+    });
+    el.innerHTML = rows
+      ? `<table style="width:100%;border-collapse:collapse;font-size:.8rem">
+           <tr style="background:var(--surface3)">
+             <th style="padding:6px 10px;text-align:right;font-weight:700">תלמיד/ה</th>
+             <th style="padding:6px 10px;font-weight:700">שיעור</th>
+             <th style="padding:6px 10px;font-weight:700">תאריך</th>
+           </tr>${rows}</table>`
+      : '<p style="color:var(--muted);font-size:.82rem">אין הגשות שמורות.</p>';
+  } catch(e) {
+    el.textContent = 'שגיאה בטעינת נתונים: ' + e.message;
+  }
+}
+
+/* ════════════════════
+   INIT — stamp print date for teacher too
+════════════════════ */
+(function init() {
+  const h = document.querySelector('.lesson-header');
+  if (h) h.setAttribute('data-print-date', new Date().toLocaleDateString('he-IL'));
+})();
+</script>
+</body>
+</html>

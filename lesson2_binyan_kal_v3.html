@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שיעור 2 — בניין קל | לשון Lesson</title>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Firebase SDK — הוסיפו לפני שימוש:
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+-->
+<style>
+/* ══════════════════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════════════════ */
+:root {
+  --bg:#f5f6f8; --surface:#fff; --surface2:#f8f9fb; --surface3:#eef0f5;
+  --border:#e4e7ef; --border2:#d1d6e5;
+  --text:#0d1424; --text-mid:#3d4660; --muted:#6b7594; --subtle:#9aa3be;
+  --blue:#1a56db; --blue-lt:#eff4ff; --blue-dk:#1340b0;
+  --green:#15803d; --green-lt:#f0fdf4;
+  --amber:#b45309; --amber-lt:#fffbeb;
+  --red:#dc2626; --red-lt:#fef2f2;
+  --gold:#ca8a04; --gold-lt:#fefce8;
+  --sh1:0 1px 3px rgba(13,20,36,.06),0 1px 2px rgba(13,20,36,.04);
+  --sh2:0 4px 16px rgba(13,20,36,.07),0 1px 4px rgba(13,20,36,.04);
+  --sh3:0 12px 36px rgba(13,20,36,.10),0 3px 8px rgba(13,20,36,.05);
+  --r-sm:10px; --r:16px; --r-lg:20px; --r-xl:28px; --r-pill:999px;
+  --lc:#4f46e5; --lc-lt:#eef2ff;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0b0f17; --surface:#131924; --surface2:#192030; --surface3:#1f2840;
+    --border:#252f47; --border2:#313d5c;
+    --text:#d8dfe8; --text-mid:#a0adc5; --muted:#7a8aaa; --subtle:#50607e;
+    --blue:#4d8aff; --blue-lt:#162040; --blue-dk:#6aa0ff;
+    --green:#34d875; --green-lt:#0c2618;
+    --amber:#f5a623; --amber-lt:#28200c;
+    --red:#fc8080; --red-lt:#281414;
+    --gold:#f5a623; --gold-lt:#28200c;
+    --lc:#818cf8; --lc-lt:#1e1b4b;
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);
+  scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{line-height:1.6;}
+button,input,a,textarea,select{font-family:'Heebo',sans-serif;}
+a{text-decoration:none;}
+
+/* ══════════════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════════════ */
+.lesson-topbar{
+  position:sticky;top:0;z-index:200;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:.6rem 1rem;display:flex;align-items:center;gap:.55rem;
+  box-shadow:var(--sh1);min-height:52px;
+}
+.btn-back{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  font-size:1.1rem;color:var(--muted);
+  cursor:pointer;transition:all .12s;flex-shrink:0;padding:0;
+}
+.btn-back:hover{background:var(--surface3);color:var(--text);}
+.lesson-topbar-title{
+  flex:1;min-width:0;font-family:'Secular One',sans-serif;
+  font-size:.88rem;color:var(--text);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.topbar-title-wrap{
+  flex:1;min-width:0;overflow:hidden;
+}
+.lesson-topbar-sub{font-size:.6rem;color:var(--subtle);margin-top:.04rem;}
+.topbar-actions{display:flex;align-items:center;gap:.4rem;flex-shrink:0;}
+.btn-print{
+  display:inline-flex;align-items:center;gap:.25rem;
+  padding:.45rem .8rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  font-size:.76rem;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:all .12s;min-height:40px;
+}
+.btn-print:hover{background:var(--surface3);color:var(--text);}
+/* btn-answer-key removed — access via teacher tab only */
+
+/* ══════════════════════════════════════════════════
+   TABS BAR — visible to all; solutions+dashboard hidden from students
+══════════════════════════════════════════════════ */
+.tabs-bar{
+  display:flex;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs-bar::-webkit-scrollbar{display:none;}
+#tab-btn-ta,#tab-btn-td{ display:none; }
+.is-teacher #tab-btn-ta,
+.is-teacher #tab-btn-td{ display:flex; }
+.tab-btn{
+  padding:.65rem 1.15rem;border:none;border-bottom:2.5px solid transparent;
+  background:none;font-size:.82rem;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all .14s;white-space:nowrap;min-height:44px;
+  margin-bottom:-1px;flex-shrink:0;
+}
+.tab-btn:hover{color:var(--lc);}
+.tab-btn.active{color:var(--lc);border-bottom-color:var(--lc);font-weight:800;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* ══════════════════════════════════════════════════
+   LESSON HEADER
+══════════════════════════════════════════════════ */
+.lesson-header{
+  background:linear-gradient(135deg,var(--lc-lt) 0%,var(--surface) 70%);
+  border-bottom:1px solid var(--border);
+  padding:1.6rem 1.4rem 1.4rem;
+  position:relative;overflow:hidden;cursor:default;user-select:none;
+}
+.lesson-header::before{
+  content:'';position:absolute;top:0;right:0;bottom:0;width:5px;
+  background:var(--lc);opacity:.8;
+}
+.lh-unit-badge{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.62rem;font-weight:800;color:var(--lc);
+  text-transform:uppercase;letter-spacing:.06em;
+  background:var(--lc-lt);border:1.5px solid var(--lc);
+  border-radius:var(--r-pill);padding:.22rem .75rem;margin-bottom:.85rem;opacity:.85;
+}
+.lh-emoji{font-size:2.2rem;line-height:1;margin-bottom:.55rem;display:block;}
+.lh-title{
+  font-family:'Secular One',sans-serif;
+  font-size:clamp(1.3rem,4vw,1.65rem);
+  color:var(--text);line-height:1.2;margin-bottom:.4rem;
+}
+.lh-desc{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:540px;}
+.lh-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:.9rem;}
+.lh-chip{
+  font-size:.65rem;font-weight:700;padding:.22rem .7rem;
+  border-radius:var(--r-pill);border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);
+}
+.lh-chip.time{color:var(--amber);background:var(--amber-lt);border-color:#fde68a;}
+#role-chip{display:none;background:var(--gold-lt);color:var(--gold);border-color:#fde68a;}
+.is-teacher #role-chip{display:inline-flex;}
+#lp-bar-wrap{position:absolute;bottom:0;right:0;left:0;height:3px;display:none;overflow:hidden;}
+#lp-bar{height:100%;width:0%;background:var(--gold);transition:width 3s linear;}
+
+/* ══════════════════════════════════════════════════
+   LESSON CONTENT
+══════════════════════════════════════════════════ */
+.lesson-content{max-width:780px;margin:0 auto;padding:1.4rem 1.2rem 3rem;}
+.section-title{
+  font-family:'Secular One',sans-serif;font-size:1.05rem;color:var(--lc);
+  display:flex;align-items:center;gap:.5rem;
+  margin-bottom:.9rem;margin-top:2rem;
+  padding-bottom:.45rem;border-bottom:2px solid var(--lc-lt);
+}
+.section-title:first-child{margin-top:0;}
+.st-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--lc);color:#fff;
+  font-size:.75rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-weight:900;
+}
+.content-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.2rem 1.3rem;
+  box-shadow:var(--sh1);margin-bottom:1rem;
+}
+.content-card p{font-size:.9rem;line-height:1.75;color:var(--text-mid);}
+.content-card p+p{margin-top:.65rem;}
+.content-card h4{font-size:.88rem;font-weight:800;margin-bottom:.4rem;color:var(--text);}
+.content-card ul,.content-card ol{padding-right:1.2rem;margin-top:.4rem;}
+.content-card li{font-size:.9rem;line-height:1.75;color:var(--text-mid);}
+.tip-box{
+  background:var(--blue-lt);border:1.5px solid #bfdbfe;
+  border-radius:var(--r);padding:1rem 1.15rem;
+  font-size:.85rem;line-height:1.7;color:var(--text-mid);margin-bottom:1rem;
+}
+.tip-box strong{color:var(--blue);}
+.warning-box{
+  background:var(--amber-lt);border:1.5px solid #fde68a;
+  border-radius:var(--r);padding:1rem 1.15rem;
+  font-size:.85rem;line-height:1.7;color:var(--text-mid);margin-bottom:1rem;
+}
+.warning-box strong{color:var(--amber);}
+
+/* ── TABLE (mobile scroll) ── */
+.binyan-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:1rem;}
+.binyan-table{
+  width:100%;min-width:380px;border-collapse:collapse;font-size:.82rem;
+  background:var(--surface);border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);box-shadow:var(--sh1);
+}
+.binyan-table th{
+  background:var(--lc);color:#fff;font-weight:800;
+  padding:.55rem .8rem;text-align:center;font-size:.78rem;
+}
+.binyan-table td{
+  padding:.5rem .8rem;border-bottom:1px solid var(--border);
+  text-align:center;vertical-align:middle;
+}
+.binyan-table tr:last-child td{border-bottom:none;}
+.binyan-table tr:nth-child(even) td{background:var(--surface2);}
+.binyan-table td:first-child{font-weight:800;color:var(--lc);}
+.binyan-table td.heb{font-size:.95rem;letter-spacing:.03em;}
+
+/* ══════════════════════════════════════════════════
+   EXERCISE BLOCKS
+══════════════════════════════════════════════════ */
+.exercise-block{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--sh1);margin-bottom:1.1rem;
+}
+.ex-header{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+  background:var(--surface2);
+}
+.ex-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--lc);color:#fff;
+  font-size:.75rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ex-title{font-size:.88rem;font-weight:700;flex:1;}
+.ex-points{
+  font-size:.62rem;font-weight:700;padding:.15rem .55rem;
+  border-radius:var(--r-pill);background:var(--lc-lt);
+  color:var(--lc);border:1px solid var(--lc);opacity:.8;white-space:nowrap;
+}
+.ex-body{padding:1rem 1.1rem;}
+.ex-question{font-size:.9rem;line-height:1.7;margin-bottom:.85rem;}
+.answer-area{
+  width:100%;min-height:90px;padding:.8rem 1rem;
+  border:1.5px solid var(--border);border-radius:var(--r);
+  font-family:'Heebo',sans-serif;font-size:.9rem;
+  background:var(--surface);color:var(--text);
+  resize:vertical;outline:none;direction:rtl;
+  transition:border-color .14s,box-shadow .16s;line-height:1.6;
+}
+.answer-area:focus{border-color:var(--lc);box-shadow:0 0 0 3px rgba(79,70,229,.08);}
+.answer-area::placeholder{color:var(--subtle);}
+.mc-options{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.6rem;}
+.mc-option{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.7rem .9rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);cursor:pointer;
+  transition:all .14s;user-select:none;
+  -webkit-tap-highlight-color:transparent;min-height:48px;background:var(--surface);
+}
+.mc-option:hover{border-color:var(--lc);background:var(--lc-lt);}
+.mc-option input[type=radio]{accent-color:var(--lc);width:16px;height:16px;flex-shrink:0;}
+.mc-option-label{font-size:.88rem;flex:1;cursor:pointer;}
+.mc-option.selected{border-color:var(--lc);background:var(--lc-lt);font-weight:600;}
+.fill-blank{
+  display:inline-block;min-width:80px;padding:.2rem .5rem;
+  border:none;border-bottom:2px solid var(--lc);
+  background:transparent;font-family:'Heebo',sans-serif;
+  font-size:.9rem;color:var(--text);outline:none;text-align:center;
+}
+.fill-blank:focus{border-color:var(--blue);}
+
+/* ── TEACHER-ONLY ANSWERS ── */
+.teacher-only{
+  display:none;
+  background:var(--gold-lt);border:1.5px solid #fde68a;
+  border-radius:var(--r);padding:.85rem 1rem;
+  font-size:.84rem;color:var(--text-mid);line-height:1.7;margin-top:.6rem;
+}
+.teacher-only strong{
+  color:var(--gold);font-size:.7rem;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:.35rem;
+}
+.is-teacher .teacher-only{display:block;}
+
+/* ── SUBMIT & SCORE ── */
+.btn-submit{
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  width:100%;padding:.9rem;margin-top:1.4rem;
+  background:var(--lc);color:#fff;
+  border:none;border-radius:var(--r-sm);
+  font-size:.92rem;font-weight:700;cursor:pointer;
+  transition:all .15s;min-height:52px;font-family:'Heebo',sans-serif;
+  box-shadow:0 3px 12px rgba(79,70,229,.25);
+}
+.btn-submit:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.btn-submit:active{transform:scale(.98);}
+.score-display{
+  display:none;background:var(--green-lt);border:1.5px solid #86efac;
+  border-radius:var(--r-lg);padding:1.2rem 1.4rem;
+  text-align:center;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);margin-top:1rem;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.score-display.show{display:block;}
+.score-num{font-family:'Secular One',sans-serif;font-size:2.4rem;color:var(--green);line-height:1;}
+.score-label{font-size:.82rem;color:var(--muted);margin-top:.25rem;}
+
+/* ══════════════════════════════════════════════════
+   SINGLE SEND FOOTER — bottom only
+══════════════════════════════════════════════════ */
+.footer-send-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.3rem 1.4rem;
+  box-shadow:var(--sh2);text-align:center;margin-top:1.5rem;
+}
+.footer-send-card h3{
+  font-family:'Secular One',sans-serif;font-size:1rem;
+  margin-bottom:.4rem;color:var(--text);
+}
+.footer-send-card p{font-size:.78rem;color:var(--muted);margin-bottom:1.15rem;line-height:1.55;}
+.footer-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+.btn-send-wa{
+  display:inline-flex;align-items:center;gap:.42rem;
+  padding:.78rem 1.4rem;border:none;border-radius:var(--r-sm);
+  background:linear-gradient(135deg,#25d366,#1ebe5d);
+  color:#fff;font-size:.88rem;font-weight:800;cursor:pointer;
+  transition:all .14s;min-height:50px;font-family:'Heebo',sans-serif;
+  box-shadow:0 3px 12px rgba(37,211,102,.32);
+}
+.btn-send-wa:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(37,211,102,.42);}
+.btn-send-email{
+  display:inline-flex;align-items:center;gap:.42rem;
+  padding:.78rem 1.4rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  color:var(--text-mid);font-size:.88rem;font-weight:700;
+  cursor:pointer;transition:all .14s;min-height:50px;font-family:'Heebo',sans-serif;
+}
+.btn-send-email:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);}
+
+/* ══════════════════════════════════════════════════
+   TEACHER PANEL (tabs: פתרונות + דשבורד)
+══════════════════════════════════════════════════ */
+.teacher-panel{max-width:780px;margin:0 auto;padding:1.4rem 1.2rem 3rem;}
+.teacher-panel-header{
+  background:linear-gradient(135deg,#3b0764,#6d28d9);
+  border-radius:var(--r-lg);padding:1.1rem 1.3rem;margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.tph-icon{font-size:1.8rem;flex-shrink:0;}
+.tph-text h2{font-family:'Secular One',sans-serif;font-size:.98rem;color:#e9d5ff;margin:0;}
+.tph-text p{font-size:.72rem;color:rgba(233,213,255,.6);margin-top:.1rem;}
+.ak-answer-item{
+  background:var(--gold-lt);border:1px solid #fde68a;border-right:4px solid var(--gold);
+  border-radius:var(--r);padding:.85rem 1rem;
+  font-size:.84rem;color:var(--text-mid);line-height:1.75;margin-bottom:.8rem;
+}
+.ak-answer-item strong{
+  color:var(--gold);font-size:.7rem;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:.38rem;
+}
+.teacher-section-title{
+  font-family:'Secular One',sans-serif;font-size:.9rem;color:var(--lc);
+  display:flex;align-items:center;gap:.4rem;
+  margin:1.6rem 0 .75rem;padding-bottom:.38rem;
+  border-bottom:2px solid var(--lc-lt);
+}
+.dashboard-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.2rem 1.3rem;box-shadow:var(--sh1);
+  margin-bottom:1rem;
+}
+.dashboard-card h3{
+  font-family:'Secular One',sans-serif;font-size:.88rem;color:var(--text);
+  margin-bottom:.85rem;display:flex;align-items:center;gap:.38rem;
+}
+#dashboard-content{
+  font-size:.82rem;color:var(--muted);line-height:1.65;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:1rem;min-height:58px;
+}
+.btn-refresh{
+  margin-top:.75rem;padding:.55rem 1rem;
+  border:1.5px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface2);font-size:.78rem;font-weight:700;
+  color:var(--muted);cursor:pointer;transition:all .12s;min-height:38px;
+}
+.btn-refresh:hover{background:var(--surface3);color:var(--text);}
+
+/* ══════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════ */
+#toast{
+  position:fixed;bottom:1.4rem;right:1.2rem;z-index:10000;
+  background:var(--text);color:var(--surface);
+  border-radius:var(--r);padding:.65rem 1.15rem;
+  font-size:.82rem;font-weight:600;
+  opacity:0;transform:translateY(6px);
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;box-shadow:var(--sh3);
+}
+#toast.show{opacity:1;transform:translateY(0);}
+
+/* ══════════════════════════════════════════════════
+   PRINT — teacher-aware
+══════════════════════════════════════════════════ */
+@media print{
+  @page{size:A4 portrait;margin:1.6cm 1.4cm 1.8cm;}
+  @page :first{margin-top:1.2cm;}
+  *,*::before,*::after{print-color-adjust:exact !important;-webkit-print-color-adjust:exact !important;}
+  .lesson-topbar,.tabs-bar,.topbar-actions,.btn-back,.btn-print,
+  .btn-submit,.score-display,.footer-send-card,
+  #toast,.teacher-panel,.btn-refresh{display:none !important;}
+  html,body{background:#fff !important;font-size:11pt;color:#111;}
+  .tab-pane{display:block !important;}
+  .lesson-header{background:#f5f7ff !important;border:1pt solid #c7d2fe !important;
+    padding:.65cm .8cm !important;margin-bottom:.55cm;break-inside:avoid;}
+  .lesson-header::before{display:none !important;}
+  .lh-title{font-size:17pt !important;}
+  .lh-desc{font-size:10pt !important;color:#444 !important;}
+  .lesson-content{padding:0 !important;max-width:100% !important;}
+  .section-title{font-size:12pt !important;border-bottom:1.5pt solid #4f46e5 !important;
+    color:#3730a3 !important;break-after:avoid;}
+  .st-num{background:#4f46e5 !important;color:#fff !important;
+    width:20pt !important;height:20pt !important;font-size:8pt !important;}
+  .content-card{border:1pt solid #d1d6e5 !important;box-shadow:none !important;
+    break-inside:avoid;page-break-inside:avoid;}
+  .tip-box{background:#eff6ff !important;border:1pt solid #93c5fd !important;break-inside:avoid;}
+  .warning-box{background:#fffbeb !important;border:1pt solid #fde68a !important;break-inside:avoid;}
+  .exercise-block{border:1pt solid #cbd5e1 !important;box-shadow:none !important;
+    break-inside:avoid;page-break-inside:avoid;margin-bottom:.45cm;}
+  .ex-header{background:#f1f5f9 !important;padding:.28cm .42cm !important;
+    border-bottom:1pt solid #e2e8f0 !important;}
+  .ex-num{background:#4f46e5 !important;color:#fff !important;
+    width:20pt !important;height:20pt !important;}
+  .answer-area{border:none !important;border-bottom:1pt solid #999 !important;
+    background:transparent !important;min-height:2.4cm !important;
+    background-image:repeating-linear-gradient(transparent,transparent 1.4em,#e5e7eb 1.4em,#e5e7eb calc(1.4em + .5pt)) !important;}
+  .fill-blank{border:none !important;border-bottom:1.5pt solid #4f46e5 !important;
+    min-width:1.8cm;background:transparent !important;}
+  .mc-option{border:1pt solid #d1d6e5 !important;padding:.22cm .4cm !important;
+    background:#fff !important;break-inside:avoid;min-height:auto !important;}
+  .binyan-table{border:1pt solid #d1d6e5 !important;box-shadow:none !important;break-inside:avoid;}
+  .binyan-table th{background:#4f46e5 !important;color:#fff !important;}
+  .teacher-only{display:none !important;}
+  body.is-teacher .teacher-only{display:block !important;background:#fffbeb !important;
+    border:1.5pt solid #fde68a !important;border-radius:5pt !important;
+    padding:.28cm .42cm !important;margin-top:.3cm !important;}
+  body.is-teacher .teacher-only strong{color:#92400e !important;}
+  .lesson-header::after{content:'לשון Lesson · לשון עברית כיתה י׳ · ' attr(data-print-date);
+    display:block !important;font-size:7pt;color:#aaa;margin-top:.3cm;
+    padding-top:.18cm;border-top:.5pt solid #e0e0e0;}
+}
+
+/* ══════════════════════════════════════════════════
+   MOBILE ≤660px
+══════════════════════════════════════════════════ */
+@media(max-width:660px){
+  .lesson-header{padding:1.2rem .95rem 1.1rem;}
+  .lesson-content{padding:1rem .85rem 3rem;}
+  .lesson-topbar-sub{display:none;}
+  .footer-btns{flex-direction:column;}
+  .btn-send-wa,.btn-send-email{justify-content:center;width:100%;}
+  #toast{bottom:1.6rem;right:.7rem;left:.7rem;text-align:center;}
+  .btn-print .print-label{display:none;}
+  .tab-btn{font-size:.76rem;padding:.6rem .85rem;}
+  .binyan-table-wrap{margin-left:-.85rem;margin-right:-.85rem;border-radius:0;}
+  .binyan-table{min-width:320px;font-size:.76rem;}
+  .binyan-table th,.binyan-table td{padding:.4rem .6rem;}
+  .exercise-block{border-radius:var(--r);}
+  .ex-body{padding:.85rem .9rem;}
+  .mc-option{padding:.65rem .75rem;}
+  .footer-send-card{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     TOPBAR
+════════════════════════════════════════════════ -->
+<div class="lesson-topbar">
+  <button class="btn-back" onclick="window.location.href='index.html'" aria-label="חזרה לדף הבית">🔙</button>
+  <div class="topbar-title-wrap">
+    <div class="lesson-topbar-title">שיעור 2 — בניין קל</div>
+    <div class="lesson-topbar-sub">יחידה 1: מערכת הפועל · לשון עברית י׳</div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-print" onclick="window.print()">🖨️<span class="print-label"> הדפסה</span></button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TABS BAR
+════════════════════════════════════════════════ -->
+<div class="tabs-bar" id="tabs-bar">
+  <button class="tab-btn" id="tab-btn-th" onclick="showTab('th',this)">📚 תיאוריה</button>
+  <button class="tab-btn" id="tab-btn-tw" onclick="showTab('tw',this)">✏️ תרגול</button>
+  <button class="tab-btn" id="tab-btn-ta" onclick="showTab('ta',this)">🔑 פתרונות</button>
+  <button class="tab-btn" id="tab-btn-td" onclick="showTab('td',this)">📊 דשבורד</button>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     LESSON HEADER
+════════════════════════════════════════════════ -->
+<div class="lesson-header">
+  <div class="lh-unit-badge">📘 יחידה 1</div>
+  <span class="lh-emoji">🔵</span>
+  <h1 class="lh-title">בניין קל (פָּעַל)</h1>
+  <p class="lh-desc">הכרת בניין קל — סימני זיהוי, צורות הבינוני, שם הפועל והטיית הפועל בכל הזמנים</p>
+  <div class="lh-meta">
+    <span class="lh-chip time">⏱ 45 דקות</span>
+    <span class="lh-chip">שיעור 2</span>
+    <span class="lh-chip" id="role-chip">👑 מצב מורה</span>
+  </div>
+  <div id="lp-bar-wrap" style="display:none"><div id="lp-bar"></div></div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TAB: THEORY (th)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-th">
+<div class="lesson-content">
+
+  <!-- ── סעיף 1: סימני זיהוי ── -->
+  <div class="section-title">
+    <div class="st-num">1</div>
+    <span>סימני זיהוי של בניין קל</span>
+  </div>
+
+  <div class="content-card">
+    <p><strong>בניין קל</strong> (הנקרא גם <strong>פָּעַל</strong>) הוא הבניין הנפוץ והבסיסי ביותר בעברית. הוא מבטא פעולה פשוטה ובסיסית שהנושא עושה בעצמו.</p>
+    <h4>צלילי הבניין בעבר:</h4>
+    <ul>
+      <li>פ׳׳פ (אות ראשונה) — בקמץ: <strong>קָ</strong>טַל</li>
+      <li>ע׳׳פ (אות אמצעית) — בפתח: קָ<strong>טַ</strong>ל</li>
+      <li>ל׳׳פ (אות אחרונה) — בסגול בדרך כלל: קָטַ<strong>ל</strong></li>
+    </ul>
+    <p style="margin-top:.65rem">דוגמאות: <strong>אָכַל, כָּתַב, שָׁמַר, סָגַר, יָשַׁב</strong></p>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>שיטת הזיהוי הבטוחה — העברה לעבר נסתר:</strong> כדי לזהות בניין קל בכל פועל, העבירו אותו לצורת <strong>"הוא אתמול ___"</strong>. אם מתקבל דפוס <strong>קָטַל</strong> — קמץ (ָ) תחת פ׳׳פ ופתח (ַ) תחת ע׳׳פ — הפועל בבניין קל.<br><br>
+    דוגמאות: "כותב" → "הוא אתמול <strong>כָּ</strong>תַב" ← קמץ בכּ ✓ | "שומר" → "הוא אתמול <strong>שָׁ</strong>מַר" ← קמץ בשׁ ✓ | "סוגר" → "הוא אתמול <strong>סָ</strong>גַר" ← קמץ בסּ ✓<br><br>
+    <strong>הקמץ (ָ) תחת אות פ׳׳פ בעבר נסתר הוא "חותמת הזהב" של בניין קל!</strong>
+  </div>
+
+  <div class="warning-box">
+    ⚠️ <strong>שימו לב — לא כל פועל עם קמץ הוא קל!</strong> פעלים כמו "נִכְתַּב" (נפעל) או "הֻכְתַּב" (הופעל) אינם בניין קל למרות שיש בהם קמץ. חפשו תמיד את ה<strong>שלישייה קמץ־פתח</strong> בשורש עצמו, ללא קידומות בניין.
+  </div>
+
+  <!-- ── סעיף 2: צורות הבינוני ── -->
+  <div class="section-title">
+    <div class="st-num">2</div>
+    <span>צורות הבינוני (הווה) בבניין קל</span>
+  </div>
+
+  <div class="content-card">
+    <p>הבינוני (הווה) בבניין קל בנוי על תבנית <strong>פּוֹעֵל</strong> — עם חולם (וֹ) בפ׳׳פ וצירה (ֵ) בע׳׳פ. ארבעת המשקלים מתאימים לפי מין ומספר:</p>
+    <ul>
+      <li><strong>פּוֹעֵל</strong> — זכר יחיד: כּוֹתֵב, שׁוֹמֵר, אוֹכֵל, סוֹגֵר</li>
+      <li><strong>פּוֹעֶלֶת</strong> — נקבה יחידה: כּוֹתֶבֶת, שׁוֹמֶרֶת, אוֹכֶלֶת</li>
+      <li><strong>פּוֹעֲלִים</strong> — זכר רבים: כּוֹתְבִים, שׁוֹמְרִים, אוֹכְלִים</li>
+      <li><strong>פּוֹעֲלוֹת</strong> — נקבה רבות: כּוֹתְבוֹת, שׁוֹמְרוֹת, אוֹכְלוֹת</li>
+    </ul>
+    <p style="margin-top:.65rem"><strong>סימן הזיהוי הבולט:</strong> החולם (וֹ) בפ׳׳פ הוא מאפיין ייחודי של הבינוני בבניין קל — כּ<strong>וֹ</strong>תֵב, שׁ<strong>וֹ</strong>מֵר, א<strong>וֹ</strong>כֵל.</p>
+  </div>
+
+  <div class="binyan-table-wrap">
+    <table class="binyan-table">
+      <thead>
+        <tr>
+          <th>גוף</th>
+          <th>תבנית</th>
+          <th>דוגמה (כ-ת-ב)</th>
+          <th>דוגמה (ש-מ-ר)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>זכר יחיד</td><td class="heb">פּוֹעֵל</td><td class="heb">כּוֹתֵב</td><td class="heb">שׁוֹמֵר</td></tr>
+        <tr><td>נקבה יחידה</td><td class="heb">פּוֹעֶלֶת</td><td class="heb">כּוֹתֶבֶת</td><td class="heb">שׁוֹמֶרֶת</td></tr>
+        <tr><td>זכר רבים</td><td class="heb">פּוֹעֲלִים</td><td class="heb">כּוֹתְבִים</td><td class="heb">שׁוֹמְרִים</td></tr>
+        <tr><td>נקבה רבות</td><td class="heb">פּוֹעֲלוֹת</td><td class="heb">כּוֹתְבוֹת</td><td class="heb">שׁוֹמְרוֹת</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>סימן הכר מהיר לבינוני קל:</strong> חפשו את ה-<strong>חולם (וּ/וֹ)</strong> בפ׳׳פ — כּ<strong>וֹ</strong>תֵב, שׁ<strong>וֹ</strong>מֵר, א<strong>וֹ</strong>כֵל. הוא מאפיין ייחודי של הווה בניין קל.
+  </div>
+
+  <!-- ── סעיף 3: שם הפועל ── -->
+  <div class="section-title">
+    <div class="st-num">3</div>
+    <span>שם הפועל (אינפיניטיב) בבניין קל</span>
+  </div>
+
+  <div class="content-card">
+    <p>שם הפועל בבניין קל בנוי <strong>תמיד</strong> על התבנית <strong>לִפְעֹל</strong> — עם קידומת <strong>לִ</strong> (חיריק תחת הלמ״ד) וחולם חסר (ֹ) בל׳׳פ. זהו <strong>סימן זיהוי מובהק</strong> לבניין קל!</p>
+    <h4>דוגמאות למשקל לִפְעֹל:</h4>
+    <ul>
+      <li><strong>לִכְתֹּב</strong> (מהשורש כ-ת-ב) — "הוא רוצה לִכְתֹּב מכתב"</li>
+      <li><strong>לִשְׁמֹר</strong> (מהשורש ש-מ-ר) — "חשוב לִשְׁמֹר על הבריאות"</li>
+      <li><strong>לִסְגֹּר</strong> (מהשורש ס-ג-ר) — "אנא לִסְגֹּר את הדלת"</li>
+      <li><strong>לִלְמֹד</strong> (מהשורש ל-מ-ד) — "הם רצו לִלְמֹד לבגרות"</li>
+      <li><strong>לִבְדֹּק</strong> (מהשורש ב-ד-ק) — "ביקש לִבְדֹּק את הנושא"</li>
+    </ul>
+    <p style="margin-top:.65rem"><strong>השוואה לבניינים אחרים:</strong> לְהַפְעִיל (הפעיל) | לְהִתְפַּעֵל (התפעל) | לְפַעֵל (פיעל) | לְהִפָּעֵל (נפעל). <em>רק</em> בניין קל מתחיל בקידומת <strong>לִ</strong> עם חיריק!</p>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>שם הפועל — כלי העזר המושלם לזיהוי:</strong> כאשר תראו שם פועל המתחיל בְּ<strong>לִ</strong> (חיריק) — זהו בניין קל ללא ספק! לִסְגֹּר ✓ קל | לִלְמֹד ✓ קל | לִבְדֹּק ✓ קל. בדקו: "הוא ביקש <strong>לִבְדֹּק</strong>" → לִ + שורש = קל ✓
+  </div>
+
+  <div class="warning-box">
+    ⚠️ <strong>חריגים:</strong> פעלים גרוניים (א-כ-ל, ע-מ-ד) עשויים לשנות את הניקוד מעט — למשל <strong>לַעֲמֹד</strong> (פתח בלמ״ד במקום חיריק). זהו תוצאה של הגרוניות ולא שינוי בניין.
+  </div>
+
+  <!-- ── סעיף 4: הטיית הפועל ── -->
+  <div class="section-title">
+    <div class="st-num">4</div>
+    <span>הטיית הפועל בבניין קל — "סָגַר"</span>
+  </div>
+
+  <div class="content-card">
+    <p>להלן טבלת הנטייה המלאה של הפועל <strong>סָגַר</strong> (שורש: ס-ג-ר, גזרת שלמים) בארבעת הזמנים:</p>
+  </div>
+
+  <div class="binyan-table-wrap">
+    <table class="binyan-table">
+      <thead>
+        <tr>
+          <th>גוף</th>
+          <th>עבר</th>
+          <th>הווה</th>
+          <th>עתיד</th>
+          <th>ציווי</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>אני</td><td class="heb">סָגַרְתִּי</td><td class="heb">סוֹגֵר / סוֹגֶרֶת</td><td class="heb">אֶסְגֹּר</td><td>—</td></tr>
+        <tr><td>אתה</td><td class="heb">סָגַרְתָּ</td><td class="heb">סוֹגֵר</td><td class="heb">תִּסְגֹּר</td><td class="heb">סְגֹר</td></tr>
+        <tr><td>את</td><td class="heb">סָגַרְתְּ</td><td class="heb">סוֹגֶרֶת</td><td class="heb">תִּסְגְּרִי</td><td class="heb">סִגְרִי</td></tr>
+        <tr><td>הוא</td><td class="heb">סָגַר</td><td class="heb">סוֹגֵר</td><td class="heb">יִסְגֹּר</td><td>—</td></tr>
+        <tr><td>היא</td><td class="heb">סָגְרָה</td><td class="heb">סוֹגֶרֶת</td><td class="heb">תִּסְגֹּר</td><td>—</td></tr>
+        <tr><td>אנחנו</td><td class="heb">סָגַרְנוּ</td><td class="heb">סוֹגְרִים / סוֹגְרוֹת</td><td class="heb">נִסְגֹּר</td><td>—</td></tr>
+        <tr><td>אתם</td><td class="heb">סְגַרְתֶּם</td><td class="heb">סוֹגְרִים</td><td class="heb">תִּסְגְּרוּ</td><td class="heb">סִגְרוּ</td></tr>
+        <tr><td>אתן</td><td class="heb">סְגַרְתֶּן</td><td class="heb">סוֹגְרוֹת</td><td class="heb">תִּסְגֹּרְנָה</td><td class="heb">סְגֹרְנָה</td></tr>
+        <tr><td>הם</td><td class="heb">סָגְרוּ</td><td class="heb">סוֹגְרִים</td><td class="heb">יִסְגְּרוּ</td><td>—</td></tr>
+        <tr><td>הן</td><td class="heb">סָגְרוּ</td><td class="heb">סוֹגְרוֹת</td><td class="heb">תִּסְגֹּרְנָה</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>סימני הבניין בעתיד:</strong> קידומות העתיד <strong>אֶ / תִּ / יִ / נִ</strong> + חולם בפ׳׳פ (אֶסְגֹּר, יִסְגֹּר). ציווי: הפועל נפתח ישירות בעיצור ללא קידומת.
+  </div>
+
+</div><!-- /lesson-content theory -->
+</div><!-- /tab-th -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: WORKSHEET (tw)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-tw">
+<div class="lesson-content" id="lesson-content">
+
+  <div class="section-title" style="margin-top:0">
+    <div class="st-num">5</div>
+    <span>תרגול — שאלות 1–15</span>
+  </div>
+
+  <!-- ════ חלק א׳: זיהוי (1–5) ════ -->
+
+  <!-- שאלה 1 -->
+  <div class="exercise-block" id="ex-1">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-title">זיהוי בניין קל במשפט</div>
+      <span class="ex-points">6 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">קראו את המשפט וסמנו את כל הפעלים בבניין קל. הסבירו כיצד זיהיתם כל אחד.</p>
+      <p class="ex-question" style="margin-top:.4rem;font-size:1rem;line-height:2">"הַיֶּלֶד <strong>כָּתַב</strong> מִכְתָּב, אִמּוֹ <strong>קָרְאָה</strong> אוֹתוֹ, וְאָחִיו <strong>הִכְתִּיב</strong> לוֹ תְּשׁוּבָה."</p>
+      <textarea class="answer-area" id="ans-1" placeholder="ציינו את הפעלים בבניין קל והסבירו..." rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        כָּתַב — בניין קל ✓ (עבר נסתר, קמץ־פתח, שורש כ-ת-ב)<br>
+        קָרְאָה — בניין קל ✓ (עבר נסתרת, שורש ק-ר-א, גזרת ל״א)<br>
+        הִכְתִּיב — בניין הפעיל ✗ (קידומת הִ + חיריק בין פ״פ לע״פ)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 2 -->
+  <div class="exercise-block" id="ex-2">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-title">האם הפועל בבניין קל?</div>
+      <span class="ex-points">5 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">לכל פועל — ציינו אם הוא בבניין קל (✓) או לא (✗), והסבירו בקצרה:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>יָשַׁב, הִתְלַמֵּד, שׁוֹמֵר, נִפְתַּח, לִכְתֹּב</strong></p>
+      <textarea class="answer-area" id="ans-2" placeholder="פועל — קל / לא קל — הסבר..." rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        יָשַׁב ✓ — עבר נסתר, קמץ־פתח, שורש י-שׁ-ב<br>
+        הִתְלַמֵּד ✗ — התפעל (קידומת הִתְ + דגש)<br>
+        שׁוֹמֵר ✓ — הווה קל (פועֵל, חולם בפ״פ)<br>
+        נִפְתַּח ✗ — נפעל (קידומת נִ)<br>
+        לִכְתֹּב ✓ — שם פועל קל (קידומת לִ)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 3 -->
+  <div class="exercise-block" id="ex-3">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-title">זיהוי בניין קל בטקסט</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">קראו את הקטע ורשמו את כל הפעלים בבניין קל, עם ציון הגוף (אני / הוא / הן וכד׳):</p>
+      <p class="ex-question" style="margin-top:.4rem;font-size:.95rem;line-height:2">"הַמּוֹרָה <strong>פָּתְחָה</strong> אֶת הַחֶדֶר, הַתַּלְמִידִים <strong>נִכְנְסוּ</strong> בְּשֶׁקֶט, <strong>יָשְׁבוּ</strong> וְ<strong>הוֹצִיאוּ</strong> מַחְבָּרוֹת."</p>
+      <textarea class="answer-area" id="ans-3" placeholder="פועל — גוף — בניין קל / לא..." rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        פָּתְחָה ✓ — קל, עבר נסתרת (היא פתחה), שורש פ-ת-ח<br>
+        נִכְנְסוּ ✗ — נפעל (קידומת נִ), שורש כ-נ-ס<br>
+        יָשְׁבוּ ✓ — קל, עבר נסתרים (הם ישבו), שורש י-שׁ-ב<br>
+        הוֹצִיאוּ ✗ — הפעיל (קידומת הוֹ, גזרת פ״י), שורש י-צ-א
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 4 -->
+  <div class="exercise-block" id="ex-4">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-title">בחרו את הפועל בבניין קל</div>
+      <span class="ex-points">5 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">איזה מהפעלים הבאים שייך לבניין קל?</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc4" value="a"><span class="mc-option-label">הִשְׁמִיד</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="b"><span class="mc-option-label">שָׁמַד ✓</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="c"><span class="mc-option-label">שִׁמֵּד</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="d"><span class="mc-option-label">נִשְׁמַד</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ב׳: שָׁמַד</strong>
+        שָׁמַד — עבר נסתר, קמץ בפ״פ + פתח בע״פ = בניין קל ✓<br>
+        הִשְׁמִיד = הפעיל | שִׁמֵּד = פיעל | נִשְׁמַד = נפעל
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 5 -->
+  <div class="exercise-block" id="ex-5">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-title">זיהוי בניין קל — משפטים מורכבים</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">במשפט הבא יש 4 פעלים. זהו אלה מהם בבניין קל ואלה לא, והסבירו:</p>
+      <p class="ex-question" style="margin-top:.4rem;font-size:.95rem;line-height:2">"הַמְּנַהֵל <strong>הִזְמִין</strong> אוֹרְחִים, <strong>קִבֵּל</strong> אֶת פְּנֵיהֶם, <strong>שָׁאַל</strong> לִשְׁלוֹמָם וְ<strong>הֵגִישׁ</strong> קָפֶה."</p>
+      <textarea class="answer-area" id="ans-5" placeholder="פועל — קל / לא קל — סיבה..." rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        הִזְמִין ✗ — הפעיל (קידומת הִ + שורש ז-מ-נ)<br>
+        קִבֵּל ✗ — פיעל (חיריק בפ״פ + דגש בע״פ)<br>
+        שָׁאַל ✓ — קל (קמץ־פתח, שורש ש-א-ל, גרוניים אך דפוס קל)<br>
+        הֵגִישׁ ✗ — הפעיל (קידומת הֵ, שורש נ-ג-שׁ גזרת פ״נ)
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ חלק ב׳: הטייה (6–10) ════ -->
+
+  <!-- שאלה 6 -->
+  <div class="exercise-block" id="ex-6">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-title">העברה לבניין קל — הפעיל לקל</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">העבירו כל פועל מבניין הפעיל לבניין קל, <strong>באותו גוף וזמן</strong>:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>הוא הִכְנִיס → הוא ___ | הִם הוֹצִיאוּ → הֵם ___ | הִיא הִגִּישָׁה → הִיא ___</strong></p>
+      <textarea class="answer-area" id="ans-6" placeholder="הוא כָּנַס | הם יָצְאוּ | היא גִּשָּׁה ..." rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        הוא הִכְנִיס → הוא <strong>כָּנַס</strong> (קל, שורש כ-נ-ס)<br>
+        הם הוֹצִיאוּ → הם <strong>יָצְאוּ</strong> (קל, שורש י-צ-א, גזרת פ״י + ל״א)<br>
+        היא הִגִּישָׁה → היא <strong>גִּשָּׁה / נִגְּשָׁה</strong> (קל/נפעל, שורש נ-ג-שׁ — מקובל שתי תשובות)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 7 -->
+  <div class="exercise-block" id="ex-7">
+    <div class="ex-header">
+      <div class="ex-num">7</div>
+      <div class="ex-title">הטיית פועל קל בעתיד</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">הטו את הפועל <strong>שָׁמַר</strong> (בניין קל) בעתיד לכל הגופים: אני, אתה, את, הוא, היא, אנחנו, אתם, הן.</p>
+      <textarea class="answer-area" id="ans-7" placeholder="אני אשמור, אתה תשמור..." rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח — הטיית שָׁמַר בעתיד</strong>
+        אני — אֶשְׁמֹר | אתה — תִּשְׁמֹר | את — תִּשְׁמְרִי | הוא — יִשְׁמֹר | היא — תִּשְׁמֹר | אנחנו — נִשְׁמֹר | אתם — תִּשְׁמְרוּ | הן — תִּשְׁמֹרְנָה
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 8 -->
+  <div class="exercise-block" id="ex-8">
+    <div class="ex-header">
+      <div class="ex-num">8</div>
+      <div class="ex-title">מפיעל לקל — אותו שורש</div>
+      <span class="ex-points">6 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">לכל פועל בפיעל — כתבו את צורת העבר נסתר (הוא) המקבילה בבניין קל, אם קיימת:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>לִמֵּד → ___ | שִׁחֵק → ___ | בִּקֵּשׁ → ___</strong></p>
+      <textarea class="answer-area" id="ans-8" placeholder="לִמֵּד → לָמַד (הוא למד) | ..." rows="3"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        לִמֵּד → <strong>לָמַד</strong> (קל, הוא למד) ✓<br>
+        שִׁחֵק → <strong>שָׂחַק</strong> (קל, הוא שחק) ✓<br>
+        בִּקֵּשׁ → בניין קל מקביל אינו קיים בשימוש שגור (השורש ב-ק-שׁ בקל = בָּקַשׁ, נדיר)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 9 -->
+  <div class="exercise-block" id="ex-9">
+    <div class="ex-header">
+      <div class="ex-num">9</div>
+      <div class="ex-title">ציווי בבניין קל</div>
+      <span class="ex-points">6 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">כתבו את צורת הציווי בבניין קל לפי הגוף המבוקש:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        פועל <strong>כָּתַב</strong> — ציווי לאתה: <input class="fill-blank" id="fill-9a" placeholder="____" size="7"> |
+        ציווי לאת: <input class="fill-blank" id="fill-9b" placeholder="____" size="7"> |
+        ציווי לאתם: <input class="fill-blank" id="fill-9c" placeholder="____" size="7">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        ציווי אתה: <strong>כְּתֹב</strong> | ציווי את: <strong>כִּתְבִי</strong> | ציווי אתם: <strong>כִּתְבוּ</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 10 -->
+  <div class="exercise-block" id="ex-10">
+    <div class="ex-header">
+      <div class="ex-num">10</div>
+      <div class="ex-title">השלמת טבלת הטיה</div>
+      <span class="ex-points">10 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">השלימו את הטיית הפועל <strong>לָקַח</strong> (שורש ל-ק-ח, בניין קל) בטבלה הבאה:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        עבר: הוא <input class="fill-blank" id="fill-10a" placeholder="לָקַח" size="8" disabled> |
+        היא <input class="fill-blank" id="fill-10b" placeholder="______" size="8"> |
+        הם <input class="fill-blank" id="fill-10c" placeholder="______" size="8"><br><br>
+        הווה: הוא <input class="fill-blank" id="fill-10d" placeholder="______" size="8"> |
+        היא <input class="fill-blank" id="fill-10e" placeholder="______" size="8"><br><br>
+        עתיד: הוא <input class="fill-blank" id="fill-10f" placeholder="______" size="8"> |
+        היא <input class="fill-blank" id="fill-10g" placeholder="______" size="8">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        עבר: הוא לָקַח | היא <strong>לָקְחָה</strong> | הם <strong>לָקְחוּ</strong><br>
+        הווה: הוא <strong>לוֹקֵחַ</strong> | היא <strong>לוֹקַחַת</strong><br>
+        עתיד: הוא <strong>יִקַּח</strong> | היא <strong>תִּקַּח</strong><br>
+        <em style="font-size:.8rem;color:var(--muted)">שימו לב: לָקַח בעתיד — הלמ״ד נושרת (גזרת פ״ל), מתקבל יִקַּח.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ חלק ג׳: אתגר — זיהוי מתוך שמות פועל ומשפטים מורכבים (11–15) ════ -->
+
+  <!-- שאלה 11 -->
+  <div class="exercise-block" id="ex-11">
+    <div class="ex-header">
+      <div class="ex-num">11</div>
+      <div class="ex-title">זיהוי בניין קל מתוך שמות פועל</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">לכל שם פועל — ציינו אם הוא שייך לבניין קל (✓) או לא (✗), והסבירו לפי הקידומת:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>לִבְדֹּק, לְהַסְבִּיר, לִלְמֹד, לְהִתְלַבֵּשׁ, לִסְגֹּר, לְכַתֵּב</strong></p>
+      <textarea class="answer-area" id="ans-11" placeholder="לִבְדֹּק — ✓/✗ — כי הקידומת...&#10;לְהַסְבִּיר — ✓/✗ — כי..." rows="6"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        לִבְדֹּק ✓ — קל (קידומת לִ עם חיריק, משקל לִפְעֹל)<br>
+        לְהַסְבִּיר ✗ — הפעיל (קידומת לְהַ)<br>
+        לִלְמֹד ✓ — קל (קידומת לִ, שורש ל-מ-ד)<br>
+        לְהִתְלַבֵּשׁ ✗ — התפעל (קידומת לְהִתְ)<br>
+        לִסְגֹּר ✓ — קל (קידומת לִ, שורש ס-ג-ר)<br>
+        לְכַתֵּב ✗ — פיעל (קידומת לְ + פתח + דגש בע״פ)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 12 -->
+  <div class="exercise-block" id="ex-12">
+    <div class="ex-header">
+      <div class="ex-num">12</div>
+      <div class="ex-title">זיהוי בניין קל במשפטים מורכבים</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">בכל משפט — זהו את הפועל/שם הפועל בבניין קל וסמנו ✓, והסבירו:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. "הוא ביקש <strong>לִבְדֹּק</strong> את הנושא לפני ההחלטה."<br>
+        ב. "המנהלת <strong>הִזְמִינָה</strong> את הצוות <strong>לִשְׁמֹעַ</strong> את ההצעה."<br>
+        ג. "הם לא הצליחו <strong>לְהַשְׁלִים</strong> את המשימה בזמן."
+      </p>
+      <textarea class="answer-area" id="ans-12" placeholder="א. ___ — קל/לא קל — כי...&#10;ב. ___ — ___  |  ___ — ___&#10;ג. ___ — ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. לִבְדֹּק ✓ — קל (קידומת לִ, שורש ב-ד-ק, משקל לִפְעֹל)<br>
+        ב. הִזְמִינָה ✗ — הפעיל (קידומת הִ + שורש ז-מ-נ) | לִשְׁמֹעַ ✓ — קל (קידומת לִ, שורש שׁ-מ-ע, גרוניים אך משקל קל)<br>
+        ג. לְהַשְׁלִים ✗ — הפעיל (קידומת לְהַ, שורש ש-ל-מ)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 13 -->
+  <div class="exercise-block" id="ex-13">
+    <div class="ex-header">
+      <div class="ex-num">13</div>
+      <div class="ex-title">בחירה מרובה — שם פועל של בניין קל</div>
+      <span class="ex-points">5 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">הפועל <strong>"לָבַשׁ"</strong> (הוא לבש) — מה שם הפועל שלו בבניין קל?</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc13" value="a"><span class="mc-option-label">לְהַלְבִּישׁ</span></label>
+        <label class="mc-option"><input type="radio" name="mc13" value="b"><span class="mc-option-label">לִלְבֹּשׁ ✓</span></label>
+        <label class="mc-option"><input type="radio" name="mc13" value="c"><span class="mc-option-label">לְלַבֵּשׁ</span></label>
+        <label class="mc-option"><input type="radio" name="mc13" value="d"><span class="mc-option-label">הִתְלַבְּשׁוּת</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ב׳: לִלְבֹּשׁ</strong>
+        לָבַשׁ = קל (קמץ-פתח) → שם הפועל בקל: <strong>לִלְבֹּשׁ</strong> (קידומת לִ + שורש ל-ב-שׁ).<br>
+        לְהַלְבִּישׁ = הפעיל (גרם למישהו ללבוש) | לְלַבֵּשׁ = פיעל | הִתְלַבְּשׁוּת = שם פעולה מהתפעל.
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 14 -->
+  <div class="exercise-block" id="ex-14">
+    <div class="ex-header">
+      <div class="ex-num">14</div>
+      <div class="ex-title">מהפועל לשם הפועל — ולהפך</div>
+      <span class="ex-points">8 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">עבדו בשני הכיוונים: א) מהפועל לשם הפועל ב) מהמשפט — זהו את בניין הפועל לפי שם הפועל:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. <strong>שָׁמַר</strong> → שם הפועל: <input class="fill-blank" id="fill-14a" placeholder="______" size="9"><br><br>
+        ב. <strong>גָּמַר</strong> → שם הפועל: <input class="fill-blank" id="fill-14b" placeholder="______" size="9"><br><br>
+        ג. "הוא רצה <strong>לְהַסְבִּיר</strong>" — הפועל "להסביר" הוא בבניין: <input class="fill-blank" id="fill-14c" placeholder="______" size="10">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. שָׁמַר → <strong>לִשְׁמֹר</strong> (לִ + שורש ש-מ-ר, קל ✓)<br>
+        ב. גָּמַר → <strong>לִגְמֹר</strong> (לִ + שורש ג-מ-ר, קל ✓)<br>
+        ג. לְהַסְבִּיר — בניין <strong>הפעיל</strong> (קידומת לְהַ, לא קל)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 15 -->
+  <div class="exercise-block" id="ex-15">
+    <div class="ex-header">
+      <div class="ex-num">15</div>
+      <div class="ex-title">ניתוח משפט מורכב — שלושת סימני הזיהוי</div>
+      <span class="ex-points">10 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">נתחו את כל הפעלים ושמות הפועל במשפט הבא. לכל אחד — ציינו: (א) בניין קל / לא קל, (ב) סימן הזיהוי שהשתמשתם בו (עבר נסתר / בינוני / שם פועל):</p>
+      <p class="ex-question" style="margin-top:.5rem;font-size:.95rem;line-height:2">
+        "הַמְּנַהֵל <strong>בִּקֵּשׁ</strong> <strong>לִבְדֹּק</strong> אֶת הַדּוּ״ח, <strong>קָרָא</strong> אוֹתוֹ בְּעִיּוּן, אַךְ <strong>הֶחְלִיט</strong> <strong>לְהַחְזִיר</strong> אוֹתוֹ לְתִיקּוּן."
+      </p>
+      <textarea class="answer-area" id="ans-15" placeholder="בִּקֵּשׁ — קל/לא — סימן: ___&#10;לִבְדֹּק — קל/לא — סימן: ___&#10;קָרָא — קל/לא — סימן: ___&#10;הֶחְלִיט — קל/לא — סימן: ___&#10;לְהַחְזִיר — קל/לא — סימן: ___" rows="7"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 ניתוח מלא — שאלה 15</strong>
+        בִּקֵּשׁ ✗ — פיעל (חיריק בפ״פ + דגש בע״פ). סימן: עבר נסתר → "הוא בִּקֵּשׁ" ≠ קמץ-פתח.<br>
+        לִבְדֹּק ✓ — קל (קידומת לִ + שורש ב-ד-ק). סימן: שם פועל = משקל לִפְעֹל.<br>
+        קָרָא ✓ — קל (קמץ בפ״פ, שורש ק-ר-א, גזרת ל״א). סימן: עבר נסתר = קמץ-פתח.<br>
+        הֶחְלִיט ✗ — הפעיל (קידומת הֶ + שורש ח-ל-ט). סימן: עבר נסתר ← לא קמץ-פתח.<br>
+        לְהַחְזִיר ✗ — הפעיל (קידומת לְהַ). סימן: שם פועל ← לא מתחיל בלִ.<br>
+        <em style="font-size:.8rem;color:var(--muted)">ציפייה: 5 זיהויים נכונים + ציון הסימן שהשתמשו בו. 2 נקודות לכל פועל.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- כפתור הגשה -->
+  <button class="btn-submit" onclick="submitLesson()">✅ סיים ושמור תשובות</button>
+  <div class="score-display" id="score-display">
+    <div class="score-num">✓</div>
+    <div class="score-label">התשובות נשמרו! עכשיו שלחו למורה:</div>
+  </div>
+
+  <!-- אזור שליחה מרוכז -->
+  <div class="footer-send-card">
+    <h3>📤 סיימת? שלח את התשובות למורה</h3>
+    <p>בחרו את אמצעי השליחה המועדף עליכם:<br>
+    <small style="opacity:.7;font-size:.7rem">הפרטים מוגדרים בדף הראשי ← הגדרות (⚙️)</small></p>
+    <div class="footer-btns">
+      <button class="btn-send-wa" onclick="sendViaWhatsApp()">שליחה בוואטסאפ 🟢</button>
+      <button class="btn-send-email" onclick="sendViaEmail()">שליחה במייל ✉️</button>
+    </div>
+  </div>
+
+</div><!-- /lesson-content -->
+</div><!-- /tab-tw -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: ANSWERS — teacher only (ta)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-ta">
+<div class="teacher-panel">
+
+  <div class="teacher-panel-header">
+    <span class="tph-icon">🔑</span>
+    <div class="tph-text">
+      <h2>פתרונות — לשימוש מורה בלבד</h2>
+      <p>שיעור 2 — בניין קל (פָּעַל)</p>
+    </div>
+  </div>
+
+  <!-- חלק א׳: זיהוי -->
+  <div class="teacher-section-title"><span>א</span> חלק א׳ — זיהוי בניין קל (שאלות 1–5)</div>
+
+  <div class="teacher-section-title"><span>1</span> זיהוי בניין קל במשפט</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 1</strong>
+    <strong>כָּתַב</strong> — בניין קל ✓ (עבר נסתר, קמץ בפ״פ + פתח בע״פ, שורש כ-ת-ב, גזרת שלמים)<br>
+    <strong>קָרְאָה</strong> — בניין קל ✓ (עבר נסתרת, שורש ק-ר-א, גזרת ל״א — האל״ף שייכת לשורש)<br>
+    <strong>הִכְתִּיב</strong> — בניין הפעיל ✗ (קידומת הִ + חיריק בין ע״פ לל״פ = הפעיל)
+  </div>
+
+  <div class="teacher-section-title"><span>2</span> האם הפועל בבניין קל?</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 2</strong>
+    יָשַׁב ✓ — קל. עבר נסתר, קמץ-פתח, שורש י-שׁ-ב (גזרת פ״י, אך הצורה קל)<br>
+    הִתְלַמֵּד ✗ — התפעל. קידומת הִתְ + דגש בע״פ (ל→לּ)<br>
+    שׁוֹמֵר ✓ — קל. הווה זכר יחיד, תבנית פּוֹעֵל, חולם בפ״פ<br>
+    נִפְתַּח ✗ — נפעל. קידומת נִ + פתח תחת הפ׳ (פ→תּ)<br>
+    לִכְתֹּב ✓ — קל. שם פועל, קידומת לִ + חולם בל״פ
+  </div>
+
+  <div class="teacher-section-title"><span>3</span> זיהוי בניין קל בטקסט</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 3</strong>
+    פָּתְחָה ✓ — קל, עבר נסתרת (היא), שורש פ-ת-ח<br>
+    נִכְנְסוּ ✗ — נפעל, קידומת נִ, שורש כ-נ-ס<br>
+    יָשְׁבוּ ✓ — קל, עבר נסתרים (הם), שורש י-שׁ-ב (גזרת פ״י)<br>
+    הוֹצִיאוּ ✗ — הפעיל, קידומת הוֹ (גזרת פ״י), שורש י-צ-א
+  </div>
+
+  <div class="teacher-section-title"><span>4</span> בחירת פועל בבניין קל</div>
+  <div class="ak-answer-item">
+    <strong>🔑 תשובה נכונה — ב׳: שָׁמַד</strong>
+    שָׁמַד: עבר נסתר, קמץ בפ״פ + פתח בע״פ = מאפיין בניין קל קלאסי.<br>
+    הִשְׁמִיד = הפעיל | שִׁמֵּד = פיעל | נִשְׁמַד = נפעל
+  </div>
+
+  <div class="teacher-section-title"><span>5</span> זיהוי במשפטים מורכבים</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 5</strong>
+    הִזְמִין ✗ — הפעיל (קידומת הִ, שורש ז-מ-נ)<br>
+    קִבֵּל ✗ — פיעל (חיריק בפ״פ + דגש בע״פ)<br>
+    שָׁאַל ✓ — קל (קמץ-פתח, שורש ש-א-ל; האל״ף גרונית אבל הדפוס קל)<br>
+    הֵגִישׁ ✗ — הפעיל (קידומת הֵ, שורש נ-ג-שׁ גזרת פ״נ)
+  </div>
+
+  <!-- חלק ב׳: הטייה -->
+  <div class="teacher-section-title"><span>ב</span> חלק ב׳ — הטייה (שאלות 6–10)</div>
+
+  <div class="teacher-section-title"><span>6</span> העברה לבניין קל</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח — שאלה 6</strong>
+    הוא הִכְנִיס → הוא <strong>כָּנַס</strong> (שורש כ-נ-ס, קל, גזרת שלמים)<br>
+    הם הוֹצִיאוּ → הם <strong>יָצְאוּ</strong> (שורש י-צ-א, קל, גזרת פ״י + ל״א)<br>
+    היא הִגִּישָׁה → היא <strong>גִּשָּׁה / נִגְּשָׁה</strong> (שתי תשובות מקובלות — קל / נפעל לשורש נ-ג-שׁ)
+  </div>
+
+  <div class="teacher-section-title"><span>7</span> הטיית שָׁמַר בעתיד</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 7</strong>
+    אני — אֶשְׁמֹר | אתה — תִּשְׁמֹר | את — תִּשְׁמְרִי | הוא — יִשְׁמֹר | היא — תִּשְׁמֹר<br>
+    אנחנו — נִשְׁמֹר | אתם — תִּשְׁמְרוּ | הן — תִּשְׁמֹרְנָה<br>
+    <em style="font-size:.8rem;color:var(--muted)">סימן מבחין: קידומות יִ/תִּ/אֶ/נִ + חולם בסוף (שׁמֹר)</em>
+  </div>
+
+  <div class="teacher-section-title"><span>8</span> מפיעל לקל</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח — שאלה 8</strong>
+    לִמֵּד → <strong>לָמַד</strong> ✓ (שורש ל-מ-ד, קל, "הוא למד")<br>
+    שִׁחֵק → <strong>שָׂחַק</strong> ✓ (שורש שׂ-ח-ק, קל, "הוא שחק")<br>
+    בִּקֵּשׁ → בָּקַשׁ קיים אך נדיר בעברית המודרנית — מקובל לציין שאין שימוש שגור בקל
+  </div>
+
+  <div class="teacher-section-title"><span>9</span> ציווי בבניין קל</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח — שאלה 9</strong>
+    ציווי אתה: <strong>כְּתֹב</strong> | ציווי את: <strong>כִּתְבִי</strong> | ציווי אתם: <strong>כִּתְבוּ</strong><br>
+    <em style="font-size:.8rem;color:var(--muted)">שימו לב: הציווי בקל לאתה = כמו עתיד ללא קידומת תִּ. כְּתֹב ← תִּכְתֹּב (ללא תִּ).</em>
+  </div>
+
+  <div class="teacher-section-title"><span>10</span> הטיית לָקַח</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 10</strong>
+    עבר: היא <strong>לָקְחָה</strong> | הם <strong>לָקְחוּ</strong><br>
+    הווה: הוא <strong>לוֹקֵחַ</strong> | היא <strong>לוֹקַחַת</strong><br>
+    עתיד: הוא <strong>יִקַּח</strong> | היא <strong>תִּקַּח</strong><br>
+    <em style="font-size:.8rem;color:var(--muted)">הפ״ל של לָקַח נושרת בעתיד ובציווי — יִקַּח (לא יִלְקַח). דגש בע״פ מפצה על הנשירה.</em>
+  </div>
+
+  <!-- חלק ג׳: אתגר -->
+  <div class="teacher-section-title"><span>ג</span> חלק ג׳ — אתגר: זיהוי מתוך שמות פועל ומשפטים מורכבים (שאלות 11–15)</div>
+
+  <div class="teacher-section-title"><span>11</span> זיהוי בניין קל מתוך שמות פועל</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 11</strong>
+    לִבְדֹּק ✓ — קל. קידומת <strong>לִ</strong> (חיריק) + שורש ב-ד-ק = משקל לִפְעֹל.<br>
+    לְהַסְבִּיר ✗ — הפעיל. קידומת לְהַ = סימן הפעיל ברור.<br>
+    לִלְמֹד ✓ — קל. קידומת <strong>לִ</strong> + שורש ל-מ-ד. שם הפועל "לילמוד" = קל.<br>
+    לְהִתְלַבֵּשׁ ✗ — התפעל. קידומת לְהִתְ = סימן התפעל.<br>
+    לִסְגֹּר ✓ — קל. קידומת <strong>לִ</strong> + שורש ס-ג-ר. הדגמה: "הוא סָגַר" = קמץ-פתח.<br>
+    לְכַתֵּב ✗ — פיעל. קידומת לְ + פתח + דגש בע״פ = פיעל (גרם לכתיבה).
+  </div>
+
+  <div class="teacher-section-title"><span>12</span> זיהוי בניין קל במשפטים מורכבים</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח מלא — שאלה 12</strong>
+    א. לִבְדֹּק ✓ — קל. קידומת לִ, שורש ב-ד-ק, משקל לִפְעֹל. "הוא אתמול בָּדַק" = קמץ-פתח ✓<br>
+    ב. הִזְמִינָה ✗ — הפעיל (קידומת הִ + שורש ז-מ-נ). לִשְׁמֹעַ ✓ — קל (קידומת לִ, שורש שׁ-מ-ע, גרוניים אך משקל לִפְעֹל).<br>
+    ג. לְהַשְׁלִים ✗ — הפעיל (קידומת לְהַ, שורש ש-ל-מ). "הוא השלים" = הפעיל, לא קמץ-פתח.
+  </div>
+
+  <div class="teacher-section-title"><span>13</span> שם פועל של "לָבַשׁ"</div>
+  <div class="ak-answer-item">
+    <strong>🔑 תשובה נכונה — ב׳: לִלְבֹּשׁ</strong>
+    לָבַשׁ = קל (קמץ בפ״פ + פתח בע״פ) → שם הפועל: <strong>לִלְבֹּשׁ</strong> (קידומת לִ + שורש ל-ב-שׁ). <br>
+    לְהַלְבִּישׁ = הפעיל — "הלביש" = גרם למישהו ללבוש (פונקציה שונה).<br>
+    לְלַבֵּשׁ = פיעל — "לבּשׁ" = ניחש, נדיר בשימוש.<br>
+    <em style="font-size:.8rem;color:var(--muted)">הסבר לתלמידים: "לבש" ו-"הלביש" — אותו שורש, בניין שונה, משמעות שונה!</em>
+  </div>
+
+  <div class="teacher-section-title"><span>14</span> מהפועל לשם הפועל — ולהפך</div>
+  <div class="ak-answer-item">
+    <strong>🔑 מפתח — שאלה 14</strong>
+    א. שָׁמַר → <strong>לִשְׁמֹר</strong> (קל ✓ — קידומת לִ, שורש ש-מ-ר)<br>
+    ב. גָּמַר → <strong>לִגְמֹר</strong> (קל ✓ — קידומת לִ, שורש ג-מ-ר; "הוא גמר" = קמץ-פתח)<br>
+    ג. לְהַסְבִּיר → בניין <strong>הפעיל</strong> (קידומת לְהַ — לא קל).<br>
+    <em style="font-size:.8rem;color:var(--muted)">כלל: קל → לִפְעֹל | הפעיל → לְהַפְעִיל | פיעל → לְפַעֵל | התפעל → לְהִתְפַּעֵל</em>
+  </div>
+
+  <div class="teacher-section-title"><span>15</span> ניתוח משפט מורכב — שלושת סימני הזיהוי</div>
+  <div class="ak-answer-item">
+    <strong>🔑 ניתוח מלא — שאלה 15</strong>
+    בִּקֵּשׁ ✗ — פיעל. סימן: עבר נסתר → "הוא בִּקֵּשׁ" = חיריק בפ״פ + דגש, לא קמץ-פתח.<br>
+    לִבְדֹּק ✓ — קל. סימן: שם פועל = קידומת לִ + שורש ב-ד-ק, משקל לִפְעֹל.<br>
+    קָרָא ✓ — קל. סימן: עבר נסתר = קמץ בפ״פ (קָ), שורש ק-ר-א, גזרת ל״א.<br>
+    הֶחְלִיט ✗ — הפעיל. סימן: עבר נסתר → "הוא הֶחְלִיט" = קידומת הֶ, לא קמץ-פתח.<br>
+    לְהַחְזִיר ✗ — הפעיל. סימן: שם פועל = קידומת לְהַ, לא לִ של קל.<br>
+    <em style="font-size:.8rem;color:var(--muted)">ציפייה: 5 זיהויים נכונים + ציון הסימן שהשתמשו בו. 2 נקודות לכל פועל.</em>
+  </div>
+
+</div><!-- /teacher-panel answers -->
+</div><!-- /tab-ta -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: DASHBOARD (td)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-td">
+<div class="teacher-panel">
+
+  <div class="teacher-panel-header">
+    <span class="tph-icon">📊</span>
+    <div class="tph-text">
+      <h2>דשבורד — נתוני הגשות</h2>
+      <p>Firebase Firestore · ניתוח ומעקב</p>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <h3>📋 הגשות אחרונות (Firebase)</h3>
+    <div id="dashboard-content" style="font-size:.82rem;color:var(--muted);
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:1rem;min-height:58px">
+      ⏳ טוען נתונים מ-Firebase...
+    </div>
+    <button class="btn-refresh" onclick="loadFirebaseDashboard()" style="margin-top:.75rem">🔄 רענן מ-Firebase</button>
+  </div>
+
+  <div class="dashboard-card">
+    <h3>📈 סטטיסטיקה מקומית (localStorage)</h3>
+    <div id="local-stats-content" style="font-size:.82rem;color:var(--muted);
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:1rem;min-height:58px">
+      ⏳ טוען נתונים מקומיים...
+    </div>
+    <button class="btn-refresh" onclick="loadLocalStats()">🔄 רענן סטטיסטיקה</button>
+  </div>
+
+</div><!-- /teacher-panel dashboard -->
+</div><!-- /tab-td -->
+
+<div id="toast"></div>
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT — single clean block
+════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ════════════════════
+   FIREBASE CONFIG
+════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            'YOUR_API_KEY',
+  authDomain:        'lashon-lesson.firebaseapp.com',
+  projectId:         'lashon-lesson',
+  storageBucket:     'lashon-lesson.appspot.com',
+  messagingSenderId: 'YOUR_SENDER_ID',
+  appId:             'YOUR_APP_ID'
+};
+let _db = null;
+function getDb() {
+  if (_db) return _db;
+  try {
+    if (typeof firebase === 'undefined') return null;
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    _db = firebase.firestore();
+    return _db;
+  } catch(e) { console.warn('[Firebase]', e); return null; }
+}
+async function saveScoreToCloud(lessonId, score, studentName, extra = {}) {
+  const db = getDb(); if (!db) return false;
+  try {
+    const ref = await db.collection('student_scores').add({
+      lessonId,
+      lessonTitle: LESSON_META.title,
+      unitId:      LESSON_META.unit,
+      score:       score ?? null,
+      studentName: studentName || 'תלמיד/ה',
+      date:        new Date().toLocaleDateString('he-IL'),
+      ts:          firebase.firestore.FieldValue.serverTimestamp(),
+      ...extra
+    });
+    console.log('[Firebase] ✅ saved', ref.id);
+    return true;
+  } catch(e) { console.error('[Firebase] ❌', e); return false; }
+}
+
+/* ════════════════════
+   LESSON METADATA
+════════════════════ */
+const LESSON_META = {
+  id:    'u1_l2',
+  unit:  'u1',
+  title: 'בניין קל (פָּעַל)',
+  short: 'שיעור 2',
+  emoji: '🔵',
+  mins:  45,
+};
+
+/* ════════════════════
+   STORAGE HELPER
+════════════════════ */
+const LS = {
+  get(k, fb = null) {
+    try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : fb; }
+    catch(e) { return fb; }
+  },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+};
+
+/* ════════════════════
+   ROLE DETECTION
+   Priority: URL ?role=teacher > lashon_role > userRole (legacy)
+════════════════════ */
+const _params = new URLSearchParams(window.location.search);
+const isTeacher = (
+  _params.get('role') === 'teacher' ||
+  LS.get('lashon_role', '') === 'teacher' ||
+  localStorage.getItem('userRole') === 'teacher'
+);
+
+/* Apply is-teacher class immediately (before DOM ready) */
+if (isTeacher) {
+  document.body.classList.add('is-teacher');
+}
+
+/* ════════════════════
+   window.onload
+════════════════════ */
+window.onload = function () {
+  /* ── stamp print date ── */
+  const h = document.querySelector('.lesson-header');
+  if (h) h.setAttribute('data-print-date', new Date().toLocaleDateString('he-IL'));
+
+  attachMcListeners();
+
+  if (isTeacher) {
+    /* מורה: פתח פתרונות, טען דשבורד */
+    const taBtn = document.getElementById('tab-btn-ta');
+    showTab('ta', taBtn);
+    loadLocalStats();
+    loadFirebaseDashboard();
+    return;
+  }
+
+  /* תלמיד: פתח תיאוריה */
+  const thBtn = document.getElementById('tab-btn-th');
+  showTab('th', thBtn);
+};
+
+/* ════════════════════
+   TABS
+════════════════════ */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const pane = document.getElementById('tab-' + id);
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+/* ════════════════════
+   TOAST
+════════════════════ */
+let _tt;
+function toast(msg, dur = 2800) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+/* ════════════════════
+   MC HIGHLIGHT
+════════════════════ */
+function attachMcListeners() {
+  document.querySelectorAll('.mc-option').forEach(opt => {
+    opt.addEventListener('click', function () {
+      const name = this.querySelector('input[type=radio]')?.name;
+      if (name) {
+        document.querySelectorAll(`input[name="${name}"]`)
+          .forEach(r => r.closest('.mc-option')?.classList.remove('selected'));
+      }
+      this.classList.add('selected');
+    });
+  });
+}
+attachMcListeners();
+
+/* ════════════════════
+   COLLECT ANSWERS
+════════════════════ */
+function collectAnswers() {
+  const lines = [
+    `📚 ${LESSON_META.title}`,
+    `📅 ${new Date().toLocaleDateString('he-IL')}`,
+    `👤 ${LS.get('lashon_uname', '') || 'תלמיד/ה'}`,
+    ''
+  ];
+  document.querySelectorAll('.answer-area').forEach(ta => {
+    const title = ta.closest('.exercise-block')?.querySelector('.ex-title')?.textContent?.trim() || '—';
+    lines.push(`❓ ${title}`);
+    lines.push(ta.value.trim() || '(ללא תשובה)');
+    lines.push('');
+  });
+  const mcSeen = new Set();
+  document.querySelectorAll('.mc-options input[type=radio]:checked').forEach(r => {
+    if (mcSeen.has(r.name)) return;
+    mcSeen.add(r.name);
+    const block = r.closest('.exercise-block');
+    const title = block?.querySelector('.ex-title')?.textContent?.trim() || r.name;
+    const label = r.closest('.mc-option')?.querySelector('.mc-option-label')?.textContent?.trim() || r.value;
+    lines.push(`❓ ${title}`);
+    lines.push(`✔️ ${label}`);
+    lines.push('');
+  });
+  const blanks = [...document.querySelectorAll('.fill-blank')];
+  if (blanks.length) {
+    lines.push('✏️ השלמות:');
+    blanks.forEach((inp, i) => lines.push(`  ${i + 1}. ${inp.value.trim() || '(ריק)'}`));
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+/* ════════════════════
+   SUBMIT
+════════════════════ */
+async function submitLesson() {
+  const studentName = LS.get('lashon_uname', '') || 'תלמיד/ה';
+  const content     = collectAnswers();
+  const prog = LS.get('lashon_prog_' + studentName, {});
+  prog[LESSON_META.id] = { done: true, date: new Date().toLocaleDateString('he-IL') };
+  LS.set('lashon_prog_' + studentName, prog);
+  const btn = document.querySelector('.btn-submit');
+  if (btn) { btn.textContent = '⏳ שומר...'; btn.disabled = true; }
+  const saved = await saveScoreToCloud(LESSON_META.id, null, studentName, { content });
+  if (btn) { btn.textContent = saved ? '✅ הוגש ונשמר!' : '✅ הוגש'; btn.disabled = false; }
+  if (window.opener) {
+    try { window.opener.postMessage({ type: 'lessonDone', id: LESSON_META.id }, '*'); } catch(e) {}
+  }
+  const scoreEl = document.getElementById('score-display');
+  if (scoreEl) scoreEl.classList.add('show');
+  toast('✅ השיעור הוגש בהצלחה!');
+}
+
+/* ════════════════════
+   SEND
+════════════════════ */
+function sendViaWhatsApp() {
+  const wa = LS.get('teacher_whatsapp', '') || LS.get('lashon_teacher_phone', '') || '';
+  if (!wa) {
+    alert('⚠️ לא הוגדר מספר וואטסאפ של המורה.\nנא להגדיר בהגדרות בדף הבית (⚙️).');
+    return;
+  }
+  const content = collectAnswers();
+  const student = LS.get('lashon_uname', '') || 'תלמיד/ה';
+  const msg = `📚 ${LESSON_META.title}\n👤 ${student}\n\n${content}`;
+  window.open(`https://wa.me/972${wa.replace(/^0/, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+function sendViaEmail() {
+  const email = LS.get('teacher_email', '') || LS.get('lashon_teacher_email', '') || '';
+  if (!email) {
+    alert('⚠️ לא הוגדר מייל של המורה.\nנא להגדיר בהגדרות בדף הבית (⚙️).');
+    return;
+  }
+  const content = collectAnswers();
+  const student = LS.get('lashon_uname', '') || 'תלמיד/ה';
+  window.open(
+    `mailto:${email}?subject=${encodeURIComponent('📚 ' + LESSON_META.title + ' — ' + student)}&body=${encodeURIComponent('📚 ' + LESSON_META.title + '\n👤 ' + student + '\n\n' + content)}`,
+    '_blank'
+  );
+}
+
+/* ════════════════════
+   FIREBASE DASHBOARD
+════════════════════ */
+async function loadFirebaseDashboard() {
+  const el = document.getElementById('dashboard-content');
+  if (!el) return;
+  const db = getDb();
+  if (!db) {
+    el.innerHTML = `<div style="padding:.5rem 0;line-height:1.7">
+      <strong style="color:var(--amber)">⚠️ Firebase לא מחובר</strong><br>
+      כדי לראות הגשות בזמן אמת:<br>
+      1. הסירו את ה-comment מה-SDK scripts בתגית &lt;head&gt;<br>
+      2. החליפו את <code>YOUR_API_KEY</code> ו-<code>YOUR_APP_ID</code> בפרטי הפרויקט שלכם<br>
+      3. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--blue)">console.firebase.google.com</a>
+    </div>`;
+    return;
+  }
+  try {
+    el.innerHTML = '<em style="color:var(--muted)">⏳ טוען...</em>';
+    const snap = await db.collection('student_scores')
+      .where('lessonId', '==', LESSON_META.id)
+      .orderBy('ts', 'desc')
+      .limit(50)
+      .get();
+    if (snap.empty) {
+      el.innerHTML = '<p style="color:var(--muted)">אין הגשות עדיין לשיעור זה.</p>';
+      return;
+    }
+    let rows = '';
+    snap.forEach(doc => {
+      const d = doc.data();
+      rows += `<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:6px 10px">${d.studentName || '—'}</td>
+        <td style="padding:6px 10px;text-align:center">${d.date || '—'}</td>
+        <td style="padding:6px 10px;text-align:center">${d.content ? '✅ יש תוכן' : '—'}</td>
+      </tr>`;
+    });
+    el.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.8rem">
+      <tr style="background:var(--surface3)">
+        <th style="padding:6px 10px;text-align:right;font-weight:700">תלמיד/ה</th>
+        <th style="padding:6px 10px;font-weight:700">תאריך</th>
+        <th style="padding:6px 10px;font-weight:700">סטטוס</th>
+      </tr>${rows}</table>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:.5rem">סה״כ: ${snap.size} הגשות</p>`;
+  } catch(e) {
+    el.innerHTML = `<span style="color:var(--red)">❌ שגיאה בטעינה: ${e.message}</span>`;
+  }
+}
+
+/* ════════════════════
+   LOCAL STATS
+════════════════════ */
+function loadLocalStats() {
+  const el = document.getElementById('local-stats-content');
+  if (!el) return;
+  try {
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('lashon_prog_'));
+    if (!keys.length) {
+      el.innerHTML = '<p style="color:var(--muted);font-size:.82rem">אין נתוני הגשות שמורים מקומית.</p>';
+      return;
+    }
+    let rows = '';
+    keys.forEach(k => {
+      const name = k.replace('lashon_prog_', '');
+      const prog = LS.get(k, {});
+      Object.entries(prog).forEach(([lid, data]) => {
+        if (data.done) {
+          rows += `<tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:5px 10px">${name}</td>
+            <td style="padding:5px 10px;text-align:center">${lid}</td>
+            <td style="padding:5px 10px;text-align:center">${data.date || '—'}</td>
+          </tr>`;
+        }
+      });
+    });
+    el.innerHTML = rows
+      ? `<table style="width:100%;border-collapse:collapse;font-size:.8rem">
+           <tr style="background:var(--surface3)">
+             <th style="padding:6px 10px;text-align:right;font-weight:700">תלמיד/ה</th>
+             <th style="padding:6px 10px;font-weight:700">שיעור</th>
+             <th style="padding:6px 10px;font-weight:700">תאריך</th>
+           </tr>${rows}</table>`
+      : '<p style="color:var(--muted);font-size:.82rem">אין הגשות שמורות.</p>';
+  } catch(e) {
+    el.textContent = 'שגיאה בטעינת נתונים: ' + e.message;
+  }
+}
+
+/* ════════════════════
+   INIT
+════════════════════ */
+(function init() {
+  const h = document.querySelector('.lesson-header');
+  if (h) h.setAttribute('data-print-date', new Date().toLocaleDateString('he-IL'));
+})();
+</script>
+</body>
+</html>

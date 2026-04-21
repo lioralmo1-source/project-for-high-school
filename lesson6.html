@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>יחידה 1 — מבחן מסכם | לשון Lesson</title>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Firebase SDK — הוסיפו לפני שימוש:
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+-->
+<style>
+/* ══════════════════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════════════════ */
+:root {
+  --bg:#f5f6f8; --surface:#fff; --surface2:#f8f9fb; --surface3:#eef0f5;
+  --border:#e4e7ef; --border2:#d1d6e5;
+  --text:#0d1424; --text-mid:#3d4660; --muted:#6b7594; --subtle:#9aa3be;
+  --blue:#1a56db; --blue-lt:#eff4ff; --blue-dk:#1340b0;
+  --green:#15803d; --green-lt:#f0fdf4;
+  --amber:#b45309; --amber-lt:#fffbeb;
+  --red:#dc2626; --red-lt:#fef2f2;
+  --gold:#ca8a04; --gold-lt:#fefce8;
+  --sh1:0 1px 3px rgba(13,20,36,.06),0 1px 2px rgba(13,20,36,.04);
+  --sh2:0 4px 16px rgba(13,20,36,.07),0 1px 4px rgba(13,20,36,.04);
+  --sh3:0 12px 36px rgba(13,20,36,.10),0 3px 8px rgba(13,20,36,.05);
+  --r-sm:10px; --r:16px; --r-lg:20px; --r-xl:28px; --r-pill:999px;
+  --lc:#4f46e5; --lc-lt:#eef2ff;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0b0f17; --surface:#131924; --surface2:#192030; --surface3:#1f2840;
+    --border:#252f47; --border2:#313d5c;
+    --text:#d8dfe8; --text-mid:#a0adc5; --muted:#7a8aaa; --subtle:#50607e;
+    --blue:#4d8aff; --blue-lt:#162040; --blue-dk:#6aa0ff;
+    --green:#34d875; --green-lt:#0c2618;
+    --amber:#f5a623; --amber-lt:#28200c;
+    --red:#fc8080; --red-lt:#281414;
+    --gold:#f5a623; --gold-lt:#28200c;
+    --lc:#818cf8; --lc-lt:#1e1b4b;
+  }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);
+  scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{line-height:1.6;}
+button,input,a,textarea,select{font-family:'Heebo',sans-serif;}
+a{text-decoration:none;}
+
+/* ══════════════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════════════ */
+.lesson-topbar{
+  position:sticky;top:0;z-index:200;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:.6rem 1rem;display:flex;align-items:center;gap:.55rem;
+  box-shadow:var(--sh1);min-height:52px;
+}
+.btn-back{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  font-size:1.1rem;color:var(--muted);
+  cursor:pointer;transition:all .12s;flex-shrink:0;padding:0;
+}
+.btn-back:hover{background:var(--surface3);color:var(--text);}
+.lesson-topbar-title{
+  flex:1;min-width:0;font-family:'Secular One',sans-serif;
+  font-size:.88rem;color:var(--text);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.topbar-title-wrap{flex:1;min-width:0;overflow:hidden;}
+.lesson-topbar-sub{font-size:.6rem;color:var(--subtle);margin-top:.04rem;}
+.topbar-actions{display:flex;align-items:center;gap:.4rem;flex-shrink:0;}
+.btn-print{
+  display:inline-flex;align-items:center;gap:.25rem;
+  padding:.45rem .8rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  font-size:.76rem;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:all .12s;min-height:40px;
+}
+.btn-print:hover{background:var(--surface3);color:var(--text);}
+
+/* ══════════════════════════════════════════════════
+   TABS BAR
+══════════════════════════════════════════════════ */
+.tabs-bar{
+  display:flex;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs-bar::-webkit-scrollbar{display:none;}
+#tab-btn-ta,#tab-btn-td{ display:none; }
+.is-teacher #tab-btn-ta,
+.is-teacher #tab-btn-td{ display:flex; }
+.tab-btn{
+  padding:.65rem 1.15rem;border:none;border-bottom:2.5px solid transparent;
+  background:none;font-size:.82rem;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all .14s;white-space:nowrap;min-height:44px;
+  margin-bottom:-1px;flex-shrink:0;
+}
+.tab-btn:hover{color:var(--lc);}
+.tab-btn.active{color:var(--lc);border-bottom-color:var(--lc);font-weight:800;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* ══════════════════════════════════════════════════
+   LESSON HEADER
+══════════════════════════════════════════════════ */
+.lesson-header{
+  background:linear-gradient(135deg,var(--lc-lt) 0%,var(--surface) 70%);
+  border-bottom:1px solid var(--border);
+  padding:1.6rem 1.4rem 1.4rem;
+  position:relative;overflow:hidden;cursor:default;user-select:none;
+}
+.lesson-header::before{
+  content:'';position:absolute;top:0;right:0;bottom:0;width:5px;
+  background:var(--lc);opacity:.8;
+}
+.lh-unit-badge{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-size:.62rem;font-weight:800;color:var(--lc);
+  text-transform:uppercase;letter-spacing:.06em;
+  background:var(--lc-lt);border:1.5px solid var(--lc);
+  border-radius:var(--r-pill);padding:.22rem .75rem;margin-bottom:.85rem;opacity:.85;
+}
+.lh-emoji{font-size:2.2rem;line-height:1;margin-bottom:.55rem;display:block;}
+.lh-title{
+  font-family:'Secular One',sans-serif;
+  font-size:clamp(1.3rem,4vw,1.65rem);
+  color:var(--text);line-height:1.2;margin-bottom:.4rem;
+}
+.lh-desc{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:540px;}
+.lh-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:.9rem;}
+.lh-chip{
+  font-size:.65rem;font-weight:700;padding:.22rem .7rem;
+  border-radius:var(--r-pill);border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);
+}
+.lh-chip.time{color:var(--amber);background:var(--amber-lt);border-color:#fde68a;}
+#role-chip{display:none;background:var(--gold-lt);color:var(--gold);border-color:#fde68a;}
+.is-teacher #role-chip{display:inline-flex;}
+#lp-bar-wrap{position:absolute;bottom:0;right:0;left:0;height:3px;display:none;overflow:hidden;}
+#lp-bar{height:100%;width:0%;background:var(--gold);transition:width 3s linear;}
+
+/* ══════════════════════════════════════════════════
+   LESSON CONTENT
+══════════════════════════════════════════════════ */
+.lesson-content{max-width:780px;margin:0 auto;padding:1.4rem 1.2rem 3rem;}
+.section-title{
+  font-family:'Secular One',sans-serif;font-size:1.05rem;color:var(--lc);
+  display:flex;align-items:center;gap:.5rem;
+  margin-bottom:.9rem;margin-top:2rem;
+  padding-bottom:.45rem;border-bottom:2px solid var(--lc-lt);
+}
+.section-title:first-child{margin-top:0;}
+.st-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--lc);color:#fff;
+  font-size:.75rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-weight:900;
+}
+.content-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.2rem 1.3rem;
+  box-shadow:var(--sh1);margin-bottom:1rem;
+}
+.content-card p{font-size:.9rem;line-height:1.75;color:var(--text-mid);}
+.content-card p+p{margin-top:.65rem;}
+.content-card h4{font-size:.88rem;font-weight:800;margin-bottom:.4rem;color:var(--text);}
+.content-card ul,.content-card ol{padding-right:1.2rem;margin-top:.4rem;}
+.content-card li{font-size:.9rem;line-height:1.75;color:var(--text-mid);}
+.tip-box{
+  background:var(--blue-lt);border:1.5px solid #bfdbfe;
+  border-radius:var(--r);padding:1rem 1.15rem;
+  font-size:.85rem;line-height:1.7;color:var(--text-mid);margin-bottom:1rem;
+}
+.tip-box strong{color:var(--blue);}
+.warning-box{
+  background:var(--amber-lt);border:1.5px solid #fde68a;
+  border-radius:var(--r);padding:1rem 1.15rem;
+  font-size:.85rem;line-height:1.7;color:var(--text-mid);margin-bottom:1rem;
+}
+.warning-box strong{color:var(--amber);}
+
+/* ── TABLE (mobile scroll) ── */
+.binyan-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:1rem;}
+.binyan-table{
+  width:100%;min-width:380px;border-collapse:collapse;font-size:.82rem;
+  background:var(--surface);border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);box-shadow:var(--sh1);
+}
+.binyan-table th{
+  background:var(--lc);color:#fff;font-weight:800;
+  padding:.55rem .8rem;text-align:center;font-size:.78rem;
+}
+.binyan-table td{
+  padding:.5rem .8rem;border-bottom:1px solid var(--border);
+  text-align:center;vertical-align:middle;
+}
+.binyan-table tr:last-child td{border-bottom:none;}
+.binyan-table tr:nth-child(even) td{background:var(--surface2);}
+.binyan-table td:first-child{font-weight:800;color:var(--lc);}
+.binyan-table td.heb{font-size:.95rem;letter-spacing:.03em;}
+
+/* ══════════════════════════════════════════════════
+   EXERCISE BLOCKS
+══════════════════════════════════════════════════ */
+.exercise-block{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--sh1);margin-bottom:1.1rem;
+}
+.ex-header{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+  background:var(--surface2);
+}
+.ex-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--lc);color:#fff;
+  font-size:.75rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ex-title{font-size:.88rem;font-weight:700;flex:1;}
+.ex-points{
+  font-size:.62rem;font-weight:700;padding:.15rem .55rem;
+  border-radius:var(--r-pill);background:var(--lc-lt);
+  color:var(--lc);border:1px solid var(--lc);opacity:.8;white-space:nowrap;
+}
+.ex-body{padding:1rem 1.1rem;}
+.ex-question{font-size:.9rem;line-height:1.7;margin-bottom:.85rem;}
+.answer-area{
+  width:100%;min-height:90px;padding:.8rem 1rem;
+  border:1.5px solid var(--border);border-radius:var(--r);
+  font-family:'Heebo',sans-serif;font-size:.9rem;
+  background:var(--surface);color:var(--text);
+  resize:vertical;outline:none;direction:rtl;
+  transition:border-color .14s,box-shadow .16s;line-height:1.6;
+}
+.answer-area:focus{border-color:var(--lc);box-shadow:0 0 0 3px rgba(79,70,229,.08);}
+.answer-area::placeholder{color:var(--subtle);}
+.mc-options{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.6rem;}
+.mc-option{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.7rem .9rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);cursor:pointer;
+  transition:all .14s;user-select:none;
+  -webkit-tap-highlight-color:transparent;min-height:48px;background:var(--surface);
+}
+.mc-option:hover{border-color:var(--lc);background:var(--lc-lt);}
+.mc-option input[type=radio]{accent-color:var(--lc);width:16px;height:16px;flex-shrink:0;}
+.mc-option-label{font-size:.88rem;flex:1;cursor:pointer;}
+.mc-option.selected{border-color:var(--lc);background:var(--lc-lt);font-weight:600;}
+.fill-blank{
+  display:inline-block;min-width:80px;padding:.2rem .5rem;
+  border:none;border-bottom:2px solid var(--lc);
+  background:transparent;font-family:'Heebo',sans-serif;
+  font-size:.9rem;color:var(--text);outline:none;text-align:center;
+}
+.fill-blank:focus{border-color:var(--blue);}
+
+/* ── TEACHER-ONLY ANSWERS ── */
+.teacher-only{
+  display:none;
+  background:var(--gold-lt);border:1.5px solid #fde68a;
+  border-radius:var(--r);padding:.85rem 1rem;
+  font-size:.84rem;color:var(--text-mid);line-height:1.7;margin-top:.6rem;
+}
+.teacher-only strong{
+  color:var(--gold);font-size:.7rem;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:.35rem;
+}
+.is-teacher .teacher-only{display:block;}
+
+/* ── SUBMIT & SCORE ── */
+.btn-submit{
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  width:100%;padding:.9rem;margin-top:1.4rem;
+  background:var(--lc);color:#fff;
+  border:none;border-radius:var(--r-sm);
+  font-size:.92rem;font-weight:700;cursor:pointer;
+  transition:all .15s;min-height:52px;font-family:'Heebo',sans-serif;
+  box-shadow:0 3px 12px rgba(79,70,229,.25);
+}
+.btn-submit:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.btn-submit:active{transform:scale(.98);}
+.score-display{
+  display:none;background:var(--green-lt);border:1.5px solid #86efac;
+  border-radius:var(--r-lg);padding:1.2rem 1.4rem;
+  text-align:center;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);margin-top:1rem;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.score-display.show{display:block;}
+.score-num{font-family:'Secular One',sans-serif;font-size:2.4rem;color:var(--green);line-height:1;}
+.score-label{font-size:.82rem;color:var(--muted);margin-top:.25rem;}
+
+/* ── SEND FOOTER ── */
+.footer-send-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.3rem 1.4rem;
+  box-shadow:var(--sh2);text-align:center;margin-top:1.5rem;
+}
+.footer-send-card h3{font-family:'Secular One',sans-serif;font-size:1rem;margin-bottom:.4rem;color:var(--text);}
+.footer-send-card p{font-size:.78rem;color:var(--muted);margin-bottom:1.15rem;line-height:1.55;}
+.footer-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+.btn-send-wa{
+  display:inline-flex;align-items:center;gap:.42rem;
+  padding:.78rem 1.4rem;border:none;border-radius:var(--r-sm);
+  background:linear-gradient(135deg,#25d366,#1ebe5d);
+  color:#fff;font-size:.88rem;font-weight:800;cursor:pointer;
+  transition:all .14s;min-height:50px;font-family:'Heebo',sans-serif;
+  box-shadow:0 3px 12px rgba(37,211,102,.32);
+}
+.btn-send-wa:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(37,211,102,.42);}
+.btn-send-email{
+  display:inline-flex;align-items:center;gap:.42rem;
+  padding:.78rem 1.4rem;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);background:var(--surface2);
+  color:var(--text-mid);font-size:.88rem;font-weight:700;
+  cursor:pointer;transition:all .14s;min-height:50px;font-family:'Heebo',sans-serif;
+}
+.btn-send-email:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);}
+
+/* ══════════════════════════════════════════════════
+   TEACHER PANEL
+══════════════════════════════════════════════════ */
+.teacher-panel{max-width:780px;margin:0 auto;padding:1.4rem 1.2rem 3rem;}
+.teacher-panel-header{
+  background:linear-gradient(135deg,#3b0764,#6d28d9);
+  border-radius:var(--r-lg);padding:1.1rem 1.3rem;margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.tph-icon{font-size:1.8rem;flex-shrink:0;}
+.tph-text h2{font-family:'Secular One',sans-serif;font-size:.98rem;color:#e9d5ff;margin:0;}
+.tph-text p{font-size:.72rem;color:rgba(233,213,255,.6);margin-top:.1rem;}
+.ak-answer-item{
+  background:var(--gold-lt);border:1px solid #fde68a;border-right:4px solid var(--gold);
+  border-radius:var(--r);padding:.85rem 1rem;
+  font-size:.84rem;color:var(--text-mid);line-height:1.75;margin-bottom:.8rem;
+}
+.ak-answer-item strong{
+  color:var(--gold);font-size:.7rem;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:.38rem;
+}
+.teacher-section-title{
+  font-family:'Secular One',sans-serif;font-size:.9rem;color:var(--lc);
+  display:flex;align-items:center;gap:.4rem;
+  margin:1.6rem 0 .75rem;padding-bottom:.38rem;
+  border-bottom:2px solid var(--lc-lt);
+}
+.dashboard-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:1.2rem 1.3rem;box-shadow:var(--sh1);
+  margin-bottom:1rem;
+}
+.dashboard-card h3{
+  font-family:'Secular One',sans-serif;font-size:.88rem;color:var(--text);
+  margin-bottom:.85rem;display:flex;align-items:center;gap:.38rem;
+}
+#dashboard-content{
+  font-size:.82rem;color:var(--muted);line-height:1.65;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:1rem;min-height:58px;
+}
+.btn-refresh{
+  margin-top:.75rem;padding:.55rem 1rem;
+  border:1.5px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface2);font-size:.78rem;font-weight:700;
+  color:var(--muted);cursor:pointer;transition:all .12s;min-height:38px;
+}
+.btn-refresh:hover{background:var(--surface3);color:var(--text);}
+
+/* ══════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════ */
+#toast{
+  position:fixed;bottom:1.4rem;right:1.2rem;z-index:10000;
+  background:var(--text);color:var(--surface);
+  border-radius:var(--r);padding:.65rem 1.15rem;
+  font-size:.82rem;font-weight:600;
+  opacity:0;transform:translateY(6px);
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;box-shadow:var(--sh3);
+}
+#toast.show{opacity:1;transform:translateY(0);}
+
+/* ══════════════════════════════════════════════════
+   PRINT
+══════════════════════════════════════════════════ */
+@media print{
+  @page{size:A4 portrait;margin:1.6cm 1.4cm 1.8cm;}
+  @page :first{margin-top:1.2cm;}
+  *,*::before,*::after{print-color-adjust:exact !important;-webkit-print-color-adjust:exact !important;}
+  .lesson-topbar,.tabs-bar,.topbar-actions,.btn-back,.btn-print,
+  .btn-submit,.score-display,.footer-send-card,
+  #toast,.teacher-panel,.btn-refresh{display:none !important;}
+  html,body{background:#fff !important;font-size:11pt;color:#111;}
+  .tab-pane{display:block !important;}
+  .lesson-header{background:#f5f7ff !important;border:1pt solid #c7d2fe !important;
+    padding:.65cm .8cm !important;margin-bottom:.55cm;break-inside:avoid;}
+  .lesson-header::before{display:none !important;}
+  .lh-title{font-size:17pt !important;}
+  .lh-desc{font-size:10pt !important;color:#444 !important;}
+  .lesson-content{padding:0 !important;max-width:100% !important;}
+  .section-title{font-size:12pt !important;border-bottom:1.5pt solid #4f46e5 !important;
+    color:#3730a3 !important;break-after:avoid;}
+  .st-num{background:#4f46e5 !important;color:#fff !important;
+    width:20pt !important;height:20pt !important;font-size:8pt !important;}
+  .content-card{border:1pt solid #d1d6e5 !important;box-shadow:none !important;
+    break-inside:avoid;page-break-inside:avoid;}
+  .tip-box{background:#eff6ff !important;border:1pt solid #93c5fd !important;break-inside:avoid;}
+  .warning-box{background:#fffbeb !important;border:1pt solid #fde68a !important;break-inside:avoid;}
+  .exercise-block{border:1pt solid #cbd5e1 !important;box-shadow:none !important;
+    break-inside:avoid;page-break-inside:avoid;margin-bottom:.45cm;}
+  .ex-header{background:#f1f5f9 !important;padding:.28cm .42cm !important;
+    border-bottom:1pt solid #e2e8f0 !important;}
+  .ex-num{background:#4f46e5 !important;color:#fff !important;
+    width:20pt !important;height:20pt !important;}
+  .answer-area{border:none !important;border-bottom:1pt solid #999 !important;
+    background:transparent !important;min-height:2.4cm !important;
+    background-image:repeating-linear-gradient(transparent,transparent 1.4em,#e5e7eb 1.4em,#e5e7eb calc(1.4em + .5pt)) !important;}
+  .fill-blank{border:none !important;border-bottom:1.5pt solid #4f46e5 !important;
+    min-width:1.8cm;background:transparent !important;}
+  .mc-option{border:1pt solid #d1d6e5 !important;padding:.22cm .4cm !important;
+    background:#fff !important;break-inside:avoid;min-height:auto !important;}
+  .binyan-table{border:1pt solid #d1d6e5 !important;box-shadow:none !important;break-inside:avoid;}
+  .binyan-table th{background:#4f46e5 !important;color:#fff !important;}
+  .teacher-only{display:none !important;}
+  body.is-teacher .teacher-only{display:block !important;background:#fffbeb !important;
+    border:1.5pt solid #fde68a !important;border-radius:5pt !important;
+    padding:.28cm .42cm !important;margin-top:.3cm !important;}
+  body.is-teacher .teacher-only strong{color:#92400e !important;}
+  .lesson-header::after{content:'לשון Lesson · לשון עברית כיתה י׳ · ' attr(data-print-date);
+    display:block !important;font-size:7pt;color:#aaa;margin-top:.3cm;
+    padding-top:.18cm;border-top:.5pt solid #e0e0e0;}
+}
+
+/* ══════════════════════════════════════════════════
+   MOBILE ≤660px
+══════════════════════════════════════════════════ */
+@media(max-width:660px){
+  .lesson-header{padding:1.2rem .95rem 1.1rem;}
+  .lesson-content{padding:1rem .85rem 3rem;}
+  .lesson-topbar-sub{display:none;}
+  .footer-btns{flex-direction:column;}
+  .btn-send-wa,.btn-send-email{justify-content:center;width:100%;}
+  #toast{bottom:1.6rem;right:.7rem;left:.7rem;text-align:center;}
+  .btn-print .print-label{display:none;}
+  .tab-btn{font-size:.76rem;padding:.6rem .85rem;}
+  .binyan-table-wrap{margin-left:-.85rem;margin-right:-.85rem;border-radius:0;}
+  .binyan-table{min-width:320px;font-size:.76rem;}
+  .binyan-table th,.binyan-table td{padding:.4rem .6rem;}
+  .exercise-block{border-radius:var(--r);}
+  .ex-body{padding:.85rem .9rem;}
+  .mc-option{padding:.65rem .75rem;}
+  .footer-send-card{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     TOPBAR
+════════════════════════════════════════════════ -->
+<div class="lesson-topbar">
+  <button class="btn-back" onclick="window.location.href='index.html'" aria-label="חזרה לדף הבית">🔙</button>
+  <div class="topbar-title-wrap">
+    <div class="lesson-topbar-title">יחידה 1 — מבחן מסכם</div>
+    <div class="lesson-topbar-sub">יחידה 1: מערכת הפועל · לשון עברית י׳</div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-print" onclick="window.print()">🖨️<span class="print-label"> הדפסה</span></button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TABS BAR
+════════════════════════════════════════════════ -->
+<div class="tabs-bar" id="tabs-bar">
+  <button class="tab-btn" id="tab-btn-th" onclick="showTab('th',this)">📖 הנחיות למבחן</button>
+  <button class="tab-btn" id="tab-btn-tw" onclick="showTab('tw',this)">✍️ שאלות המבחן</button>
+  <button class="tab-btn" id="tab-btn-ta" onclick="showTab('ta',this)">🔑 פתרונות</button>
+  <button class="tab-btn" id="tab-btn-td" onclick="showTab('td',this)">📊 דשבורד</button>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     LESSON HEADER
+════════════════════════════════════════════════ -->
+<div class="lesson-header">
+  <div class="lh-unit-badge">📘 יחידה 1 — מבחן מסכם</div>
+  <span class="lh-emoji">📝</span>
+  <h1 class="lh-title">יחידה 1 — מבחן מסכם</h1>
+  <p class="lh-desc">חלקי הדיבר, שורשים ובניינים, הטיית פעלים ושם המספר — 25 שאלות</p>
+  <div class="lh-meta">
+    <span class="lh-chip time">⏱ 90 דקות</span>
+    <span class="lh-chip">100 נקודות</span>
+    <span class="lh-chip" id="role-chip">👑 מצב מורה</span>
+  </div>
+  <div id="lp-bar-wrap" style="display:none"><div id="lp-bar"></div></div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TAB: INSTRUCTIONS (th)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-th">
+<div class="lesson-content">
+
+  <div class="section-title" style="margin-top:0">
+    <div class="st-num">📋</div>
+    <span>הנחיות למבחן</span>
+  </div>
+
+  <div class="content-card">
+    <p>המבחן כולל <strong>25 שאלות</strong> המקיפות את כל נושאי היחידה: <strong>חלקי הדיבר, שורשים ובניינים, ושם המספר</strong>. קראו היטב כל שאלה לפני המענה. בהצלחה!</p>
+  </div>
+
+  <div class="section-title">
+    <div class="st-num">א</div>
+    <span>מבנה המבחן</span>
+  </div>
+
+  <div class="binyan-table-wrap">
+    <table class="binyan-table">
+      <thead>
+        <tr><th>חלק</th><th>נושא</th><th>שאלות</th><th>ניקוד</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>א׳</td><td>חלקי דיבר ושמות פעולה</td><td>1–5</td><td>20 נק׳</td></tr>
+        <tr><td>ב׳</td><td>זיהוי שורש ובניין</td><td>6–15</td><td>40 נק׳</td></tr>
+        <tr><td>ג׳</td><td>הטיית פעלים</td><td>16–20</td><td>20 נק׳</td></tr>
+        <tr><td>ד׳</td><td>שם המספר</td><td>21–25</td><td>20 נק׳</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip-box">
+    💡 <strong>הנחיות כלליות:</strong> ענו על כל השאלות בסדר. בשאלות פתוחות — נסחו בשפה ברורה ומדויקת. בשאלות רב-ברירה — סמנו תשובה אחת בלבד. בשאלות השלמה — מלאו כל השדות.
+  </div>
+
+  <div class="warning-box">
+    ⚠️ <strong>שימו לב:</strong> בחלק ב׳ עשו שימוש בשיטת "הוא אתמול" לזיהוי הבניין. בחלק ג׳ — ציינו גם את הגוף, המספר והמין בכל הטיה.
+  </div>
+
+</div>
+</div><!-- /tab-th -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: EXAM QUESTIONS (tw)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-tw">
+<div class="lesson-content" id="lesson-content">
+
+  <div class="section-title" style="margin-top:0">
+    <div class="st-num">📝</div>
+    <span>שאלות 1–25</span>
+  </div>
+
+  <!-- ══ חלק א׳: חלקי דיבר ושמות פעולה (1–5) ══ -->
+
+  <div class="section-title">
+    <div class="st-num">א</div>
+    <span>חלק א׳ — חלקי דיבר ושמות פעולה (שאלות 1–5)</span>
+  </div>
+
+  <!-- שאלה 1 -->
+  <div class="exercise-block" id="ex-1">
+    <div class="ex-header">
+      <div class="ex-num">1</div>
+      <div class="ex-title">זיהוי חלקי הדיבר</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">סווגו כל מילה מסומנת לחלק הדיבר הנכון (שם עצם / שם תואר / שם פועל / פועל / מילת יחס / מילת קישור):</p>
+      <p class="ex-question" style="font-size:1rem;line-height:2">"<strong>הכתיבה</strong> הייתה <strong>מהירה</strong> אך <strong>מדויקת</strong>, <strong>ולכן</strong> קיבל ציון גבוה."</p>
+      <textarea class="answer-area" id="ans-1" placeholder="הכתיבה — ___ | מהירה — ___ | מדויקת — ___ | ולכן — ___" rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        הכתיבה — שם פועל (מהשורש כ-ת-ב, בבניין קל) | מהירה — שם תואר (נקבה יחידה) | מדויקת — שם תואר (נקבה יחידה) | ולכן — מילת קישור (מילת חיבור + מילת נסיבה)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 2 -->
+  <div class="exercise-block" id="ex-2">
+    <div class="ex-header">
+      <div class="ex-num">2</div>
+      <div class="ex-title">שם פועל — זיהוי ומקור</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">לכל שם פועל — ציינו את השורש, הבניין, וכתבו משפט בו הוא משמש כשם עצם:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>הִתְנַהֲגוּת, שְׁמִירָה, הַכְנָסָה</strong></p>
+      <textarea class="answer-area" id="ans-2" placeholder="הִתְנַהֲגוּת — שורש: ___ | בניין: ___ | משפט: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        הִתְנַהֲגוּת — שורש נ-ה-ג, בניין התפעל | שְׁמִירָה — שורש ש-מ-ר, בניין קל | הַכְנָסָה — שורש כ-נ-ס, בניין הפעיל<br>
+        <em style="font-size:.8rem;color:var(--muted)">משפטים לדוגמה — לפי שיקול המורה.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 3 -->
+  <div class="exercise-block" id="ex-3">
+    <div class="ex-header">
+      <div class="ex-num">3</div>
+      <div class="ex-title">פועל או שם פועל?</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">קבעו אם המילה המסומנת היא <strong>פועל</strong> או <strong>שם פועל</strong>, והסבירו:</p>
+      <p class="ex-question" style="font-size:1rem;line-height:2">
+        א. "הוא <strong>כתב</strong> מכתב."<br>
+        ב. "<strong>הכתיבה</strong> של המכתב ארכה שעה."<br>
+        ג. "היא אוהבת <strong>לקרוא</strong> ספרים."
+      </p>
+      <textarea class="answer-area" id="ans-3" placeholder="א. ___ כי... | ב. ___ כי... | ג. ___ כי..." rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. כתב — פועל (עבר, גוף שלישי זכר יחיד, נשא הנושא "הוא" ונשוא)<br>
+        ב. הכתיבה — שם פועל (משמש כנושא המשפט, ניתן להחליפו בשם עצם)<br>
+        ג. לקרוא — שם פועל / אינפיניטיב (משמש כמושא פועל "אוהבת")
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 4 -->
+  <div class="exercise-block" id="ex-4">
+    <div class="ex-header">
+      <div class="ex-num">4</div>
+      <div class="ex-title">זיהוי חלק הדיבר — בחירה מרובה</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">במשפט "הִגִּיעָה הַחֲבוּרָה לְבֵית הַסֵּפֶר בְּשַׁעַת בֹּקֶר" — המילה <strong>"הִגִּיעָה"</strong> היא:</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc4" value="a"><span class="mc-option-label">שם פועל</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="b"><span class="mc-option-label">פועל עבר נסתרת (היא)</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="c"><span class="mc-option-label">שם תואר</span></label>
+        <label class="mc-option"><input type="radio" name="mc4" value="d"><span class="mc-option-label">פועל הווה נקבה</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ב׳</strong>
+        הִגִּיעָה — פועל עבר נסתרת (היא), בניין הפעיל, שורש נ-ג-ע (גזרת פ״נ). ה-"ה" בסוף = סיומת נסתרת.
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 5 -->
+  <div class="exercise-block" id="ex-5">
+    <div class="ex-header">
+      <div class="ex-num">5</div>
+      <div class="ex-title">שמות פעולה מבניינים שונים</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">כתבו את שם הפועל (אינפיניטיב) ואת שם הפעולה (gerund) לכל פועל:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>לִמֵּד (פיעל) | נִשְׁמַר (נפעל) | הִפְעִיל (הפעיל)</strong></p>
+      <textarea class="answer-area" id="ans-5" placeholder="לִמֵּד → שם פועל: ___ | שם פעולה: ___" rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        לִמֵּד → שם פועל: לְלַמֵּד | שם פעולה: לִמּוּד / הוֹרָאָה<br>
+        נִשְׁמַר → שם פועל: לְהִשָּׁמֵר | שם פעולה: הִשָּׁמְרוּת<br>
+        הִפְעִיל → שם פועל: לְהַפְעִיל | שם פעולה: הַפְעָלָה
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ חלק ב׳: שורש ובניין (6–15) ══ -->
+
+  <div class="section-title">
+    <div class="st-num">ב</div>
+    <span>חלק ב׳ — שורש ובניין (שאלות 6–15)</span>
+  </div>
+
+  <!-- שאלה 6 -->
+  <div class="exercise-block" id="ex-6">
+    <div class="ex-header">
+      <div class="ex-num">6</div>
+      <div class="ex-title">זיהוי בניין — שיטת "הוא אתמול"</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">השתמשו בשיטת "הוא אתמול" כדי לזהות את הבניין של כל פועל:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>מְסַפֵּר, נִשְׁאַר, מַכְתִּיב, מִשְׁתַּמֵּשׁ</strong></p>
+      <textarea class="answer-area" id="ans-6" placeholder="מְסַפֵּר → הוא אתמול: ___ → בניין: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        מְסַפֵּר → הוא אתמול סִפֵּר → <strong>פיעל</strong> (שורש ס-פ-ר)<br>
+        נִשְׁאַר → הוא אתמול נִשְׁאַר → <strong>נפעל</strong> (שורש שׁ-א-ר)<br>
+        מַכְתִּיב → הוא אתמול הִכְתִּיב → <strong>הפעיל</strong> (שורש כ-ת-ב)<br>
+        מִשְׁתַּמֵּשׁ → הוא אתמול הִשְׁתַּמֵּשׁ → <strong>התפעל</strong> (שורש שׁ-מ-שׁ)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 7 -->
+  <div class="exercise-block" id="ex-7">
+    <div class="ex-header">
+      <div class="ex-num">7</div>
+      <div class="ex-title">חילוץ שורש — גזרות מיוחדות</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">חלצו את השורש מכל פועל וציינו את הגזרה:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>מָצָא, יָשַׁב, נָתַן, הֵבִיא</strong></p>
+      <textarea class="answer-area" id="ans-7" placeholder="מָצָא — שורש: ___ — גזרה: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        מָצָא — שורש מ-צ-א, גזרת ל״א | יָשַׁב — שורש י-שׁ-ב, גזרת פ״י<br>
+        נָתַן — שורש נ-ת-נ, גזרת פ״נ + ל״נ | הֵבִיא — שורש ב-ו-א, גזרת ע״ו + ל״א (הפעיל)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 8 -->
+  <div class="exercise-block" id="ex-8">
+    <div class="ex-header">
+      <div class="ex-num">8</div>
+      <div class="ex-title">שורש מרובע</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">זהו את הפועל בעל השורש המרובע (4 עיצורים) ונתחו אותו — שורש, בניין, גוף וזמן:</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc8" value="a"><span class="mc-option-label">הִתְפַּלֵּל</span></label>
+        <label class="mc-option"><input type="radio" name="mc8" value="b"><span class="mc-option-label">הִתְכַּתֵּב</span></label>
+        <label class="mc-option"><input type="radio" name="mc8" value="c"><span class="mc-option-label">הִתְבַּלְבֵּל</span></label>
+        <label class="mc-option"><input type="radio" name="mc8" value="d"><span class="mc-option-label">הִסְתַּכֵּל</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ג׳: הִתְבַּלְבֵּל</strong>
+        שורש: <strong>ב-ל-ב-ל</strong> (מרובע — 4 עיצורים) | בניין: התפעל (מרובע) | גוף: עבר נסתר (הוא)<br>
+        הסבר: שורשים מרובעים נכנסים לבניין דומה להתפעל. הִתְפַּלֵּל = שורש פ-ל-ל (מכופל); הִתְכַּתֵּב = שורש כ-ת-ב; הִסְתַּכֵּל = שורש ס-כ-ל.
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 9 -->
+  <div class="exercise-block" id="ex-9">
+    <div class="ex-header">
+      <div class="ex-num">9</div>
+      <div class="ex-title">בניין ופונקציה</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">לכל פועל — ציינו בניין ופונקציה (פעיל / סביל / גורם / הדדי / עצמי):</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>לֻמַּד, הִשְׁתַּדֵּל, הֻפְרַד, כָּתַב, הִדְלִיק</strong></p>
+      <textarea class="answer-area" id="ans-9" placeholder="לֻמַּד — בניין: ___ — פונקציה: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        לֻמַּד — פועל (סביל של פיעל) | הִשְׁתַּדֵּל — התפעל (עצמי/מתמשך)<br>
+        הֻפְרַד — הופעל (סביל של הפעיל) | כָּתַב — קל (פעיל, בסיסי)<br>
+        הִדְלִיק — הפעיל (גורם — גרם להדלקה)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 10 -->
+  <div class="exercise-block" id="ex-10">
+    <div class="ex-header">
+      <div class="ex-num">10</div>
+      <div class="ex-title">זיהוי שורש בטקסט</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">קראו את המשפט וחלצו שורש ובניין לכל פועל מסומן:</p>
+      <p class="ex-question" style="font-size:.95rem;line-height:2">"הַמּוֹרָה <strong>הִסְבִּירָה</strong> אֶת הַחֹמֶר, הַתַּלְמִידִים <strong>הִקְשִׁיבוּ</strong> וְ<strong>רָשְׁמוּ</strong> הֶעָרוֹת."</p>
+      <textarea class="answer-area" id="ans-10" placeholder="הִסְבִּירָה — שורש: ___ — בניין: ___" rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        הִסְבִּירָה — שורש ס-ב-ר, בניין הפעיל, עבר נסתרת (היא)<br>
+        הִקְשִׁיבוּ — שורש ק-שׁ-ב, בניין הפעיל, עבר נסתרים (הם)<br>
+        רָשְׁמוּ — שורש ר-שׁ-מ, בניין קל, עבר נסתרים (הם)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 11 -->
+  <div class="exercise-block" id="ex-11">
+    <div class="ex-header">
+      <div class="ex-num">11</div>
+      <div class="ex-title">שבעת הבניינים — זיהוי מהיר</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">זהו את הבניין של כל פועל (קל / נפעל / פיעל / פועל / התפעל / הפעיל / הופעל):</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>שֻׁלַּח, הִצְלִיחַ, נִפְגַּע, פִּרְסֵם, הִתְאַמֵּן</strong></p>
+      <textarea class="answer-area" id="ans-11" placeholder="שֻׁלַּח — ___" rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        שֻׁלַּח — פועל (סביל של שִׁלֵּחַ פיעל) | הִצְלִיחַ — הפעיל (שורש צ-ל-ח)<br>
+        נִפְגַּע — נפעל (שורש פ-ג-ע) | פִּרְסֵם — פיעל (שורש פ-ר-ס-מ, מרובע)<br>
+        הִתְאַמֵּן — התפעל (שורש א-מ-נ, עצמי/מתמשך)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 12 -->
+  <div class="exercise-block" id="ex-12">
+    <div class="ex-header">
+      <div class="ex-num">12</div>
+      <div class="ex-title">בניין קל — סימני זיהוי</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">איזה מהפעלים הבאים <strong>אינו</strong> בבניין קל?</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc12" value="a"><span class="mc-option-label">שָׁמַר</span></label>
+        <label class="mc-option"><input type="radio" name="mc12" value="b"><span class="mc-option-label">כָּתַב</span></label>
+        <label class="mc-option"><input type="radio" name="mc12" value="c"><span class="mc-option-label">קִבֵּל</span></label>
+        <label class="mc-option"><input type="radio" name="mc12" value="d"><span class="mc-option-label">יָשַׁב</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ג׳: קִבֵּל</strong>
+        קִבֵּל — בניין פיעל (חיריק בפ״פ + דגש חזק בע״פ). שאר הפעלים: שָׁמַר / כָּתַב / יָשַׁב = קל (קמץ-פתח).
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 13 -->
+  <div class="exercise-block" id="ex-13">
+    <div class="ex-header">
+      <div class="ex-num">13</div>
+      <div class="ex-title">שורשים מרובעים — זיהוי</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">מצאו בין הפעלים הבאים את אלה בעלי שורש מרובע (4 עיצורים) וציינו את השורש:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>גִּלְגֵּל, כָּתַב, צִלְצֵל, שְׁמַר, בִּרְבֵּר, לָמַד</strong></p>
+      <textarea class="answer-area" id="ans-13" placeholder="גִּלְגֵּל — שורש: ג-ל-ג-ל (מרובע) ✓ | ..." rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        גִּלְגֵּל — שורש <strong>ג-ל-ג-ל</strong> ✓ (מרובע) | צִלְצֵל — שורש <strong>צ-ל-צ-ל</strong> ✓ (מרובע) | בִּרְבֵּר — שורש <strong>ב-ר-ב-ר</strong> ✓ (מרובע)<br>
+        כָּתַב — ג-ע (שלושה) | שְׁמַר — ג-ע (שלושה) | לָמַד — ג-ע (שלושה)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 14 -->
+  <div class="exercise-block" id="ex-14">
+    <div class="ex-header">
+      <div class="ex-num">14</div>
+      <div class="ex-title">הבחנה בין בניינים דומים</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">הסבירו את ההבדל במשמעות בין כל זוג פעלים (הפעיל / קל — גורם / פעיל):</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. <strong>לָמַד</strong> לעומת <strong>לִמֵּד</strong><br>
+        ב. <strong>הִכְנִיס</strong> לעומת <strong>כָּנַס</strong>
+      </p>
+      <textarea class="answer-area" id="ans-14" placeholder="א. לָמַד = ... | לִמֵּד = ..." rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. לָמַד (קל) = רכש ידע בעצמו | לִמֵּד (פיעל) = גרם לאחר לרכוש ידע<br>
+        ב. הִכְנִיס (הפעיל) = גרם לדבר להיכנס / הכניס אחרים | כָּנַס (קל) = נכנס בעצמו
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 15 -->
+  <div class="exercise-block" id="ex-15">
+    <div class="ex-header">
+      <div class="ex-num">15</div>
+      <div class="ex-title">גזרת השלמים — זיהוי</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">אילו מהשורשים הבאים שייכים לגזרת <strong>השלמים</strong>? ציינו ✓ או ✗ והסבירו:</p>
+      <p class="ex-question" style="margin-top:.4rem"><strong>ש-מ-ר, א-מ-ר, פ-ל-ל, כ-ת-ב, י-ל-ד</strong></p>
+      <textarea class="answer-area" id="ans-15" placeholder="ש-מ-ר ✓/✗ — סיבה: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        ש-מ-ר ✓ — שלושה עיצורים שלמים, ללא גרוניות/נחות/מכופלים<br>
+        א-מ-ר ✗ — א׳ גרונית → גזרת פ״א גרונית<br>
+        פ-ל-ל ✗ — ל״ הפועל = ע״ הפועל → גזרת המכופלים<br>
+        כ-ת-ב ✓ — שלושה עיצורים שלמים ✓<br>
+        י-ל-ד ✗ — פ״ יו״ד → גזרת פ״י
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ חלק ג׳: הטיית פעלים (16–20) ══ -->
+
+  <div class="section-title">
+    <div class="st-num">ג</div>
+    <span>חלק ג׳ — הטיית פעלים (שאלות 16–20)</span>
+  </div>
+
+  <!-- שאלה 16 -->
+  <div class="exercise-block" id="ex-16">
+    <div class="ex-header">
+      <div class="ex-num">16</div>
+      <div class="ex-title">הטיית פועל קל בעתיד</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">הטו את הפועל <strong>כָּתַב</strong> (בניין קל) בעתיד לגופים: אני, אתה, את, הוא, היא, אנחנו, אתם, הן:</p>
+      <textarea class="answer-area" id="ans-16" placeholder="אני אכתוב, אתה תכתוב..." rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        אני — אֶכְתֹּב | אתה — תִּכְתֹּב | את — תִּכְתְּבִי | הוא — יִכְתֹּב | היא — תִּכְתֹּב | אנחנו — נִכְתֹּב | אתם — תִּכְתְּבוּ | הן — תִּכְתֹּבְנָה
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 17 -->
+  <div class="exercise-block" id="ex-17">
+    <div class="ex-header">
+      <div class="ex-num">17</div>
+      <div class="ex-title">הטיית פועל פיעל בעבר</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">הטו את הפועל <strong>לִמֵּד</strong> (פיעל) בעבר לגופים: אני, אתה, הוא, היא, אנחנו, הם:</p>
+      <textarea class="answer-area" id="ans-17" placeholder="אני לימדתי, אתה לימדת..." rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        אני — לִמַּדְתִּי | אתה — לִמַּדְתָּ | הוא — לִמֵּד | היא — לִמְּדָה | אנחנו — לִמַּדְנוּ | הם — לִמְּדוּ
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 18 -->
+  <div class="exercise-block" id="ex-18">
+    <div class="ex-header">
+      <div class="ex-num">18</div>
+      <div class="ex-title">ציווי — בניין קל ופיעל</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">כתבו את צורת הציווי לפי הגוף המבוקש:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. <strong>שָׁמַר</strong> (קל) — ציווי לאת: <input class="fill-blank" id="fill-18a" placeholder="______" size="8"><br>
+        ב. <strong>שָׁמַר</strong> (קל) — ציווי לאתם: <input class="fill-blank" id="fill-18b" placeholder="______" size="8"><br>
+        ג. <strong>לִמֵּד</strong> (פיעל) — ציווי לאתה: <input class="fill-blank" id="fill-18c" placeholder="______" size="8"><br>
+        ד. <strong>הִפְעִיל</strong> (הפעיל) — ציווי לאתה: <input class="fill-blank" id="fill-18d" placeholder="______" size="8">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. שִׁמְרִי | ב. שִׁמְרוּ | ג. לַמֵּד | ד. הַפְעֵל
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 19 -->
+  <div class="exercise-block" id="ex-19">
+    <div class="ex-header">
+      <div class="ex-num">19</div>
+      <div class="ex-title">העברת פועל מגוף לגוף</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">העבירו כל פועל לגוף ולזמן המבוקשים בסוגריים, ושמרו על אותו בניין:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. כָּתַב (הוא, עבר) → <strong>את, עתיד:</strong> <input class="fill-blank" id="fill-19a" placeholder="______" size="10"><br>
+        ב. לִמְּדָה (היא, עבר) → <strong>הם, הווה:</strong> <input class="fill-blank" id="fill-19b" placeholder="______" size="10"><br>
+        ג. יִשְׁמֹר (הוא, עתיד) → <strong>אנחנו, עתיד:</strong> <input class="fill-blank" id="fill-19c" placeholder="______" size="10"><br>
+        ד. הִפְעִיל (הוא, עבר) → <strong>אתן, עתיד:</strong> <input class="fill-blank" id="fill-19d" placeholder="______" size="10">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. תִּכְתְּבִי | ב. מְלַמְּדִים | ג. נִשְׁמֹר | ד. תַּפְעֵלְנָה
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 20 -->
+  <div class="exercise-block" id="ex-20">
+    <div class="ex-header">
+      <div class="ex-num">20</div>
+      <div class="ex-title">שגיאה בהטיה — איתור ותיקון</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">בכל שורה יש פועל שגוי. מצאו אותו, ציינו מדוע הוא שגוי ותקנו:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. אני / אתה / הוא / <strong>היא כָּתְבָה</strong> / הם<br>
+        ב. הוא לִמֵּד / היא לִמֵּדָה / אנחנו <strong>לִמְּדָנוּ</strong> / הם לִמְּדוּ<br>
+        ג. אני אכתוב / את תכתבי / הוא <strong>יכתוב</strong> / הן תכתבנה
+      </p>
+      <textarea class="answer-area" id="ans-20" placeholder="א. הצורה השגויה: ___ | הסיבה: ___ | תיקון: ___" rows="5"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. כָּתְבָה — שגוי (סיומת נקבה בקל = ה בשווא נע). תיקון: <strong>כָּתְבָה</strong> — זה נכון בעצם! הצורה כָּתְבָה (היא כתבה) תקנית. הערה: ייתכן שהכוונה לצורה לְכָתְבָה שגויה.<br>
+        ב. לִמְּדָנוּ — שגוי (צריך לִמַּדְנוּ — פתח, לא שווא). תיקון: <strong>לִמַּדְנוּ</strong><br>
+        ג. יכתוב — נכון (יִכְתֹּב). אין שגיאה בשורה ג׳.
+        <em style="font-size:.8rem;color:var(--muted)">הערה: שאלה זו בודקת חשיבה ביקורתית — ייתכן שינויים לפי גרסה.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ חלק ד׳: שם המספר (21–25) ══ -->
+
+  <div class="section-title">
+    <div class="st-num">ד</div>
+    <span>חלק ד׳ — שם המספר (שאלות 21–25)</span>
+  </div>
+
+  <!-- שאלה 21 -->
+  <div class="exercise-block" id="ex-21">
+    <div class="ex-header">
+      <div class="ex-num">21</div>
+      <div class="ex-title">הסכמה בין מספר לשם עצם</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">בחרו את המספר הנכון לכל שם עצם (זכרי / נקבי) והסבירו:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. <strong>ספרים</strong> — שלושה / שלוש: <input class="fill-blank" id="fill-21a" placeholder="______" size="8"><br>
+        ב. <strong>תלמידות</strong> — חמישה / חמש: <input class="fill-blank" id="fill-21b" placeholder="______" size="8"><br>
+        ג. <strong>עצים</strong> — שבעה / שבע: <input class="fill-blank" id="fill-21c" placeholder="______" size="8"><br>
+        ד. <strong>מכוניות</strong> — עשרה / עשר: <input class="fill-blank" id="fill-21d" placeholder="______" size="8">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. ספרים (זכר) — <strong>שלושה</strong> (מספר נקבי לשם עצם זכרי)<br>
+        ב. תלמידות (נקבה) — <strong>חמש</strong> (מספר זכרי לשם עצם נקבי)<br>
+        ג. עצים (זכר) — <strong>שבעה</strong> | ד. מכוניות (נקבה) — <strong>עשר</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 22 -->
+  <div class="exercise-block" id="ex-22">
+    <div class="ex-header">
+      <div class="ex-num">22</div>
+      <div class="ex-title">תאריכים בעברית</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">כתבו את התאריכים הבאים במילים בעברית (כולל הסכמה נכונה):</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. 5 ביוני: <input class="fill-blank" id="fill-22a" placeholder="______" size="15"><br>
+        ב. 14 ביולי: <input class="fill-blank" id="fill-22b" placeholder="______" size="15"><br>
+        ג. 21 במרס: <input class="fill-blank" id="fill-22c" placeholder="______" size="15">
+      </p>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. <strong>חֲמִישָּׁה בְּיוּנִי</strong> (יום = זכר → מספר נקבי)<br>
+        ב. <strong>אַרְבָּעָה עָשָׂר בְּיוּלִי</strong><br>
+        ג. <strong>עֶשְׂרִים וְאֶחָד בְּמָרְס</strong> (אחד = זכר, מיום = זכר)
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 23 -->
+  <div class="exercise-block" id="ex-23">
+    <div class="ex-header">
+      <div class="ex-num">23</div>
+      <div class="ex-title">גיל בעברית</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">כתבו את גיל כל אחד מהדמויות הבאות במשפט שלם, עם הסכמה נכונה:</p>
+      <p class="ex-question" style="margin-top:.4rem">
+        א. דנה — 16 שנה<br>
+        ב. אורי — 23 שנה<br>
+        ג. ילדה — 7 שנה
+      </p>
+      <textarea class="answer-area" id="ans-23" placeholder="א. דנה בת ___ | ב. אורי בן ___ | ג. הילדה בת ___" rows="4"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח תשובות</strong>
+        א. דנה בת <strong>שֵׁשׁ עֶשְׂרֵה</strong> (גיל = נקבה → מספר זכרי)<br>
+        ב. אורי בן <strong>עֶשְׂרִים וּשְׁלוֹשָׁה</strong> (גיל = נקבה → מספר זכרי)<br>
+        ג. הילדה בת <strong>שֶׁבַע</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 24 -->
+  <div class="exercise-block" id="ex-24">
+    <div class="ex-header">
+      <div class="ex-num">24</div>
+      <div class="ex-title">שם המספר — בחירה מרובה</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">איזה מהמשפטים הבא <strong>נכון</strong> מבחינת הסכמת המספר?</p>
+      <div class="mc-options">
+        <label class="mc-option"><input type="radio" name="mc24" value="a"><span class="mc-option-label">קניתי שלוש ספרים.</span></label>
+        <label class="mc-option"><input type="radio" name="mc24" value="b"><span class="mc-option-label">קניתי שלושה ספרים.</span></label>
+        <label class="mc-option"><input type="radio" name="mc24" value="c"><span class="mc-option-label">קניתי שלושה ספרות.</span></label>
+        <label class="mc-option"><input type="radio" name="mc24" value="d"><span class="mc-option-label">קניתי שלוש הספרים.</span></label>
+      </div>
+      <div class="teacher-only">
+        <strong>🔑 תשובה נכונה — ב׳</strong>
+        ספרים = שם עצם זכר → מספר נקבי = שלושה. ✓<br>
+        א. שגוי — "שלוש" = מספר זכרי, מתאים לנקבה | ג. "ספרות" לא קיים כך | ד. "הספרים" = יידוע, אבל "שלוש" שגוי לזכר
+      </div>
+    </div>
+  </div>
+
+  <!-- שאלה 25 -->
+  <div class="exercise-block" id="ex-25">
+    <div class="ex-header">
+      <div class="ex-num">25</div>
+      <div class="ex-title">כתיבה חופשית — שם המספר</div>
+      <span class="ex-points">4 נקודות</span>
+    </div>
+    <div class="ex-body">
+      <p class="ex-question">כתבו 4 משפטים קצרים המכילים מספרים, כאשר כל משפט כולל:</p>
+      <ol class="ex-question" style="padding-right:1.2rem;margin-top:.4rem">
+        <li>מספר עם שם עצם זכרי</li>
+        <li>מספר עם שם עצם נקבי</li>
+        <li>תאריך (יום + חודש)</li>
+        <li>ביטוי גיל</li>
+      </ol>
+      <textarea class="answer-area" id="ans-25" placeholder="1. ___ | 2. ___ | 3. ___ | 4. ___" rows="6"></textarea>
+      <div class="teacher-only">
+        <strong>🔑 מפתח הערכה — שאלה 25</strong>
+        1. זכרי: לדוגמה "קראתי <strong>שלושה</strong> ספרים" | 2. נקבי: "יש לי <strong>חמש</strong> מחברות" | 3. תאריך: "נולדתי <strong>בעשרים ושניים</strong> באפריל" | 4. גיל: "אחותי בת <strong>שבע עשרה</strong>"<br>
+        <em style="font-size:.8rem;color:var(--muted)">בדקו: הסכמה נכונה, כתיב מלא, תוכן מובן. נקודה אחת לכל משפט תקין.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- כפתור הגשה -->
+  <button class="btn-submit" onclick="submitLesson()">✅ סיים ושלח את המבחן</button>
+  <div class="score-display" id="score-display">
+    <div class="score-num">✓</div>
+    <div class="score-label">המבחן הוגש בהצלחה! תשובותיך נשמרו.</div>
+  </div>
+
+  <div class="footer-send-card">
+    <h3>📤 שלחו את המבחן למורה</h3>
+    <p>בחרו את אמצעי השליחה המועדף עליכם.<br>
+    <small style="opacity:.7;font-size:.7rem">הפרטים מוגדרים בדף הראשי ← הגדרות (⚙️)</small></p>
+    <div class="footer-btns">
+      <button class="btn-send-wa" onclick="sendViaWhatsApp()">שליחה בוואטסאפ 🟢</button>
+      <button class="btn-send-email" onclick="sendViaEmail()">שליחה במייל ✉️</button>
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-tw -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: ANSWERS (ta) — teacher only
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-ta">
+<div class="teacher-panel">
+
+  <div class="teacher-panel-header">
+    <span class="tph-icon">🔑</span>
+    <div class="tph-text">
+      <h2>פתרונות — לשימוש מורה בלבד</h2>
+      <p>יחידה 1 — מבחן מסכם · 25 שאלות · 100 נקודות</p>
+    </div>
+  </div>
+
+  <!-- חלק א׳ -->
+  <div class="teacher-section-title"><span>א</span> חלק א׳ — חלקי דיבר ושמות פעולה (שאלות 1–5)</div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 1 — זיהוי חלקי הדיבר (4 נק׳)</strong>
+    הכתיבה — <strong>שם פועל</strong> (מכ-ת-ב, קל, משמש כנושא) | מהירה — <strong>שם תואר</strong> (נקבה יחידה) | מדויקת — <strong>שם תואר</strong> (נקבה יחידה) | ולכן — <strong>מילת קישור</strong> (ו + לכן, מבטאת סיבה/תוצאה)
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 2 — שמות פעולה (4 נק׳)</strong>
+    הִתְנַהֲגוּת — שורש נ-ה-ג, התפעל | שְׁמִירָה — שורש ש-מ-ר, קל | הַכְנָסָה — שורש כ-נ-ס, הפעיל<br>
+    <em style="font-size:.8rem;color:var(--muted)">משפטים לדוגמה מתקבלים לפי שיקול המורה — בדקו שהמילה משמשת כשם עצם (נושא/מושא).</em>
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 3 — פועל או שם פועל? (4 נק׳)</strong>
+    א. כתב — <strong>פועל</strong> (עבר, נשוא המשפט, ניתן להחליף בזמן אחר)<br>
+    ב. הכתיבה — <strong>שם פועל</strong> (נושא המשפט, ניתן להחליפו בשם עצם: "מלאכת הכתיבה")<br>
+    ג. לקרוא — <strong>שם פועל / אינפיניטיב</strong> (מושא הפועל "אוהבת"; לא מטייל בזמנים)
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 4 — זיהוי חלק הדיבר (4 נק׳)</strong>
+    תשובה: <strong>ב׳ — פועל עבר נסתרת (היא)</strong><br>
+    הִגִּיעָה — שורש נ-ג-ע, בניין הפעיל, עבר נסתרת. ה-"ה" בסוף = סיומת נקבה. הגזרה: פ״נ (הנ׳ נושרת בהפעיל → הגיע).
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 5 — שמות פועל ופעולה (4 נק׳)</strong>
+    לִמֵּד → שם פועל: <strong>לְלַמֵּד</strong> | שם פעולה: <strong>לִמּוּד</strong><br>
+    נִשְׁמַר → שם פועל: <strong>לְהִשָּׁמֵר</strong> | שם פעולה: <strong>הִשָּׁמְרוּת</strong><br>
+    הִפְעִיל → שם פועל: <strong>לְהַפְעִיל</strong> | שם פעולה: <strong>הַפְעָלָה</strong>
+  </div>
+
+  <!-- חלק ב׳ -->
+  <div class="teacher-section-title"><span>ב</span> חלק ב׳ — שורש ובניין (שאלות 6–15)</div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 6 — שיטת "הוא אתמול" (4 נק׳)</strong>
+    מְסַפֵּר → הוא אתמול סִפֵּר → <strong>פיעל</strong> (ש׳ ס-פ-ר)<br>
+    נִשְׁאַר → הוא אתמול נִשְׁאַר → <strong>נפעל</strong> (ש׳ שׁ-א-ר)<br>
+    מַכְתִּיב → הוא אתמול הִכְתִּיב → <strong>הפעיל</strong> (ש׳ כ-ת-ב)<br>
+    מִשְׁתַּמֵּשׁ → הוא אתמול הִשְׁתַּמֵּשׁ → <strong>התפעל</strong> (ש׳ שׁ-מ-שׁ)
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 7 — חילוץ שורש (4 נק׳)</strong>
+    מָצָא — שורש מ-צ-א, גזרת <strong>ל״א</strong> | יָשַׁב — שורש י-שׁ-ב, גזרת <strong>פ״י</strong><br>
+    נָתַן — שורש נ-ת-נ, גזרת <strong>פ״נ + ל״נ</strong> | הֵבִיא — שורש ב-ו-א, גזרת <strong>ע״ו + ל״א</strong> (הפעיל)
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 8 — שורש מרובע (4 נק׳)</strong>
+    תשובה: <strong>ג׳ — הִתְבַּלְבֵּל</strong><br>
+    שורש: ב-ל-ב-ל (4 עיצורים) | בניין: התפעל מרובע | עבר נסתר (הוא)<br>
+    הפריטים האחרים: הִתְפַּלֵּל = פ-ל-ל (מכופל, 3 עיצורים); הִתְכַּתֵּב = כ-ת-ב (שלמים); הִסְתַּכֵּל = ס-כ-ל (שלמים).
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 9 — בניין ופונקציה (4 נק׳)</strong>
+    לֻמַּד — <strong>פועל, סביל</strong> | הִשְׁתַּדֵּל — <strong>התפעל, עצמי/מתמשך</strong><br>
+    הֻפְרַד — <strong>הופעל, סביל</strong> | כָּתַב — <strong>קל, פעיל</strong> | הִדְלִיק — <strong>הפעיל, גורם</strong>
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 10 — שורש בטקסט (4 נק׳)</strong>
+    הִסְבִּירָה — שורש ס-ב-ר, <strong>הפעיל</strong>, עבר נסתרת<br>
+    הִקְשִׁיבוּ — שורש ק-שׁ-ב, <strong>הפעיל</strong>, עבר נסתרים<br>
+    רָשְׁמוּ — שורש ר-שׁ-מ, <strong>קל</strong>, עבר נסתרים
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 11 — שבעת הבניינים (4 נק׳)</strong>
+    שֻׁלַּח — <strong>פועל</strong> | הִצְלִיחַ — <strong>הפעיל</strong> | נִפְגַּע — <strong>נפעל</strong> | פִּרְסֵם — <strong>פיעל (מרובע)</strong> | הִתְאַמֵּן — <strong>התפעל</strong>
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 12 — קל או לא? (4 נק׳)</strong>
+    תשובה: <strong>ג׳ — קִבֵּל</strong> (פיעל: חיריק + דגש). שָׁמַר / כָּתַב / יָשַׁב = קל (קמץ-פתח).
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 13 — שורשים מרובעים (4 נק׳)</strong>
+    גִּלְגֵּל — <strong>ג-ל-ג-ל</strong> ✓ | צִלְצֵל — <strong>צ-ל-צ-ל</strong> ✓ | בִּרְבֵּר — <strong>ב-ר-ב-ר</strong> ✓<br>
+    כָּתַב = כ-ת-ב (3 עיצורים) | שְׁמַר = שׁ-מ-ר (3) | לָמַד = ל-מ-ד (3)
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 14 — הבחנה בין בניינים (4 נק׳)</strong>
+    א. לָמַד (קל) = רכש ידע בעצמו | לִמֵּד (פיעל) = גרם לאחר ללמוד (עיסוק בהוראה)<br>
+    ב. הִכְנִיס (הפעיל) = גרם לדבר להיכנס | כָּנַס (קל) = נכנס בעצמו
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 15 — גזרת השלמים (4 נק׳)</strong>
+    ש-מ-ר ✓ | א-מ-ר ✗ (א׳ גרונית) | פ-ל-ל ✗ (מכופל) | כ-ת-ב ✓ | י-ל-ד ✗ (פ״י)
+  </div>
+
+  <!-- חלק ג׳ -->
+  <div class="teacher-section-title"><span>ג</span> חלק ג׳ — הטיית פעלים (שאלות 16–20)</div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 16 — כָּתַב בעתיד (4 נק׳)</strong>
+    אני — אֶכְתֹּב | אתה — תִּכְתֹּב | את — תִּכְתְּבִי | הוא — יִכְתֹּב | היא — תִּכְתֹּב | אנחנו — נִכְתֹּב | אתם — תִּכְתְּבוּ | הן — תִּכְתֹּבְנָה
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 17 — לִמֵּד בעבר (4 נק׳)</strong>
+    אני — לִמַּדְתִּי | אתה — לִמַּדְתָּ | הוא — לִמֵּד | היא — לִמְּדָה | אנחנו — לִמַּדְנוּ | הם — לִמְּדוּ
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 18 — ציווי (4 נק׳)</strong>
+    א. שִׁמְרִי | ב. שִׁמְרוּ | ג. לַמֵּד | ד. הַפְעֵל
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 19 — העברה בין גופים (4 נק׳)</strong>
+    א. תִּכְתְּבִי | ב. מְלַמְּדִים | ג. נִשְׁמֹר | ד. תַּפְעֵלְנָה
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 20 — איתור שגיאה (4 נק׳)</strong>
+    ב. לִמְּדָנוּ שגוי → תיקון: <strong>לִמַּדְנוּ</strong> (פתח, לא שווא נע)<br>
+    <em style="font-size:.8rem;color:var(--muted)">הערה: השורות א׳ וג׳ תקינות. ניתן לתת 2 נקודות על זיהוי השגיאה ו-2 על התיקון.</em>
+  </div>
+
+  <!-- חלק ד׳ -->
+  <div class="teacher-section-title"><span>ד</span> חלק ד׳ — שם המספר (שאלות 21–25)</div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 21 — הסכמה (4 נק׳)</strong>
+    א. ספרים (זכר) → <strong>שלושה</strong> | ב. תלמידות (נקבה) → <strong>חמש</strong><br>
+    ג. עצים (זכר) → <strong>שבעה</strong> | ד. מכוניות (נקבה) → <strong>עשר</strong><br>
+    <em style="font-size:.8rem;color:var(--muted)">כלל: שם עצם זכרי = מספר נקבי (עם ה); שם עצם נקבי = מספר זכרי (ללא ה).</em>
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 22 — תאריכים (4 נק׳)</strong>
+    א. <strong>חֲמִישָּׁה בְּיוּנִי</strong> | ב. <strong>אַרְבָּעָה עָשָׂר בְּיוּלִי</strong> | ג. <strong>עֶשְׂרִים וְאֶחָד בְּמָרְס</strong><br>
+    <em style="font-size:.8rem;color:var(--muted)">תאריך = זכר (יום) → מספר נקבי.</em>
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 23 — גיל (4 נק׳)</strong>
+    א. דנה בת <strong>שֵׁשׁ עֶשְׂרֵה</strong> | ב. אורי בן <strong>עֶשְׂרִים וּשְׁלוֹשָׁה</strong> | ג. הילדה בת <strong>שֶׁבַע</strong><br>
+    <em style="font-size:.8rem;color:var(--muted)">גיל = נקבה (שנה) → מספר זכרי.</em>
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 24 — בחירה מרובה (4 נק׳)</strong>
+    תשובה: <strong>ב׳ — קניתי שלושה ספרים</strong><br>
+    ספרים = זכר → מספר נקבי = שלושה. "שלוש" מתאים לנקבה בלבד.
+  </div>
+
+  <div class="ak-answer-item">
+    <strong>🔑 שאלה 25 — כתיבה חופשית (4 נק׳)</strong>
+    נקודה אחת לכל משפט תקין (הסכמה נכונה + כתיב תקין).<br>
+    1. זכרי: "קראתי שלושה ספרים" | 2. נקבי: "יש לי חמש מחברות"<br>
+    3. תאריך: "נולדתי בעשרים ושניים באפריל" | 4. גיל: "אחותי בת שבע עשרה"<br>
+    <em style="font-size:.8rem;color:var(--muted)">אפשרו תשובות שונות — בדקו הסכמה ונכונות לשונית.</em>
+  </div>
+
+</div><!-- /teacher-panel answers -->
+</div><!-- /tab-ta -->
+
+<!-- ════════════════════════════════════════════════
+     TAB: DASHBOARD (td)
+════════════════════════════════════════════════ -->
+<div class="tab-pane" id="tab-td">
+<div class="teacher-panel">
+
+  <div class="teacher-panel-header">
+    <span class="tph-icon">📊</span>
+    <div class="tph-text">
+      <h2>דשבורד — נתוני הגשות</h2>
+      <p>Firebase Firestore · ניתוח ומעקב</p>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <h3>📋 הגשות אחרונות (Firebase)</h3>
+    <div id="dashboard-content" style="font-size:.82rem;color:var(--muted);
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:1rem;min-height:58px">
+      ⏳ טוען נתונים מ-Firebase...
+    </div>
+    <button class="btn-refresh" onclick="loadFirebaseDashboard()" style="margin-top:.75rem">🔄 רענן מ-Firebase</button>
+  </div>
+
+  <div class="dashboard-card">
+    <h3>📈 סטטיסטיקה מקומית (localStorage)</h3>
+    <div id="local-stats-content" style="font-size:.82rem;color:var(--muted);
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:1rem;min-height:58px">
+      ⏳ טוען נתונים מקומיים...
+    </div>
+    <button class="btn-refresh" onclick="loadLocalStats()">🔄 רענן סטטיסטיקה</button>
+  </div>
+
+</div>
+</div><!-- /tab-td -->
+
+<div id="toast"></div>
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+const FIREBASE_CONFIG = {
+  apiKey:            'YOUR_API_KEY',
+  authDomain:        'lashon-lesson.firebaseapp.com',
+  projectId:         'lashon-lesson',
+  storageBucket:     'lashon-lesson.appspot.com',
+  messagingSenderId: 'YOUR_SENDER_ID',
+  appId:             'YOUR_APP_ID'
+};
+let _db = null;
+function getDb() {
+  if (_db) return _db;
+  try {
+    if (typeof firebase === 'undefined') return null;
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    _db = firebase.firestore();
+    return _db;
+  } catch(e) { console.warn('[Firebase]', e); return null; }
+}
+async function saveScoreToCloud(lessonId, score, studentName, extra = {}) {
+  const db = getDb(); if (!db) return false;
+  try {
+    await db.collection('student_scores').add({
+      lessonId, lessonTitle: LESSON_META.title, unitId: LESSON_META.unit,
+      score: score ?? null, studentName: studentName || 'תלמיד/ה',
+      date: new Date().toLocaleDateString('he-IL'),
+      ts: firebase.firestore.FieldValue.serverTimestamp(), ...extra
+    });
+    return true;
+  } catch(e) { console.error('[Firebase]', e); return false; }
+}
+
+const LESSON_META = {
+  id:    'u1_exam',
+  unit:  'u1',
+  title: 'יחידה 1 — מבחן מסכם',
+  short: 'מבחן יחידה 1',
+  emoji: '📝',
+  mins:  90,
+};
+
+const LS = {
+  get(k, fb = null) {
+    try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : fb; } catch(e) { return fb; }
+  },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+};
+
+const _params = new URLSearchParams(window.location.search);
+const isTeacher = (
+  _params.get('role') === 'teacher' ||
+  LS.get('lashon_role', '') === 'teacher' ||
+  localStorage.getItem('userRole') === 'teacher'
+);
+if (isTeacher) document.body.classList.add('is-teacher');
+
+window.onload = function () {
+  const h = document.querySelector('.lesson-header');
+  if (h) h.setAttribute('data-print-date', new Date().toLocaleDateString('he-IL'));
+  attachMcListeners();
+  if (isTeacher) {
+    showTab('ta', document.getElementById('tab-btn-ta'));
+    loadLocalStats();
+    loadFirebaseDashboard();
+    return;
+  }
+  showTab('th', document.getElementById('tab-btn-th'));
+};
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const pane = document.getElementById('tab-' + id);
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+let _tt;
+function toast(msg, dur = 2800) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+function attachMcListeners() {
+  document.querySelectorAll('.mc-option').forEach(opt => {
+    opt.addEventListener('click', function () {
+      const name = this.querySelector('input[type=radio]')?.name;
+      if (name) document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.mc-option')?.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+}
+attachMcListeners();
+
+function collectAnswers() {
+  const lines = [`📚 ${LESSON_META.title}`, `📅 ${new Date().toLocaleDateString('he-IL')}`, `👤 ${LS.get('lashon_uname','') || 'תלמיד/ה'}`, ''];
+  document.querySelectorAll('.answer-area').forEach(ta => {
+    const title = ta.closest('.exercise-block')?.querySelector('.ex-title')?.textContent?.trim() || '—';
+    lines.push(`❓ ${title}`); lines.push(ta.value.trim() || '(ללא תשובה)'); lines.push('');
+  });
+  const mcSeen = new Set();
+  document.querySelectorAll('.mc-options input[type=radio]:checked').forEach(r => {
+    if (mcSeen.has(r.name)) return; mcSeen.add(r.name);
+    const block = r.closest('.exercise-block');
+    const title = block?.querySelector('.ex-title')?.textContent?.trim() || r.name;
+    const label = r.closest('.mc-option')?.querySelector('.mc-option-label')?.textContent?.trim() || r.value;
+    lines.push(`❓ ${title}`); lines.push(`✔️ ${label}`); lines.push('');
+  });
+  const blanks = [...document.querySelectorAll('.fill-blank')];
+  if (blanks.length) {
+    lines.push('✏️ השלמות:');
+    blanks.forEach((inp, i) => lines.push(`  ${i + 1}. ${inp.value.trim() || '(ריק)'}`));
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+async function submitLesson() {
+  const studentName = LS.get('lashon_uname', '') || 'תלמיד/ה';
+  const content = collectAnswers();
+  const prog = LS.get('lashon_prog_' + studentName, {});
+  prog[LESSON_META.id] = { done: true, date: new Date().toLocaleDateString('he-IL') };
+  LS.set('lashon_prog_' + studentName, prog);
+  const btn = document.querySelector('.btn-submit');
+  if (btn) { btn.textContent = '⏳ שומר...'; btn.disabled = true; }
+  const saved = await saveScoreToCloud(LESSON_META.id, null, studentName, { content });
+  if (btn) { btn.textContent = saved ? '✅ הוגש ונשמר!' : '✅ הוגש'; btn.disabled = false; }
+  if (window.opener) { try { window.opener.postMessage({ type: 'lessonDone', id: LESSON_META.id }, '*'); } catch(e) {} }
+  const scoreEl = document.getElementById('score-display');
+  if (scoreEl) scoreEl.classList.add('show');
+  toast('✅ המבחן הוגש בהצלחה!');
+}
+
+function sendViaWhatsApp() {
+  const wa = LS.get('teacher_whatsapp','') || LS.get('lashon_teacher_phone','') || '';
+  if (!wa) { alert('⚠️ לא הוגדר מספר וואטסאפ של המורה.\nנא להגדיר בהגדרות בדף הבית (⚙️).'); return; }
+  const msg = `📚 ${LESSON_META.title}\n👤 ${LS.get('lashon_uname','') || 'תלמיד/ה'}\n\n${collectAnswers()}`;
+  window.open(`https://wa.me/972${wa.replace(/^0/,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+function sendViaEmail() {
+  const email = LS.get('teacher_email','') || LS.get('lashon_teacher_email','') || '';
+  if (!email) { alert('⚠️ לא הוגדר מייל של המורה.\nנא להגדיר בהגדרות בדף הבית (⚙️).'); return; }
+  const student = LS.get('lashon_uname','') || 'תלמיד/ה';
+  const content = collectAnswers();
+  window.open(`mailto:${email}?subject=${encodeURIComponent('📚 ' + LESSON_META.title + ' — ' + student)}&body=${encodeURIComponent('📚 ' + LESSON_META.title + '\n👤 ' + student + '\n\n' + content)}`, '_blank');
+}
+
+async function loadFirebaseDashboard() {
+  const el = document.getElementById('dashboard-content');
+  if (!el) return;
+  const db = getDb();
+  if (!db) {
+    el.innerHTML = `<div style="padding:.5rem 0;line-height:1.7"><strong style="color:var(--amber)">⚠️ Firebase לא מחובר</strong><br>1. הסירו את ה-comment מה-SDK scripts<br>2. החליפו YOUR_API_KEY<br>3. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--blue)">console.firebase.google.com</a></div>`;
+    return;
+  }
+  try {
+    el.innerHTML = '<em style="color:var(--muted)">⏳ טוען...</em>';
+    const snap = await db.collection('student_scores').where('lessonId','==',LESSON_META.id).orderBy('ts','desc').limit(50).get();
+    if (snap.empty) { el.innerHTML = '<p style="color:var(--muted)">אין הגשות עדיין.</p>'; return; }
+    let rows = '';
+    snap.forEach(doc => {
+      const d = doc.data();
+      rows += `<tr style="border-bottom:1px solid var(--border)"><td style="padding:6px 10px">${d.studentName||'—'}</td><td style="padding:6px 10px;text-align:center">${d.date||'—'}</td><td style="padding:6px 10px;text-align:center">${d.content?'✅ יש תוכן':'—'}</td></tr>`;
+    });
+    el.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.8rem"><tr style="background:var(--surface3)"><th style="padding:6px 10px;text-align:right;font-weight:700">תלמיד/ה</th><th style="padding:6px 10px;font-weight:700">תאריך</th><th style="padding:6px 10px;font-weight:700">סטטוס</th></tr>${rows}</table><p style="font-size:.72rem;color:var(--muted);margin-top:.5rem">סה״כ: ${snap.size} הגשות</p>`;
+  } catch(e) { el.innerHTML = `<span style="color:var(--red)">❌ שגיאה: ${e.message}</span>`; }
+}
+
+function loadLocalStats() {
+  const el = document.getElementById('local-stats-content');
+  if (!el) return;
+  try {
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('lashon_prog_'));
+    if (!keys.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.82rem">אין נתוני הגשות שמורים מקומית.</p>'; return; }
+    let rows = '';
+    keys.forEach(k => {
+      const name = k.replace('lashon_prog_','');
+      const prog = LS.get(k, {});
+      Object.entries(prog).forEach(([lid, data]) => {
+        if (data.done) rows += `<tr style="border-bottom:1px solid var(--border)"><td style="padding:5px 10px">${name}</td><td style="padding:5px 10px;text-align:center">${lid}</td><td style="padding:5px 10px;text-align:center">${data.date||'—'}</td></tr>`;
+      });
+    });
+    el.innerHTML = rows
+      ? `<table style="width:100%;border-collapse:collapse;font-size:.8rem"><tr style="background:var(--surface3)"><th style="padding:6px 10px;text-align:right;font-weight:700">תלמיד/ה</th><th style="padding:6px 10px;font-weight:700">שיעור</th><th style="padding:6px 10px;font-weight:700">תאריך</th></tr>${rows}</table>`
+      : '<p style="color:var(--muted);font-size:.82rem">אין הגשות שמורות.</p>';
+  } catch(e) { el.textContent = 'שגיאה: ' + e.message; }
+}
+
+(function init() {
+  const h = document.querySelector('.lesson-header');
+  if (h) h.setAttribute('data-print-date', new Date().toLocaleDateString('he-IL'));
+})();
+</script>
+</body>
+</html>
