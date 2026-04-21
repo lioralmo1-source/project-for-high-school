@@ -718,10 +718,9 @@ a { text-decoration:none; }
 ══════════════════════════════════════════════════ */
 #settings-overlay {
   position:fixed; inset:0; z-index:1000;
-  background:rgba(0,0,0,.55);
+  background:rgba(0,0,0,.5); backdrop-filter:blur(6px);
   display:none; align-items:center; justify-content:center;
   padding:1.2rem;
-  -webkit-overflow-scrolling:touch;
 }
 #settings-overlay.open { display:flex; }
 #settings-modal {
@@ -901,10 +900,9 @@ a { text-decoration:none; }
 ══════════════════════════════════════════════════ */
 #student-settings-overlay {
   position:fixed; inset:0; z-index:1000;
-  background:rgba(0,0,0,.55);
+  background:rgba(0,0,0,.5); backdrop-filter:blur(6px);
   display:none; align-items:center; justify-content:center;
   padding:1.2rem;
-  -webkit-overflow-scrolling:touch;
 }
 #student-settings-overlay.open { display:flex; }
 #student-settings-modal {
@@ -1584,18 +1582,95 @@ a { text-decoration:none; }
     ═══════════════════════════════ -->
     <div class="lessons-section" id="unit2-section" style="padding-top:.5rem">
       <div class="section-header">
-        <h2 class="section-title-future">
+        <h2 class="section-title">
           🏷️ יחידה 2 — תצורת השם
         </h2>
-        <span class="section-badge-soon">בקרוב</span>
+        <span class="section-badge">3 שיעורים</span>
       </div>
-      <div class="lessons-grid">
-        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 1</span><span class="soon-badge">⏳ בקרוב</span></div>
-        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 2</span><span class="soon-badge">⏳ בקרוב</span></div>
-        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 3</span><span class="soon-badge">⏳ בקרוב</span></div>
-        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 4</span><span class="soon-badge">⏳ בקרוב</span></div>
-        <div class="lesson-card-soon"><span class="soon-icon">🎯</span><span class="soon-label">מבחן סיכום</span><span class="soon-badge">⏳ בקרוב</span></div>
-      </div>
+      <div class="lessons-grid" id="lessons-grid-u2">
+
+        <!-- U1 -->
+        <div class="lesson-card" data-lesson-id="U1"
+             style="--card-color:#0f766e"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                🏷️
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 1</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">שורש ומשקל</div>
+            <div class="card-desc">הקשר בין שורש לצורת המשקל ומשמעויותיו</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- U2 -->
+        <div class="lesson-card" data-lesson-id="U2"
+             style="--card-color:#0284c7"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                🔤
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 2</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">בסיס וסיומת</div>
+            <div class="card-desc">מרכיבי המילה — בסיס, סיומת ותפקידם</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- U3 -->
+        <div class="lesson-card" data-lesson-id="U3"
+             style="--card-color:#7c3aed"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                🔀
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 3</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">דרכי תצורה — השוואה</div>
+            <div class="card-desc">שורש+משקל לעומת בסיס+סיומת — זיהוי ותרגול</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /lessons-grid-u2 -->
     </div>
 
     <!-- ═══════════════════════════════
@@ -1746,7 +1821,7 @@ a { text-decoration:none; }
 /* ════════════════════════
    GRID — lesson file map
 ════════════════════════ */
-const GRID_LESSONS = {'L0': {'file': 'unit1_lesson0_intro.html', 'id': 'u1_l0'}, 'L1': {'file': 'lesson1_shoresh_binyamin_v3.html', 'id': 'u1_l1'}, 'L2': {'file': 'lesson2_binyan_kal_v3.html', 'id': 'u1_l2'}, 'L3': {'file': 'lesson3_binyanim_kvedim_v3.html', 'id': 'u1_l3'}, 'L4': {'file': 'lesson4_hifil_hufal_v3.html', 'id': 'u1_l4'}, 'L5': {'file': 'lesson5_summary_mruba_v3.html', 'id': 'u1_l5'}, 'L6': {'file': 'lesson6.html', 'id': 'u1_l6'}};
+const GRID_LESSONS = {'L0': {'file': 'unit1_lesson0_intro.html', 'id': 'u1_l0'}, 'L1': {'file': 'lesson1_shoresh_binyamin_v3.html', 'id': 'u1_l1'}, 'L2': {'file': 'lesson2_binyan_kal_v3.html', 'id': 'u1_l2'}, 'L3': {'file': 'lesson3_binyanim_kvedim_v3.html', 'id': 'u1_l3'}, 'L4': {'file': 'lesson4_hifil_hufal_v3.html', 'id': 'u1_l4'}, 'L5': {'file': 'lesson5_summary_mruba_v3.html', 'id': 'u1_l5'}, 'L6': {'file': 'lesson6.html', 'id': 'u1_l6'}, 'U1': {'file': 'unit2_lesson1.html', 'id': 'u2_l1'}, 'U2': {'file': 'unit2_lesson2.html', 'id': 'u2_l2'}, 'U3': {'file': 'unit2_lesson3.html', 'id': 'u2_l3'}};
 
 /* ════════════════════════
    GRID — lock storage (mirrors UNITS logic)
@@ -1911,23 +1986,38 @@ function buildGridLockList() {
   const list = document.getElementById('sm-lock-list');
   if (!list) return;
   list.innerHTML = '';
-  const NAMES = {
-    L0: {emoji:'🔤', title:'מבוא וחלקי הדיבר',     short:'שיעור 0'},
-    L1: {emoji:'🌱', title:'שורש ובניינים',          short:'שיעור 1'},
-    L2: {emoji:'💧', title:'בניין קל (פָּעַל)',       short:'שיעור 2'},
-    L3: {emoji:'⚙️', title:'הבניינים הכבדים',        short:'שיעור 3'},
-    L4: {emoji:'🔮', title:'בנייני הגורם',           short:'שיעור 4'},
-    L5: {emoji:'📝', title:'סיכום ומרובעים',          short:'שיעור 5'},
-    L6: {emoji:'🎯', title:'מבחן מסכם',              short:'שיעור 6'},
+  const UNIT1 = {
+    L0: {emoji:'🔤', title:'מבוא וחלקי הדיבר',       short:'שיעור 0', unit:'יחידה 1'},
+    L1: {emoji:'🌱', title:'שורש ובניינים',            short:'שיעור 1', unit:'יחידה 1'},
+    L2: {emoji:'💧', title:'בניין קל (פָּעַל)',         short:'שיעור 2', unit:'יחידה 1'},
+    L3: {emoji:'⚙️', title:'הבניינים הכבדים',          short:'שיעור 3', unit:'יחידה 1'},
+    L4: {emoji:'🔮', title:'בנייני הגורם',             short:'שיעור 4', unit:'יחידה 1'},
+    L5: {emoji:'📝', title:'סיכום ומרובעים',            short:'שיעור 5', unit:'יחידה 1'},
+    L6: {emoji:'🎯', title:'מבחן מסכם',                short:'שיעור 6', unit:'יחידה 1'},
   };
-  Object.entries(NAMES).forEach(([key, info]) => {
-    const locked = gridIsLocked(key);
-    list.innerHTML += `
+  const UNIT2 = {
+    U1: {emoji:'🏷️', title:'שורש ומשקל',              short:'שיעור 1', unit:'יחידה 2'},
+    U2: {emoji:'🔤', title:'בסיס וסיומת',              short:'שיעור 2', unit:'יחידה 2'},
+    U3: {emoji:'🔀', title:'דרכי תצורה — השוואה',       short:'שיעור 3', unit:'יחידה 2'},
+  };
+  const ALL_LESSONS = {...UNIT1, ...UNIT2};
+
+  // Section dividers
+  const sections = [
+    {label:'📘 יחידה 1 — מערכת הפועל', keys: Object.keys(UNIT1)},
+    {label:'🏷️ יחידה 2 — תצורת השם',   keys: Object.keys(UNIT2)},
+  ];
+  sections.forEach(sec => {
+    list.innerHTML += `<div class="sm-sec-title" style="margin-top:.9rem;margin-bottom:.35rem;font-size:.68rem;font-weight:800;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em">${sec.label}</div>`;
+    sec.keys.forEach(key => {
+      const info = ALL_LESSONS[key];
+      const locked = gridIsLocked(key);
+      list.innerHTML += `
       <div class="sm-lock-item">
         <span class="sm-lock-emoji">${info.emoji}</span>
         <div class="sm-lock-info">
           <div class="sm-lock-name">${info.title}</div>
-          <div class="sm-lock-unit">יחידה 1 · ${info.short}</div>
+          <div class="sm-lock-unit">${info.unit} · ${info.short}</div>
         </div>
         <label class="sm-toggle" title="${locked?'פתח':'נעל'}">
           <input type="checkbox" ${!locked?'checked':''}
@@ -1935,6 +2025,7 @@ function buildGridLockList() {
           <span class="sm-slider"></span>
         </label>
       </div>`;
+    });
   });
 }
 
@@ -2722,8 +2813,8 @@ window.addEventListener('message', function(e) {
    FIREBASE — לשון Lesson
 ════════════════════════ */
 // ── SDK scripts (הוסיפו בתגית <head> לפני שימוש) ──
-// <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"><\/script>
-// <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"><\/script>
+// firebase-app-compat.js (load in <head> to enable Firebase)
+// firebase-firestore-compat.js (load in <head> to enable Firestore)
 
 const FIREBASE_CONFIG = {
   apiKey:            "YOUR_API_KEY",
