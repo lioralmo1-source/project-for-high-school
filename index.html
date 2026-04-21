@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>לשון Lesson — פלטפורמה דיגיטלית ללימודי עברית</title>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════════════════ */
+:root {
+  --bg:          #f5f6f8;
+  --surface:     #ffffff;
+  --surface2:    #f8f9fb;
+  --surface3:    #eef0f5;
+  --border:      #e4e7ef;
+  --border2:     #d1d6e5;
+  --text:        #0d1424;
+  --text-mid:    #3d4660;
+  --muted:       #6b7594;
+  --subtle:      #9aa3be;
+
+  --blue:        #1a56db;
+  --blue-lt:     #eff4ff;
+  --blue-dk:     #1340b0;
+  --green:       #15803d;
+  --green-lt:    #f0fdf4;
+  --amber:       #b45309;
+  --amber-lt:    #fffbeb;
+  --red:         #dc2626;
+  --red-lt:      #fef2f2;
+  --purple:      #6d28d9;
+  --purple-lt:   #faf5ff;
+  --gold:        #ca8a04;
+  --gold-lt:     #fefce8;
+  --teal:        #0f766e;
+  --teal-lt:     #f0fdfa;
+
+  --sh1: 0 1px 3px rgba(13,20,36,.06), 0 1px 2px rgba(13,20,36,.04);
+  --sh2: 0 4px 16px rgba(13,20,36,.07), 0 1px 4px rgba(13,20,36,.04);
+  --sh3: 0 12px 36px rgba(13,20,36,.10), 0 3px 8px rgba(13,20,36,.05);
+
+  --r-sm: 10px;
+  --r:    16px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+  --sidebar-w: 224px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #0b0f17;
+    --surface:     #131924;
+    --surface2:    #192030;
+    --surface3:    #1f2840;
+    --border:      #252f47;
+    --border2:     #313d5c;
+    --text:        #d8dfe8;
+    --text-mid:    #a0adc5;
+    --muted:       #7a8aaa;
+    --subtle:      #50607e;
+
+    --blue:        #4d8aff;
+    --blue-lt:     #162040;
+    --blue-dk:     #6aa0ff;
+    --green:       #34d875;
+    --green-lt:    #0c2618;
+    --amber:       #f5a623;
+    --amber-lt:    #28200c;
+    --red:         #fc8080;
+    --red-lt:      #281414;
+    --purple:      #b09dfa;
+    --purple-lt:   #1a1432;
+    --gold:        #f5a623;
+    --gold-lt:     #28200c;
+    --teal:        #34d4c2;
+    --teal-lt:     #0c221e;
+
+    --sh1: 0 1px 3px rgba(0,0,0,.28), 0 1px 2px rgba(0,0,0,.2);
+    --sh2: 0 4px 16px rgba(0,0,0,.36), 0 1px 4px rgba(0,0,0,.24);
+    --sh3: 0 12px 36px rgba(0,0,0,.45), 0 3px 8px rgba(0,0,0,.28);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html {
+  font-family:'Heebo',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+body { line-height:1.6; }
+button,input,a,textarea,select { font-family:'Heebo',sans-serif; }
+a { text-decoration:none; }
+
+/* ══════════════════════════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════════════════════════ */
+#login-screen {
+  position:fixed; inset:0; z-index:999;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:2rem 1.5rem; overflow:hidden;
+  background:linear-gradient(160deg,#060b18 0%,#0d1b38 50%,#07111f 100%);
+}
+#login-screen::before {
+  content:''; position:absolute; border-radius:50%; pointer-events:none;
+  width:800px; height:800px; top:-300px; right:-150px;
+  background:radial-gradient(circle,rgba(26,86,219,.16) 0%,transparent 60%);
+  animation:gl1 10s ease-in-out infinite alternate;
+}
+#login-screen::after {
+  content:''; position:absolute; border-radius:50%; pointer-events:none;
+  width:600px; height:600px; bottom:-250px; left:-120px;
+  background:radial-gradient(circle,rgba(21,128,61,.12) 0%,transparent 60%);
+  animation:gl2 13s ease-in-out infinite alternate;
+}
+.ls-glow3 {
+  position:absolute; border-radius:50%; pointer-events:none;
+  width:400px; height:400px; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(202,138,4,.05) 0%,transparent 65%);
+  animation:gl3 8s ease-in-out infinite alternate;
+}
+@keyframes gl1{from{transform:scale(1) translateY(0)} to{transform:scale(1.2) translateY(-25px)}}
+@keyframes gl2{from{transform:scale(1.1)} to{transform:scale(.85)}}
+@keyframes gl3{from{transform:translate(-50%,-50%) scale(1)} to{transform:translate(-50%,-55%) scale(1.25)}}
+
+.ls-stars { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.ls-stars span {
+  position:absolute; border-radius:50%; background:#fff;
+  animation:twinkle var(--d,4s) ease-in-out infinite alternate;
+  opacity:var(--op,0.3);
+}
+@keyframes twinkle{from{opacity:var(--op,.3)}to{opacity:calc(var(--op,.3)*0.15)}}
+
+/* Login header */
+.ls-header {
+  position:relative; z-index:1;
+  text-align:center; margin-bottom:2.8rem;
+  animation:fadeInDown .65s ease both;
+}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)}}
+
+.ls-logo-wrap {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:68px; height:68px; border-radius:18px;
+  background:linear-gradient(145deg,#162040,#1e3060);
+  border:1px solid rgba(202,138,4,.3);
+  box-shadow:0 10px 36px rgba(0,0,0,.4),0 0 24px rgba(26,86,219,.18),inset 0 1px 0 rgba(255,255,255,.06);
+  margin-bottom:1rem;
+  animation:logoPop .55s cubic-bezier(.34,1.56,.64,1) .15s both;
+}
+@keyframes logoPop{from{opacity:0;transform:scale(.55)} to{opacity:1;transform:scale(1)}}
+.ls-logo { font-size:2.4rem; display:block; filter:drop-shadow(0 3px 14px rgba(26,86,219,.55)); }
+
+.ls-title {
+  font-family:'Secular One',sans-serif;
+  font-size:clamp(1.6rem,4.5vw,2.4rem);
+  color:#fff; margin-bottom:.35rem;
+  letter-spacing:-.01em;
+  animation:fadeInUp .55s ease .3s both;
+}
+.ls-title em {
+  font-style:normal;
+  background:linear-gradient(90deg,#fbbf24,#f59e0b);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.ls-sub-big {
+  font-size:clamp(.8rem,2vw,.95rem);
+  color:rgba(255,255,255,.42); letter-spacing:.03em;
+  animation:fadeInUp .55s ease .4s both;
+}
+.ls-badge-row {
+  display:flex; align-items:center; justify-content:center;
+  gap:.45rem; margin-top:.8rem;
+  animation:fadeInUp .55s ease .5s both;
+}
+.ls-badge {
+  font-size:.6rem; font-weight:700; letter-spacing:.05em;
+  padding:.2rem .65rem; border-radius:var(--r-pill);
+  border:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.3);
+}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)}}
+
+/* ─── Login cards — elegant pill buttons ─── */
+.ls-cards {
+  position:relative; z-index:1;
+  width:100%; max-width:400px;
+  display:flex; flex-direction:column; gap:.85rem;
+  animation:fadeInUp .55s ease .58s both;
+}
+
+.lc {
+  border-radius:var(--r-xl);
+  padding:1.4rem 1.8rem;
+  cursor:pointer; border:1px solid transparent;
+  transition:transform .22s cubic-bezier(.34,1.45,.64,1), box-shadow .22s, border-color .18s;
+  text-align:right; user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  outline:none; background:none;
+  position:relative; overflow:hidden;
+  display:flex; align-items:center; gap:1rem;
+}
+.lc:hover { transform:translateY(-3px); }
+.lc:active { transform:scale(.98); }
+.lc:focus-visible { outline:2px solid rgba(255,255,255,.35); outline-offset:4px; }
+
+.lc-student {
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.12);
+  box-shadow:0 4px 20px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.lc-student:hover {
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.2);
+  box-shadow:0 10px 36px rgba(26,86,219,.22), inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+.lc-teacher {
+  background:rgba(202,138,4,.08);
+  border-color:rgba(202,138,4,.22);
+  box-shadow:0 4px 20px rgba(0,0,0,.25), inset 0 1px 0 rgba(202,138,4,.08);
+}
+.lc-teacher:hover {
+  background:rgba(202,138,4,.12);
+  border-color:rgba(202,138,4,.45);
+  box-shadow:0 10px 36px rgba(202,138,4,.18), inset 0 1px 0 rgba(202,138,4,.1);
+}
+
+.lc-icon-wrap {
+  width:40px; height:40px; border-radius:12px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; background:rgba(255,255,255,.06);
+}
+.lc-student .lc-icon-wrap { background:rgba(77,138,255,.12); }
+.lc-teacher .lc-icon-wrap { background:rgba(202,138,4,.12); }
+
+.lc-text { flex:1; text-align:right; }
+.lc-label {
+  font-family:'Secular One',sans-serif;
+  font-size:.97rem; display:block; margin-bottom:.15rem;
+  color:#fff;
+}
+.lc-desc { font-size:.72rem; display:block; color:rgba(255,255,255,.4); }
+.lc-arrow {
+  font-size:.9rem; color:rgba(255,255,255,.3);
+  transition:transform .18s, color .18s; flex-shrink:0;
+}
+.lc:hover .lc-arrow { transform:translateX(-3px); color:rgba(255,255,255,.6); }
+.lc-teacher:hover .lc-arrow { color:rgba(202,138,4,.7); }
+
+/* Teacher code panel */
+.ls-tcp {
+  position:relative; z-index:1;
+  width:100%; max-width:400px; margin-top:.6rem;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-xl); padding:1.3rem 1.5rem;
+  display:none;
+  animation:tcpSlide .22s ease;
+  box-shadow:0 20px 56px rgba(0,0,0,.5);
+}
+.ls-tcp.open { display:block; }
+@keyframes tcpSlide{from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)}}
+
+.tcp-name-row { display:none; margin-bottom:.75rem; }
+.tcp-name-row.show { display:block; }
+.tcp-lbl { font-size:.68rem; font-weight:700; color:rgba(255,255,255,.35); display:block; margin-bottom:.38rem; }
+.tcp-name-in {
+  width:100%; padding:.75rem 1rem; border-radius:var(--r); direction:rtl;
+  background:rgba(255,255,255,.06); border:1.5px solid rgba(255,255,255,.1);
+  color:#fff; font-size:.9rem; outline:none; transition:border-color .16s, box-shadow .16s;
+  min-height:48px;
+}
+.tcp-name-in::placeholder { color:rgba(255,255,255,.2); }
+.tcp-name-in:focus { border-color:#4d8aff; box-shadow:0 0 0 3px rgba(77,138,255,.25); }
+
+.tcp-row { display:flex; gap:.6rem; margin-top:.4rem; }
+.tcp-in {
+  flex:1; padding:.75rem 1rem; border-radius:var(--r);
+  direction:ltr; text-align:center; letter-spacing:.2em;
+  background:rgba(255,255,255,.06); border:1.5px solid rgba(255,255,255,.1);
+  color:#fff; font-size:1rem; outline:none; transition:border-color .16s, box-shadow .16s;
+  min-height:48px;
+}
+.tcp-in::placeholder { color:rgba(255,255,255,.18); letter-spacing:normal; }
+.tcp-in:focus { border-color:#4d8aff; box-shadow:0 0 0 3px rgba(77,138,255,.25); }
+.tcp-in.shake { animation:shk .3s; border-color:#f87171; }
+@keyframes shk{0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}}
+
+/* The red pill login button */
+.tcp-go {
+  padding:.75rem 1.3rem; border:none; border-radius:var(--r-pill);
+  background:linear-gradient(135deg,#e53e3e,#c53030);
+  color:#fff; font-size:.85rem; font-weight:700;
+  cursor:pointer; transition:all .15s; white-space:nowrap;
+  box-shadow:0 4px 16px rgba(220,38,38,.4); min-height:48px;
+}
+.tcp-go:hover { background:linear-gradient(135deg,#fc5a5a,#e53e3e); transform:translateY(-1px); box-shadow:0 6px 22px rgba(220,38,38,.45); }
+.tcp-hint { font-size:.6rem; color:rgba(255,255,255,.14); text-align:center; margin-top:.55rem; }
+.tcp-back {
+  display:block; margin:.4rem auto 0; padding:.2rem;
+  background:none; border:none; color:rgba(255,255,255,.25);
+  font-size:.66rem; cursor:pointer; text-decoration:underline;
+  text-underline-offset:2px; transition:color .12s;
+}
+.tcp-back:hover { color:rgba(255,255,255,.55); }
+
+/* ══════════════════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════════════════ */
+#app { display:none; min-height:100vh; }
+#app.on { display:flex; }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width:var(--sidebar-w); flex-shrink:0;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  display:flex; flex-direction:column;
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+  box-shadow:var(--sh1);
+  transition:background .25s, border-color .25s;
+  scrollbar-width:none;
+}
+.sidebar::-webkit-scrollbar { display:none; }
+
+.sb-head {
+  padding:1.15rem 1rem .9rem;
+  border-bottom:1px solid var(--border);
+}
+.sb-logo {
+  font-family:'Secular One',sans-serif;
+  font-size:.88rem; color:var(--blue);
+  display:flex; align-items:center; gap:.4rem;
+}
+.sb-sub { font-size:.6rem; color:var(--subtle); margin-top:.12rem; }
+.sb-nav { padding:.6rem .45rem; flex:1; }
+
+.sb-section-label {
+  font-size:.56rem; font-weight:800; color:var(--subtle);
+  letter-spacing:.08em; text-transform:uppercase;
+  padding:.2rem .6rem .32rem;
+}
+.sb-link {
+  display:flex; align-items:center; gap:.5rem;
+  padding:.65rem .85rem; border-radius:var(--r-sm);
+  width:100%; font-size:.78rem; font-weight:600;
+  color:var(--muted); border:none; background:none;
+  cursor:pointer; text-align:right; transition:all .12s;
+  margin-bottom:.12rem; min-height:48px;
+}
+.sb-link:hover { background:var(--blue-lt); color:var(--blue); }
+.sb-link.active { background:var(--blue-lt); color:var(--blue); font-weight:700; }
+.sb-link .sb-em { font-size:.95rem; flex-shrink:0; }
+.sb-foot {
+  padding:.8rem .85rem;
+  border-top:1px solid var(--border);
+  background:var(--surface2);
+}
+.user-row {
+  display:flex; align-items:center; gap:.45rem;
+  background:var(--surface3); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:.45rem .65rem; margin-bottom:.45rem;
+}
+.u-av {
+  width:26px; height:26px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.65rem; font-weight:900; color:#fff; flex-shrink:0;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.u-av.t { background:linear-gradient(135deg,#ca8a04,#d97706); }
+.u-av.s { background:linear-gradient(135deg,#15803d,#16a34a); }
+.u-name {
+  font-size:.78rem; font-weight:700; flex:1; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.role-tag {
+  font-size:.58rem; font-weight:800; padding:.1rem .42rem;
+  border-radius:var(--r-pill); background:var(--gold-lt); color:var(--gold);
+  border:1px solid #fde68a; white-space:nowrap;
+}
+.btn-logout {
+  width:100%; padding:.55rem; border:1px solid var(--border);
+  border-radius:var(--r-sm); background:none; color:var(--subtle);
+  font-size:.72rem; cursor:pointer; transition:all .12s; min-height:44px;
+  display:flex; align-items:center; justify-content:center; gap:.32rem;
+}
+.btn-logout:hover { background:var(--red-lt); color:var(--red); border-color:currentColor; }
+.btn-switch-user {
+  width:100%; padding:.48rem; border:1px dashed var(--border2);
+  border-radius:var(--r-sm); background:none; color:var(--subtle);
+  font-size:.68rem; cursor:pointer; transition:all .12s; min-height:38px;
+  display:flex; align-items:center; justify-content:center; gap:.28rem;
+  margin-top:.3rem;
+}
+.btn-switch-user:hover { background:var(--blue-lt); color:var(--blue); border-color:var(--blue); }
+
+/* ─── MAIN ─── */
+.main { flex:1; min-width:0; display:flex; flex-direction:column; }
+
+/* ─── TOPBAR ─── */
+.topbar {
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:.75rem 1.4rem; display:flex; align-items:center;
+  gap:.7rem; position:sticky; top:0; z-index:40;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+  transition:background .25s;
+}
+.tb-text { flex:1; }
+.tb-title {
+  font-family:'Secular One',sans-serif;
+  font-size:.92rem; color:var(--text);
+}
+.tb-sub { font-size:.65rem; color:var(--subtle); margin-top:.04rem; }
+.tb-t-row { display:flex; align-items:center; gap:.55rem; flex-shrink:0; }
+.tb-greeting {
+  font-size:.78rem; font-weight:700;
+  background:linear-gradient(90deg,#3b0764,#6d28d9);
+  color:#fff; border-radius:var(--r-pill);
+  padding:.3rem .9rem; white-space:nowrap;
+  box-shadow:0 2px 8px rgba(109,40,217,.3);
+}
+.btn-settings {
+  display:inline-flex; align-items:center; gap:.28rem;
+  padding:.38rem .9rem; border:1.5px solid var(--border);
+  border-radius:var(--r-sm); background:var(--surface2);
+  font-size:.73rem; font-weight:700; color:var(--purple);
+  cursor:pointer; transition:all .12s; white-space:nowrap; min-height:44px;
+}
+.btn-settings:hover { background:var(--purple-lt); border-color:var(--purple); }
+
+/* ─── TEACHER STRIP ─── */
+.teacher-strip {
+  background:linear-gradient(90deg,#3b0764 0%,#6d28d9 60%,#7c3aed 100%);
+  padding:.4rem 1.4rem;
+  font-size:.72rem; font-weight:700; color:rgba(255,255,255,.88);
+  display:none; align-items:center; gap:.45rem;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.teacher-strip.on { display:flex; }
+.teacher-strip-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:#86efac; box-shadow:0 0 5px #86efac;
+  animation:blink 2s ease-in-out infinite; flex-shrink:0;
+}
+@keyframes blink{0%,100%{opacity:1} 50%{opacity:.35}}
+
+/* ─── PROGRESS BANNER ─── */
+.prog-banner {
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:.9rem 1.4rem; transition:background .25s;
+}
+.prog-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.45rem; }
+.prog-title { font-size:.78rem; font-weight:700; }
+.prog-pct { font-size:.82rem; font-weight:800; color:var(--blue); }
+.prog-track {
+  height:5px; background:var(--surface3); border-radius:var(--r-pill);
+  overflow:hidden; border:1px solid var(--border);
+}
+.prog-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--blue),#60a5fa);
+  border-radius:var(--r-pill); transition:width .55s ease;
+}
+.prog-stats { display:flex; gap:1.2rem; margin-top:.5rem; }
+.prog-stat { font-size:.68rem; color:var(--muted); }
+.prog-stat b { color:var(--text); font-weight:700; }
+
+/* ─── UNITS WRAP — Mobile-first dashboard grid ─── */
+.units-wrap {
+  padding:1rem 1rem 2rem;
+  display:flex; flex-direction:column; gap:1rem;
+}
+@keyframes contentFade{from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)}}
+.units-wrap.fading { animation:contentFade .28s ease both; }
+
+/* ─── UNIT CARD (the big tappable card) ─── */
+.unit-block {
+  border-radius:var(--r-xl);
+  box-shadow:var(--sh2);
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--surface);
+  animation:unitFadeIn .38s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes unitFadeIn{from{opacity:0;transform:translateY(12px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)}}
+.unit-block:nth-child(1){animation-delay:.04s}
+.unit-block:nth-child(2){animation-delay:.12s}
+.unit-block:nth-child(3){animation-delay:.20s}
+
+/* ─── UNIT TRIGGER — big card header ─── */
+.unit-trigger {
+  width:100%; display:flex; align-items:center; gap:1rem;
+  padding:1.2rem 1.3rem 1.15rem;
+  cursor:pointer; text-align:right;
+  transition:background .18s, transform .18s cubic-bezier(.34,1.2,.64,1);
+  min-height:76px;
+  border:none;
+  background:var(--surface);
+  position:relative; overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+/* Subtle color band on the right edge of each card */
+.unit-trigger::after {
+  content:''; position:absolute; top:0; right:0; bottom:0; width:4px;
+  background:var(--ut-color, var(--blue));
+  border-radius:0 var(--r-xl) var(--r-xl) 0;
+  opacity:.7;
+}
+.unit-trigger:active { transform:scale(0.985); background:var(--surface2); }
+.unit-trigger.open { background:var(--surface2); }
+
+/* Emoji circle badge */
+.ut-em-wrap {
+  width:52px; height:52px; border-radius:16px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.55rem;
+  background:var(--ut-color-lt, var(--blue-lt));
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
+.ut-em { font-size:1.55rem; }
+
+.ut-body { flex:1; min-width:0; text-align:right; }
+.ut-label { font-size:.62rem; font-weight:800; color:var(--ut-color,var(--blue)); letter-spacing:.06em; text-transform:uppercase; margin-bottom:.18rem; }
+.ut-name  { font-size:1.02rem; font-weight:800; line-height:1.25; color:var(--text); }
+.ut-meta  { font-size:.68rem; color:var(--subtle); margin-top:.22rem; }
+
+.ut-right { display:flex; flex-direction:column; align-items:flex-start; gap:.4rem; flex-shrink:0; }
+.ut-bar-wrap { width:54px; }
+.ut-bar-track { height:5px; background:var(--surface3); border-radius:var(--r-pill); overflow:hidden; border:1px solid var(--border); }
+.ut-bar-fill { height:100%; background:var(--ut-color,var(--green)); border-radius:var(--r-pill); transition:width .5s ease; }
+.ut-bar-pct { font-size:.62rem; font-weight:700; color:var(--ut-color,var(--blue)); margin-top:.15rem; text-align:center; }
+.ut-chev {
+  font-size:.7rem; color:var(--subtle);
+  transition:transform .25s cubic-bezier(.34,1.2,.64,1); flex-shrink:0;
+  margin-top:.2rem;
+}
+.unit-trigger.open .ut-chev { transform:rotate(180deg); }
+
+/* Divider between header and lessons */
+.unit-divider {
+  height:1px; background:var(--border); margin:0;
+  display:none;
+}
+.unit-body.open + .unit-divider,
+.unit-trigger.open ~ .unit-divider { display:block; }
+
+/* ─── UNIT BODY ─── */
+.unit-body {
+  background:var(--surface2);
+  overflow:hidden; max-height:0;
+  transition:max-height .36s cubic-bezier(.22,1,.36,1);
+}
+.unit-body.open { max-height:4000px; }
+
+/* ══════════════════════════════════════════════════
+   LESSON ROW — Touch-friendly, production-grade
+══════════════════════════════════════════════════ */
+.lesson-row {
+  display:flex; align-items:center; gap:.85rem;
+  padding:1rem 1.3rem;
+  border-bottom:1px solid var(--border);
+  transition:background .15s, transform .16s cubic-bezier(.34,1.2,.64,1), box-shadow .15s;
+  position:relative; min-height:70px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  background:var(--surface);
+}
+.lesson-row:last-child { border-bottom:none; }
+.lesson-row:not(.locked):hover {
+  background:var(--blue-lt);
+  box-shadow:inset 0 0 0 1px rgba(26,86,219,.12);
+}
+.lesson-row:not(.locked):active { transform:scale(0.975); background:var(--surface3); }
+.lesson-row.locked { opacity:.52; cursor:default; pointer-events:none; }
+
+/* Done row — subtle green wash */
+.lesson-row.is-done { background:linear-gradient(to left, var(--green-lt) 0%, var(--surface) 65%); }
+.lesson-row.is-done:hover { background:linear-gradient(to left, #dcfce7 0%, var(--blue-lt) 65%); }
+
+/* Colored right-edge accent */
+.lesson-row::before {
+  content:''; position:absolute; top:10px; bottom:10px; right:0;
+  width:3.5px; border-radius:var(--r-pill);
+  background:var(--lr-color, transparent); opacity:.55;
+}
+
+/* Done row — green right edge */
+.lesson-row.is-done::before { background:var(--green); opacity:.7; }
+
+/* ── Done checkmark badge (top-left corner of emoji) ── */
+.lr-done-badge {
+  position:absolute; top:-3px; right:-3px;
+  width:16px; height:16px; border-radius:50%;
+  background:var(--green); color:#fff;
+  font-size:.58rem; font-weight:900;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 1px 4px rgba(21,128,61,.4);
+  border:2px solid var(--surface);
+  z-index:1; line-height:1;
+}
+
+/* Emoji badge wrapper */
+.lr-em-wrap { position:relative; flex-shrink:0; }
+.lr-em {
+  width:42px; height:42px; border-radius:13px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.15rem; box-shadow:var(--sh1);
+  transition:transform .15s;
+}
+.lesson-row:not(.locked):hover .lr-em { transform:scale(1.08); }
+
+.lr-info { flex:1; min-width:0; }
+.lr-short { font-size:.58rem; font-weight:800; color:var(--subtle); text-transform:uppercase; letter-spacing:.06em; }
+.lr-title { font-size:.93rem; font-weight:700; line-height:1.3; margin-top:1px; word-break:break-word; overflow-wrap:anywhere; }
+.lr-desc  { font-size:.68rem; color:var(--subtle); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:3px; }
+
+/* Meta cluster */
+.lr-meta  { display:flex; align-items:center; gap:.38rem; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+.lr-mins  { font-size:.62rem; color:var(--subtle); white-space:nowrap; }
+
+/* Far-left chevron / lock */
+.lr-indicator { flex-shrink:0; font-size:.9rem; opacity:.4; transition:opacity .12s, transform .14s; }
+.lr-chevron-icon { color:var(--subtle); }
+.lr-lock-icon    { font-size:.75rem; }
+.lesson-row:not(.locked):hover .lr-indicator { opacity:.9; transform:translateX(-2px); }
+
+/* ─── STATUS CHIPS ─── */
+.chip {
+  display:inline-flex; align-items:center; gap:.15rem;
+  padding:.18rem .6rem; border-radius:var(--r-pill);
+  font-size:.62rem; font-weight:700; white-space:nowrap;
+  transition:box-shadow .12s;
+}
+.ch-open  { background:var(--green-lt);  color:var(--green);  border:1px solid #86efac; }
+.ch-lock  { background:var(--surface3);  color:var(--subtle); border:1px solid var(--border); }
+.ch-done  { background:#dcfce7; color:#15803d; border:1px solid #86efac; font-weight:800; }
+.ch-exam  { background:var(--amber-lt);  color:var(--amber);  border:1px solid #fde68a; }
+
+/* ─── EXAM ROW ─── */
+.lesson-row.exam-row {
+  background:linear-gradient(to left,var(--blue-lt) 0%,var(--surface) 55%);
+}
+.lesson-row.exam-row:not(.locked):hover {
+  background:linear-gradient(to left,#dbeafe 0%,var(--blue-lt) 55%);
+}
+.lesson-row.exam-row::after {
+  content:''; position:absolute; top:8px; bottom:8px; right:0;
+  width:3.5px; border-radius:var(--r-pill); background:var(--blue); opacity:.5;
+}
+.lesson-row.exam-row::before { background:transparent; }
+
+.exam-label {
+  display:inline-flex; align-items:center; gap:.22rem;
+  font-size:.52rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+  color:#1e40af; background:var(--blue-lt);
+  border:1px solid #93c5fd; border-radius:4px;
+  padding:.08rem .38rem; margin-bottom:.2rem;
+}
+.theory-label {
+  display:inline-flex; align-items:center; gap:.22rem;
+  font-size:.52rem; font-weight:800; letter-spacing:.06em;
+  color:#065f46; background:var(--green-lt);
+  border:1px solid #6ee7b7; border-radius:4px;
+  padding:.08rem .38rem; margin-bottom:.2rem;
+}
+
+.done-stamp {
+  font-size:.58rem; font-weight:700; color:var(--green); background:var(--green-lt);
+  border-radius:var(--r-pill); padding:.1rem .5rem; white-space:nowrap;
+  border:1px solid #86efac;
+}
+
+/* ─── INLINE LOCK TOGGLE (teacher only) ─── */
+.lr-lock-wrap { display:flex; align-items:center; gap:.28rem; flex-shrink:0; }
+.lr-lock-label { font-size:.56rem; color:var(--muted); white-space:nowrap; }
+.lr-toggle { position:relative; width:28px; height:15px; cursor:pointer; display:inline-block; flex-shrink:0; }
+.lr-toggle input { opacity:0; width:0; height:0; position:absolute; }
+.lr-slider {
+  position:absolute; inset:0; background:var(--border2); border-radius:var(--r-pill);
+  transition:background .2s cubic-bezier(.4,0,.2,1); cursor:pointer;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.12);
+}
+.lr-slider::before {
+  content:''; position:absolute; width:11px; height:11px; border-radius:50%;
+  background:#fff; top:2px; right:14px;
+  transition:right .2s cubic-bezier(.4,0,.2,1); box-shadow:0 1px 4px rgba(0,0,0,.18);
+}
+.lr-toggle input:checked + .lr-slider { background:var(--green); }
+.lr-toggle input:checked + .lr-slider::before { right:2px; }
+.lr-toggle input:focus-visible + .lr-slider { outline:2px solid var(--blue); outline-offset:2px; }
+
+/* ══════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════ */
+#toast {
+  position:fixed; bottom:1.2rem; right:1.2rem; z-index:10000;
+  background:var(--text); color:var(--surface);
+  border-radius:var(--r); padding:.65rem 1.15rem;
+  font-size:.8rem; font-weight:600;
+  opacity:0; transform:translateY(6px);
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none; box-shadow:var(--sh3);
+}
+#toast.show { opacity:1; transform:translateY(0); }
+
+/* ══════════════════════════════════════════════════
+   SETTINGS MODAL
+══════════════════════════════════════════════════ */
+#settings-overlay {
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,.5); backdrop-filter:blur(6px);
+  display:none; align-items:center; justify-content:center;
+  padding:1.2rem;
+}
+#settings-overlay.open { display:flex; }
+#settings-modal {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-xl); width:100%; max-width:430px;
+  box-shadow:0 8px 32px rgba(0,0,0,.2), 0 32px 80px rgba(0,0,0,.3);
+  animation:popIn .24s cubic-bezier(.34,1.45,.64,1);
+  max-height:88vh; overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+}
+#settings-modal::-webkit-scrollbar { width:4px; }
+#settings-modal::-webkit-scrollbar-track { background:transparent; }
+#settings-modal::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+@keyframes popIn{from{opacity:0;transform:scale(.9) translateY(14px)} to{opacity:1;transform:scale(1) translateY(0)}}
+.sm-header {
+  padding:1rem 1.25rem .8rem; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--surface2); border-radius:var(--r-xl) var(--r-xl) 0 0;
+}
+.sm-title  { font-family:'Secular One',sans-serif; font-size:.95rem; }
+.sm-close  {
+  width:30px; height:30px; border:none; background:var(--surface3);
+  border-radius:50%; cursor:pointer; font-size:.95rem;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); transition:all .12s;
+}
+.sm-close:hover { background:var(--border); color:var(--text); }
+.sm-section { padding:.95rem 1.25rem; border-bottom:1px solid var(--border); }
+.sm-section:last-child { border-bottom:none; }
+.sm-sec-title {
+  font-size:.68rem; font-weight:800; color:var(--subtle);
+  text-transform:uppercase; letter-spacing:.06em; margin-bottom:.7rem;
+}
+.sm-name-display {
+  font-size:.86rem; font-weight:700; color:var(--gold);
+  background:var(--gold-lt); border:1px solid #fde68a;
+  border-radius:var(--r-sm); padding:.45rem .8rem;
+  display:flex; align-items:center; gap:.4rem;
+}
+.sm-lock-list  { display:flex; flex-direction:column; gap:.32rem; max-height:260px; overflow-y:auto; }
+.sm-lock-item  {
+  display:flex; align-items:center; gap:.5rem; padding:.45rem .5rem;
+  border-radius:var(--r-sm); background:var(--surface2);
+  border:1px solid var(--border); transition:background .1s;
+}
+.sm-lock-item:hover { background:var(--surface3); }
+.sm-lock-emoji { font-size:.82rem; flex-shrink:0; }
+.sm-lock-info  { flex:1; min-width:0; }
+.sm-lock-name  { font-size:.76rem; font-weight:700; line-height:1.2; }
+.sm-lock-unit  { font-size:.6rem; color:var(--muted); }
+
+/* Settings toggle */
+.sm-toggle { position:relative; width:44px; height:26px; flex-shrink:0; cursor:pointer; display:inline-block; }
+.sm-toggle input { opacity:0; width:0; height:0; position:absolute; }
+.sm-slider {
+  position:absolute; inset:0; background:var(--border2); border-radius:var(--r-pill);
+  transition:background .2s cubic-bezier(.4,0,.2,1); cursor:pointer;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.1);
+}
+.sm-slider::before {
+  content:''; position:absolute; width:20px; height:20px; border-radius:50%; background:#fff;
+  top:3px; right:21px;
+  transition:background .2s, right .2s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 2px 6px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.04);
+}
+.sm-toggle input:checked + .sm-slider { background:var(--green); }
+.sm-toggle input:checked + .sm-slider::before { right:3px; }
+.sm-toggle input:focus-visible + .sm-slider { outline:2px solid var(--blue); outline-offset:2px; }
+
+.sm-field { margin-bottom:.7rem; }
+.sm-field:last-child { margin-bottom:0; }
+.sm-label { font-size:.68rem; font-weight:700; color:var(--muted); display:block; margin-bottom:.35rem; }
+.sm-input {
+  width:100%; padding:.75rem 1rem; border:1.5px solid var(--border);
+  border-radius:var(--r); font-size:.9rem; outline:none;
+  transition:border-color .14s, box-shadow .16s; direction:rtl;
+  background:var(--surface); color:var(--text); min-height:48px;
+}
+.sm-input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(26,86,219,.08); }
+.sm-btn {
+  padding:.7rem 1.15rem; border:none; border-radius:var(--r-sm);
+  font-size:.85rem; font-weight:700; cursor:pointer; transition:all .12s;
+  margin-top:.42rem; min-height:48px;
+}
+.sm-btn.save { background:var(--blue); color:#fff; }
+.sm-btn.save:hover { background:var(--blue-dk); box-shadow:0 2px 8px rgba(26,86,219,.22); }
+.sm-btn.danger { background:var(--red-lt); color:var(--red); border:1.5px solid #fca5a5; }
+.sm-btn.danger:hover { background:#fee2e2; }
+
+/* ══════════════════════════════════════════════════
+   MOBILE SIDEBAR DRAWER
+══════════════════════════════════════════════════ */
+.btn-hamburger {
+  display:none; align-items:center; justify-content:center;
+  width:44px; height:44px; border:none; background:var(--surface2);
+  border-radius:var(--r-sm); cursor:pointer; flex-shrink:0;
+  font-size:1.1rem; transition:background .12s; border:1px solid var(--border);
+}
+.btn-hamburger:hover { background:var(--surface3); }
+
+#sb-backdrop {
+  display:none; position:fixed; inset:0; z-index:499;
+  background:rgba(0,0,0,.35); backdrop-filter:blur(2px);
+}
+#sb-backdrop.show { display:block; }
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE — ≤660px MOBILE
+══════════════════════════════════════════════════ */
+@media(max-width:660px){
+  .btn-hamburger { display:flex; }
+  .sidebar {
+    position:fixed; top:0; right:0; height:100%; z-index:500;
+    transform:translateX(100%); transition:transform .24s ease;
+    box-shadow:-4px 0 24px rgba(0,0,0,.16);
+  }
+  .sidebar.open { transform:translateX(0); }
+  #app.on { display:block; }
+  .main { min-height:100vh; }
+
+  /* Login adjustments */
+  .ls-header { margin-bottom:2rem; }
+  .ls-cards { max-width:340px; }
+  .lc { padding:1.15rem 1.4rem; }
+
+  /* Dashboard cards */
+  .units-wrap { padding:.7rem .6rem 2rem; gap:.75rem; }
+  .unit-trigger { padding:1rem 1rem; min-height:72px; }
+  .ut-em-wrap { width:46px; height:46px; border-radius:14px; font-size:1.3rem; }
+  .ut-name { font-size:.96rem; }
+
+  /* Lesson rows */
+  .lesson-row { padding:.85rem 1rem; min-height:64px; }
+  .lr-em { width:36px; height:36px; font-size:1rem; }
+  .lr-title { font-size:.88rem; }
+  .lr-desc  { font-size:.64rem; }
+  .lr-meta  { gap:.22rem; }
+  .lr-lock-wrap { transform:scale(.82); transform-origin:center; }
+
+  /* Topbar */
+  .prog-banner { padding:.75rem .95rem; }
+  .topbar { padding:.6rem .95rem; gap:.45rem; }
+  .tb-greeting { font-size:.72rem; padding:.26rem .7rem; }
+  .btn-settings { font-size:.7rem; padding:.26rem .65rem; min-height:40px; }
+  .tb-sub { display:none; }
+  #settings-overlay { padding:.5rem .5rem 0; align-items:flex-end; justify-content:center; }
+  #settings-overlay.open { display:flex !important; }
+  #student-settings-overlay.open { display:flex !important; }
+  #settings-modal { max-width:100%; border-radius:var(--r-xl) var(--r-xl) var(--r-lg) var(--r-lg); max-height:92vh; }
+  #toast { bottom:1.6rem; right:.85rem; left:.85rem; text-align:center; }
+  .teacher-strip { padding:.35rem .95rem; }
+}
+
+@media(max-width:640px){
+  .lr-meta { flex-wrap:wrap; justify-content:flex-end; }
+}
+
+/* ══════════════════════════════════════════════════
+   STUDENT SETTINGS BUTTON (gear icon, top-right)
+══════════════════════════════════════════════════ */
+.btn-student-settings {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px; border-radius:50%;
+  border:1.5px solid var(--border);
+  background:var(--surface2); color:var(--muted);
+  cursor:pointer; transition:all .15s; flex-shrink:0;
+  font-size:1rem;
+}
+.btn-student-settings:hover {
+  background:var(--surface3); color:var(--text);
+  border-color:var(--blue); transform:rotate(30deg);
+}
+
+/* ══════════════════════════════════════════════════
+   STUDENT SETTINGS MODAL
+══════════════════════════════════════════════════ */
+#student-settings-overlay {
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,.5); backdrop-filter:blur(6px);
+  display:none; align-items:center; justify-content:center;
+  padding:1.2rem;
+}
+#student-settings-overlay.open { display:flex; }
+#student-settings-modal {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-xl); width:100%; max-width:420px;
+  box-shadow:0 8px 32px rgba(0,0,0,.2), 0 32px 80px rgba(0,0,0,.3);
+  animation:popIn .24s cubic-bezier(.34,1.45,.64,1);
+  overflow:hidden;
+}
+.ssm-header {
+  padding:1rem 1.25rem .8rem; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  background:linear-gradient(135deg,var(--blue-lt),var(--surface2));
+}
+.ssm-title { font-family:'Secular One',sans-serif; font-size:.95rem; color:var(--text); }
+.ssm-close {
+  width:30px; height:30px; border:none; background:var(--surface3);
+  border-radius:50%; cursor:pointer; font-size:.95rem;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); transition:all .12s;
+}
+.ssm-close:hover { background:var(--border); color:var(--text); }
+.ssm-body { padding:1.2rem 1.25rem; display:flex; flex-direction:column; gap:.9rem; }
+.ssm-info {
+  font-size:.73rem; color:var(--muted); line-height:1.6;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:.7rem .9rem;
+}
+.ssm-info strong { color:var(--blue); }
+.ssm-field { display:flex; flex-direction:column; gap:.35rem; }
+.ssm-label { font-size:.68rem; font-weight:700; color:var(--muted); }
+.ssm-input {
+  width:100%; padding:.75rem 1rem; border:1.5px solid var(--border);
+  border-radius:var(--r); font-size:.9rem; outline:none;
+  transition:border-color .14s, box-shadow .16s; direction:ltr;
+  background:var(--surface); color:var(--text); min-height:48px;
+}
+.ssm-input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(26,86,219,.08); }
+.ssm-input::placeholder { color:var(--subtle); direction:rtl; }
+.ssm-save {
+  width:100%; padding:.8rem; border:none; border-radius:var(--r-sm);
+  background:var(--blue); color:#fff; font-size:.88rem; font-weight:700;
+  cursor:pointer; transition:all .12s; min-height:48px;
+  font-family:'Heebo',sans-serif;
+}
+.ssm-save:hover { background:var(--blue-dk); box-shadow:0 3px 12px rgba(26,86,219,.3); }
+.ssm-saved-preview {
+  font-size:.7rem; color:var(--green); background:var(--green-lt);
+  border:1px solid #86efac; border-radius:var(--r-sm);
+  padding:.5rem .8rem; display:none; gap:.35rem; align-items:center;
+}
+.ssm-saved-preview.show { display:flex; }
+
+/* Mobile adjustments for student settings */
+@media(max-width:660px){
+  #student-settings-overlay { padding:.5rem .5rem 0; align-items:flex-end; justify-content:center; }
+  #student-settings-modal { max-width:100%; border-radius:var(--r-xl) var(--r-xl) var(--r-lg) var(--r-lg); }
+}
+
+/* ══════════════════════════════════════════════════
+   PRINT — index page (progress summary only)
+══════════════════════════════════════════════════ */
+@media print {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+
+  /* Hide all navigation and interactive chrome */
+  .sidebar,
+  #sb-backdrop,
+  .topbar,
+  .teacher-strip,
+  .btn-hamburger,
+  .btn-student-settings,
+  #settings-overlay,
+  #student-settings-overlay,
+  #toast,
+  .btn-logout,
+  .sb-foot,
+  .unit-trigger .ut-chev,
+  .lr-lock-wrap,
+  .lr-indicator,
+  .btn-settings,
+  .tb-t-row { display:none !important; }
+
+  body, html { background:#fff !important; }
+
+  /* Make main fill full width */
+  #app.on { display:block !important; }
+  .main { width:100% !important; }
+
+  /* Progress banner — keep, print-friendly */
+  .prog-banner {
+    border:1px solid #ccc; border-radius:4px;
+    margin:0 0 .8rem; padding:.6rem 1rem;
+    background:#fff !important;
+  }
+  .prog-fill { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+
+  /* Unit cards */
+  .units-wrap { padding:.3rem 0; gap:.5rem; }
+  .unit-block {
+    border:1px solid #d1d6e5 !important;
+    border-radius:8px !important;
+    box-shadow:none !important;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .unit-trigger {
+    background:#f8f9fb !important;
+    min-height:auto !important;
+    padding:.7rem 1rem !important;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+  .unit-trigger::after { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+  .unit-body { max-height:none !important; }
+
+  /* Lesson rows */
+  .lesson-row {
+    padding:.55rem 1rem !important;
+    min-height:auto !important;
+    border-bottom:1px solid #eee !important;
+  }
+  .lesson-row.locked { opacity:1 !important; }
+
+  /* Chips */
+  .chip { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+  .ch-done { background:#f0fdf4 !important; color:#15803d !important; }
+}
+
+/* ══════════════════════════════════════════════════
+   LESSONS GRID — Static card grid
+══════════════════════════════════════════════════ */
+.lessons-section {
+  padding: 1.4rem 1.2rem 3rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+.section-title {
+  font-family: 'Secular One', sans-serif;
+  font-size: 1rem; color: var(--text);
+  display: flex; align-items: center; gap: .5rem;
+}
+.section-badge {
+  font-size: .6rem; font-weight: 800; letter-spacing: .05em;
+  padding: .18rem .65rem; border-radius: var(--r-pill);
+  background: var(--blue-lt); color: var(--blue);
+  border: 1px solid #bfdbfe;
+}
+
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: .85rem;
+}
+
+/* ── Lesson card ── */
+.lesson-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--sh1);
+  cursor: pointer;
+  transition: transform .18s cubic-bezier(.34,1.2,.64,1),
+              box-shadow .18s, border-color .15s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  display: flex; flex-direction: column;
+  position: relative;
+  animation: cardFadeIn .35s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes cardFadeIn {
+  from { opacity:0; transform:translateY(10px) scale(.98); }
+  to   { opacity:1; transform:translateY(0)    scale(1);   }
+}
+.lesson-card:nth-child(1){animation-delay:.04s}
+.lesson-card:nth-child(2){animation-delay:.08s}
+.lesson-card:nth-child(3){animation-delay:.12s}
+.lesson-card:nth-child(4){animation-delay:.16s}
+.lesson-card:nth-child(5){animation-delay:.20s}
+.lesson-card:nth-child(6){animation-delay:.24s}
+.lesson-card:nth-child(7){animation-delay:.28s}
+
+.lesson-card:not(.card-locked):hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sh2);
+  border-color: var(--card-color, var(--blue));
+}
+.lesson-card:not(.card-locked):active { transform: scale(.975); }
+.lesson-card.card-locked  { opacity: .5; cursor: default; pointer-events: none; }
+.lesson-card.card-done {
+  background: linear-gradient(160deg, var(--green-lt) 0%, var(--surface) 70%);
+}
+
+/* Color accent bar at top */
+.card-accent {
+  height: 4px;
+  background: var(--card-color, var(--blue));
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.card-body {
+  padding: .95rem 1rem .85rem;
+  flex: 1; display: flex; flex-direction: column; gap: .45rem;
+}
+
+.card-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: .5rem;
+}
+.card-em {
+  width: 42px; height: 42px; border-radius: 13px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  background: color-mix(in srgb, var(--card-color, var(--blue)) 12%, transparent);
+  position: relative;
+}
+.card-check {
+  position: absolute; top: -4px; right: -4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  font-size: .58rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--surface);
+  box-shadow: 0 1px 4px rgba(21,128,61,.4);
+}
+.card-status-wrap {
+  display: flex; flex-direction: column; align-items: flex-end; gap: .22rem;
+}
+.card-num {
+  font-size: .6rem; font-weight: 800; letter-spacing: .04em;
+  color: var(--card-color, var(--blue)); text-transform: uppercase;
+}
+.card-status {
+  display: inline-flex; align-items: center; gap: .15rem;
+  padding: .15rem .55rem; border-radius: var(--r-pill);
+  font-size: .6rem; font-weight: 700; white-space: nowrap;
+}
+.card-status.open  { background: var(--green-lt);  color: var(--green);  border: 1px solid #86efac; }
+.card-status.done  { background: #dcfce7;           color: #15803d;       border: 1px solid #86efac; font-weight:800; }
+.card-status.locked{ background: var(--surface3);  color: var(--subtle); border: 1px solid var(--border); }
+.card-status.exam  { background: var(--amber-lt);  color: var(--amber);  border: 1px solid #fde68a; }
+
+.card-title {
+  font-family: 'Secular One', sans-serif;
+  font-size: .92rem; line-height: 1.3; color: var(--text);
+}
+.card-desc {
+  font-size: .7rem; color: var(--muted); line-height: 1.5;
+  flex: 1;
+}
+
+.card-footer {
+  padding: .65rem 1rem;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface2);
+}
+.card-mins { font-size: .65rem; color: var(--subtle); }
+.btn-start {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .38rem .85rem;
+  border: none; border-radius: var(--r-pill);
+  background: var(--card-color, var(--blue));
+  color: #fff; font-size: .72rem; font-weight: 700;
+  cursor: pointer; transition: filter .14s, transform .14s;
+  font-family: 'Heebo', sans-serif; white-space: nowrap;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--card-color, var(--blue)) 35%, transparent);
+}
+.btn-start:hover  { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-start:active { transform: scale(.96); }
+.card-locked .btn-start { background: var(--border2); color: var(--muted); box-shadow: none; }
+
+/* Done-date stamp */
+.card-done-date {
+  font-size: .58rem; color: var(--green); font-weight: 700;
+}
+
+/* Teacher lock toggle inside card footer */
+.card-lock-wrap {
+  display: flex; align-items: center; gap: .3rem;
+}
+.card-lock-label { font-size: .58rem; color: var(--muted); }
+
+/* Exam card variant */
+.lesson-card.card-exam {
+  border-color: #bfdbfe;
+  background: linear-gradient(160deg, var(--blue-lt) 0%, var(--surface) 70%);
+}
+.lesson-card.card-exam .card-footer { background: var(--blue-lt); border-color: #bfdbfe; }
+
+@media (max-width: 660px) {
+  .lessons-section { padding: 1rem .7rem 2.5rem; }
+  .lessons-grid { grid-template-columns: 1fr; gap: .65rem; }
+  .lesson-card { flex-direction: row; border-radius: var(--r); }
+  .card-accent { width: 4px; height: auto; position: absolute; top: 10px; bottom: 10px; right: 0; border-radius: var(--r-pill); }
+  .card-body { padding: .85rem .9rem; }
+  .card-footer { border-top: none; border-right: 1px solid var(--border); padding: .75rem .8rem; flex-direction: column; justify-content: center; gap: .4rem; min-width: 90px; }
+}
+
+/* ══════════════════════════════════════════════════
+   FUTURE UNITS — placeholder sections
+══════════════════════════════════════════════════ */
+.section-title-future {
+  font-family: 'Secular One', sans-serif;
+  font-size: 1rem; color: var(--muted);
+  display: flex; align-items: center; gap: .5rem;
+  opacity: .8;
+}
+.section-badge-soon {
+  font-size: .6rem; font-weight: 800; letter-spacing: .05em;
+  padding: .18rem .65rem; border-radius: var(--r-pill);
+  background: var(--surface3); color: var(--subtle);
+  border: 1px solid var(--border2);
+}
+
+/* Coming-soon card */
+.lesson-card-soon {
+  background: var(--surface2);
+  border: 1.5px dashed var(--border2);
+  border-radius: var(--r-lg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 128px;
+  gap: .4rem;
+  padding: 1rem;
+  text-align: center;
+  opacity: .58;
+  cursor: default;
+  user-select: none;
+  animation: cardFadeIn .35s cubic-bezier(.22,1,.36,1) both;
+}
+.soon-icon { font-size: 1.4rem; line-height: 1; filter: grayscale(1); }
+.soon-label {
+  font-family: 'Secular One', sans-serif;
+  font-size: .78rem; color: var(--muted);
+}
+.soon-badge {
+  display: inline-flex; align-items: center; gap: .2rem;
+  font-size: .58rem; font-weight: 800; letter-spacing: .04em;
+  padding: .12rem .5rem; border-radius: var(--r-pill);
+  background: var(--amber-lt); color: var(--amber);
+  border: 1px solid #fde68a;
+}
+
+@media (max-width: 660px) {
+  .lesson-card-soon { min-height: 76px; flex-direction: row; justify-content: flex-start; padding: .8rem 1rem; gap: .65rem; }
+  .soon-icon { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="ls-stars" id="ls-stars"></div>
+  <div class="ls-glow3"></div>
+
+  <div class="ls-header">
+    <div class="ls-logo-wrap">
+      <span class="ls-logo">📚</span>
+    </div>
+    <h1 class="ls-title">לשון <em>Lesson</em></h1>
+    <p class="ls-sub-big">הפלטפורמה הדיגיטלית ללימודי עברית</p>
+    <div class="ls-badge-row">
+      <span class="ls-badge">לשון עברית</span>
+      <span class="ls-badge">כיתה י׳</span>
+      <span class="ls-badge">2026</span>
+    </div>
+  </div>
+
+  <div class="ls-cards" id="ls-cards">
+    <button class="lc lc-student" onclick="doStudentLogin()">
+      <div class="lc-icon-wrap">🎓</div>
+      <div class="lc-text">
+        <span class="lc-label">כניסת תלמיד/ה</span>
+        <span class="lc-desc">לחצו לכניסה מיידית לשיעורים</span>
+      </div>
+      <span class="lc-arrow">←</span>
+    </button>
+    <button class="lc lc-teacher" onclick="showTCP()">
+      <div class="lc-icon-wrap">🔒</div>
+      <div class="lc-text">
+        <span class="lc-label">כניסת מורה</span>
+        <span class="lc-desc">גישה לפתרונות, מדריכים וניהול</span>
+      </div>
+      <span class="lc-arrow">←</span>
+    </button>
+  </div>
+
+  <div class="ls-tcp" id="tcp">
+    <div class="tcp-name-row" id="tcp-name-row">
+      <label class="tcp-lbl" for="tname">שמכם/ן (יוצג בפלטפורמה):</label>
+      <input type="text" id="tname" class="tcp-name-in" placeholder="לדוגמה: ליאור"
+             autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('tpass').focus()">
+    </div>
+    <label class="tcp-lbl" for="tpass">קוד כניסה:</label>
+    <div class="tcp-row">
+      <input type="password" id="tpass" class="tcp-in" placeholder="••••"
+             onkeydown="if(event.key==='Enter')doTeacherLogin()" autocomplete="off">
+      <button class="tcp-go" onclick="doTeacherLogin()">כניסה ›</button>
+    </div>
+    <p class="tcp-hint">ברירת מחדל: 1234</p>
+    <button class="tcp-back" onclick="hideTCP()">← חזרה</button>
+  </div>
+</div><!-- /login-screen -->
+
+<div id="sb-backdrop" onclick="closeSidebar()"></div>
+
+<!-- ════════════════════════════════════
+     APP
+════════════════════════════════════ -->
+<div id="app">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-head">
+      <div class="sb-logo">📚 לשון עברית י׳</div>
+      <div class="sb-sub">פלטפורמה דיגיטלית 2026</div>
+    </div>
+    <div class="sb-nav" id="sb-nav"></div>
+    <div class="sb-foot">
+      <div class="user-row">
+        <div class="u-av" id="u-av"></div>
+        <span class="u-name" id="u-name">—</span>
+        <span class="role-tag" id="role-tag" style="display:none">מורה</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">↩ יציאה</button>
+      <button class="btn-switch-user" onclick="doSwitchUser()" title="החלף משתמש / תפקיד">🔄 החלף משתמש</button>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <div class="topbar">
+      <button class="btn-hamburger" onclick="openSidebar()" aria-label="תפריט">☰</button>
+      <div class="tb-text">
+        <div class="tb-title" id="tb-title">לשון עברית — כיתה י׳</div>
+        <div class="tb-sub">פלטפורמה דיגיטלית | מפמ״ר ומיצ״ב</div>
+      </div>
+      <div class="tb-t-row" id="tb-t-row" style="display:none">
+        <span class="tb-greeting" id="tb-greeting">שלום, מורה!</span>
+        <button class="btn-settings" onclick="openSettings()">⚙️ הגדרות</button>
+      </div>
+      <button class="btn-student-settings" id="btn-student-settings" onclick="openStudentSettings()" title="הגדרות" style="display:none" aria-label="הגדרות">⚙️</button>
+    </div>
+
+    <div class="teacher-strip" id="teacher-strip">
+      <span class="teacher-strip-dot"></span>
+      <span id="teacher-strip-label">מרכז ניהול פעיל</span>
+    </div>
+
+    <div class="prog-banner" id="prog-banner">
+      <div class="prog-header">
+        <span class="prog-title">התקדמות בקורס</span>
+        <span class="prog-pct" id="prog-pct">0%</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="prog-stats" id="prog-stats"></div>
+    </div>
+
+    <!-- ═══════════════════════════════
+         LESSONS GRID — יחידה 1
+    ═══════════════════════════════ -->
+    <div class="lessons-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          📘 יחידה 1 — מערכת הפועל
+        </h2>
+        <span class="section-badge">7 שיעורים</span>
+      </div>
+
+      <div class="lessons-grid" id="lessons-grid">
+
+        <!-- L0 -->
+        <div class="lesson-card" data-lesson-id="L0"
+             style="--card-color:#6366f1"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                🔤
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 0</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">מבוא וחלקי הדיבר</div>
+            <div class="card-desc">זיהוי שם עצם, פועל ותואר — מבחן ה-ה׳ ושמות פעולה</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 30′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- L1 -->
+        <div class="lesson-card" data-lesson-id="L1"
+             style="--card-color:#4f46e5"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                🌱
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 1</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">שורש ובניינים</div>
+            <div class="card-desc">השורש העברי, גזרת השלמים ושבעת הבניינים ותפקודיהם</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- L2 -->
+        <div class="lesson-card" data-lesson-id="L2"
+             style="--card-color:#0891b2"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                💧
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 2</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">בניין קל (פָּעַל)</div>
+            <div class="card-desc">סימני זיהוי, צורות הבינוני, שם הפועל והטיה מלאה</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- L3 -->
+        <div class="lesson-card" data-lesson-id="L3"
+             style="--card-color:#059669"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                ⚙️
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 3</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">הבניינים הכבדים</div>
+            <div class="card-desc">נפעל, פיעל, פועל, התפעל — זיהוי ומשמעויות</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- L4 -->
+        <div class="lesson-card" data-lesson-id="L4"
+             style="--card-color:#7c3aed"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                🔮
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 4</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">בנייני הגורם</div>
+            <div class="card-desc">הפעיל והופעל — זיהוי, פעיל מול סביל</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- L5 -->
+        <div class="lesson-card" data-lesson-id="L5"
+             style="--card-color:#b45309"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                📝
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 5</span>
+                <span class="card-status open">פתוח</span>
+              </div>
+            </div>
+            <div class="card-title">סיכום ומרובעים</div>
+            <div class="card-desc">חזרה גנרלית — כל הבניינים ושורשים מרובעים</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              התחל ←
+            </button>
+          </div>
+        </div>
+
+        <!-- L6 — Exam -->
+        <div class="lesson-card card-exam" data-lesson-id="L6"
+             style="--card-color:#c9a227"
+             onclick="handleCardClick(this)">
+          <div class="card-accent"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-em">
+                🎯
+                <div class="card-check" style="display:none">✓</div>
+              </div>
+              <div class="card-status-wrap">
+                <span class="card-num">שיעור 6</span>
+                <span class="card-status exam">📝 מבחן</span>
+              </div>
+            </div>
+            <div class="card-title">מבחן מסכם</div>
+            <div class="card-desc">מבחן סיכום — חלקי דיבר, מערכת הפועל ושם המספר</div>
+          </div>
+          <div class="card-footer">
+            <span class="card-mins">⏱ 45′</span>
+            <button class="btn-start" onclick="event.stopPropagation();handleCardClick(this.closest('.lesson-card'))">
+              פתח ←
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /lessons-grid -->
+    </div><!-- /lessons-section -->
+
+    <!-- ═══════════════════════════════
+         יחידה 2 — תצורת השם (בקרוב)
+    ═══════════════════════════════ -->
+    <div class="lessons-section" id="unit2-section" style="padding-top:.5rem">
+      <div class="section-header">
+        <h2 class="section-title-future">
+          🏷️ יחידה 2 — תצורת השם
+        </h2>
+        <span class="section-badge-soon">בקרוב</span>
+      </div>
+      <div class="lessons-grid">
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 1</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 2</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 3</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 4</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">🎯</span><span class="soon-label">מבחן סיכום</span><span class="soon-badge">⏳ בקרוב</span></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+         יחידה 3 — תחביר (בקרוב)
+    ═══════════════════════════════ -->
+    <div class="lessons-section" id="unit3-section" style="padding-top:.5rem">
+      <div class="section-header">
+        <h2 class="section-title-future">
+          🔗 יחידה 3 — תחביר
+        </h2>
+        <span class="section-badge-soon">בקרוב</span>
+      </div>
+      <div class="lessons-grid">
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 1</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 2</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 3</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 4</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">🎯</span><span class="soon-label">מבחן סיכום</span><span class="soon-badge">⏳ בקרוב</span></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+         יחידה 4 — הבנה והבעה (בקרוב)
+    ═══════════════════════════════ -->
+    <div class="lessons-section" id="unit4-section" style="padding-top:.5rem;padding-bottom:3rem">
+      <div class="section-header">
+        <h2 class="section-title-future">
+          ✍️ יחידה 4 — הבנה והבעה
+        </h2>
+        <span class="section-badge-soon">בקרוב</span>
+      </div>
+      <div class="lessons-grid">
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 1</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 2</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 3</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">📖</span><span class="soon-label">שיעור 4</span><span class="soon-badge">⏳ בקרוב</span></div>
+        <div class="lesson-card-soon"><span class="soon-icon">🎯</span><span class="soon-label">מבחן סיכום</span><span class="soon-badge">⏳ בקרוב</span></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ════════════════════════════════════
+     SETTINGS MODAL (teacher only)
+════════════════════════════════════ -->
+<div id="settings-overlay" onclick="if(event.target===this)closeSettings()">
+  <div id="settings-modal">
+    <div class="sm-header">
+      <span class="sm-title">⚙️ הגדרות מערכת</span>
+      <button class="sm-close" onclick="closeSettings()">✕</button>
+    </div>
+    <div class="sm-section">
+      <div class="sm-sec-title">👤 שם המורה</div>
+      <div class="sm-name-display">
+        <span>👋</span><span id="sm-name-text">שלום, מורה!</span>
+      </div>
+      <div class="sm-field" style="margin-top:.7rem">
+        <label class="sm-label" for="sm-tname-input">שינוי שם:</label>
+        <input type="text" id="sm-tname-input" class="sm-input" placeholder="שמכם/ן...">
+        <button class="sm-btn save" onclick="saveTeacherName()" style="display:block;width:100%;margin-top:.5rem">שמור שם</button>
+      </div>
+    </div>
+    <div class="sm-section">
+      <div class="sm-sec-title">🔒 ניהול נעילות שיעורים</div>
+      <div style="font-size:.7rem;color:var(--muted);margin-bottom:.7rem">✅ = פתוח לתלמידים &nbsp;|&nbsp; ◻ = נעול</div>
+      <div class="sm-lock-list" id="sm-lock-list"></div>
+    </div>
+    <div class="sm-section">
+      <div class="sm-sec-title">📱 פרטי קשר לקבלת עבודות תלמידים</div>
+      <div class="sm-field">
+        <label class="sm-label" for="sm-phone">וואטסאפ (ספרות בלבד):</label>
+        <input type="tel" id="sm-phone" class="sm-input" placeholder="05XXXXXXXX" dir="ltr" style="text-align:left;letter-spacing:.05em">
+      </div>
+      <div class="sm-field">
+        <label class="sm-label" for="sm-email-input">📧 כתובת מייל:</label>
+        <input type="email" id="sm-email-input" class="sm-input" placeholder="teacher@school.co.il" dir="ltr" style="text-align:left;">
+      </div>
+      <button class="sm-btn save" onclick="saveContactDetails()" style="display:block;width:100%;margin-top:.5rem">💾 שמור פרטי קשר</button>
+      <div id="sm-phone-preview" style="font-size:.7rem;color:var(--muted);margin-top:.32rem;display:none"></div>
+    </div>
+    <div class="sm-section">
+      <div class="sm-sec-title">🔑 שינוי סיסמת כניסה</div>
+      <div class="sm-field">
+        <label class="sm-label" for="sm-pass-old">סיסמה נוכחית:</label>
+        <input type="password" id="sm-pass-old" class="sm-input" placeholder="••••">
+      </div>
+      <div class="sm-field">
+        <label class="sm-label" for="sm-pass-new">סיסמה חדשה:</label>
+        <input type="password" id="sm-pass-new" class="sm-input" placeholder="סיסמה חדשה...">
+      </div>
+      <div class="sm-field">
+        <label class="sm-label" for="sm-pass-confirm">אימות:</label>
+        <input type="password" id="sm-pass-confirm" class="sm-input" placeholder="חזרו על הסיסמה...">
+      </div>
+      <button class="sm-btn save" onclick="changePassword()" style="display:block;width:100%">עדכן סיסמה</button>
+    </div>
+    <div class="sm-section">
+      <div class="sm-sec-title">🗑️ ניקוי נתונים</div>
+      <p style="font-size:.73rem;color:var(--muted);margin-bottom:.7rem;line-height:1.6;">מחיקת כל נתוני ההתקדמות וההגדרות השמורות.</p>
+      <button class="sm-btn danger" onclick="clearAllData()" style="display:block;width:100%">🗑️ נקה את כל הנתונים</button>
+    <div class="sm-section" id="sm-progress-section">
+      <div class="sm-sec-title">📊 דוח התקדמות תלמידים</div>
+      <div id="sm-progress-content" style="font-size:.76rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:.85rem;min-height:48px">
+        לחצו ״טען דוח״ לראות הגשות תלמידים שנשמרו במכשיר זה.
+      </div>
+      <button class="sm-btn save" onclick="loadStudentProgress()" style="display:block;width:100%;margin-top:.6rem">🔄 טען דוח התקדמות</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     STUDENT SETTINGS MODAL
+════════════════════════════════════ -->
+<div id="student-settings-overlay" onclick="if(event.target===this)closeStudentSettings()">
+  <div id="student-settings-modal">
+    <div class="ssm-header">
+      <span class="ssm-title">⚙️ הגדרות — פרטי מורה</span>
+      <button class="ssm-close" onclick="closeStudentSettings()">✕</button>
+    </div>
+    <div class="ssm-body">
+      <div class="ssm-info">
+        הזינו את פרטי המורה כדי לאפשר שליחת תרגולים ישירות.<br>
+        הפרטים נשמרים <strong>רק במכשיר שלכם</strong>.
+      </div>
+      <div class="ssm-field">
+        <label class="ssm-label" for="ss-email">📧 מייל המורה:</label>
+        <input type="email" id="ss-email" class="ssm-input" placeholder="teacher@school.co.il" autocomplete="off">
+      </div>
+      <div class="ssm-field">
+        <label class="ssm-label" for="ss-whatsapp">📱 וואטסאפ המורה (ספרות בלבד):</label>
+        <input type="tel" id="ss-whatsapp" class="ssm-input" placeholder="05XXXXXXXX" autocomplete="off">
+      </div>
+      <button class="ssm-save" onclick="saveStudentSettings()">💾 שמור פרטים</button>
+      <div class="ssm-saved-preview" id="ssm-preview">
+        <span>✅</span>
+        <span id="ssm-preview-text"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+/* ════════════════════════
+   GRID — lesson file map
+════════════════════════ */
+const GRID_LESSONS = {'L0': {'file': 'unit1_lesson0_intro.html', 'id': 'u1_l0'}, 'L1': {'file': 'lesson1_shoresh_binyamin_v3.html', 'id': 'u1_l1'}, 'L2': {'file': 'lesson2_binyan_kal_v3.html', 'id': 'u1_l2'}, 'L3': {'file': 'lesson3_binyanim_kvedim_v3.html', 'id': 'u1_l3'}, 'L4': {'file': 'lesson4_hifil_hufal_v3.html', 'id': 'u1_l4'}, 'L5': {'file': 'lesson5_summary_mruba_v3.html', 'id': 'u1_l5'}, 'L6': {'file': 'lesson6.html', 'id': 'u1_l6'}};
+
+/* ════════════════════════
+   GRID — lock storage (mirrors UNITS logic)
+   Uses keys like "u1_l0", "u1_l1" etc.
+════════════════════════ */
+function gridIsLocked(lessonKey) {
+  const ov = LS.get('lashon_lock_overrides', {});
+  const id = GRID_LESSONS[lessonKey]?.id;
+  if (!id) return false;
+  return id in ov ? ov[id] : false;
+}
+function gridSetLock(lessonKey, locked) {
+  const id = GRID_LESSONS[lessonKey]?.id;
+  if (!id) return;
+  const ov = LS.get('lashon_lock_overrides', {});
+  ov[id] = locked;
+  LS.set('lashon_lock_overrides', ov);
+}
+
+/* ════════════════════════
+   GRID — open lesson
+════════════════════════ */
+function handleCardClick(card) {
+  const key  = card.getAttribute('data-lesson-id');
+  const meta = GRID_LESSONS[key];
+  if (!meta) return;
+  if (gridIsLocked(key) && S.role !== 'teacher') return;
+  const url = S.role === 'teacher'
+    ? meta.file + '?role=teacher'
+    : meta.file + '?role=student';
+  window.open(url, '_blank');
+}
+
+/* ════════════════════════
+   GRID — render progress
+   Called after enterApp sets S.prog
+════════════════════════ */
+function renderGrid() {
+  const isT = S.role === 'teacher';
+  const cards = document.querySelectorAll('.lesson-card');
+
+  // progress counters
+  let totalOpen = 0, totalDone = 0;
+
+  cards.forEach(card => {
+    const key  = card.getAttribute('data-lesson-id');
+    const meta = GRID_LESSONS[key];
+    if (!meta) return;
+
+    const locked  = gridIsLocked(key) && !isT;
+    const done    = !!S.prog[meta.id]?.done;
+    const dDate   = S.prog[meta.id]?.date || '';
+    const isExam  = card.classList.contains('card-exam');
+
+    // ── Lock state ──
+    card.classList.toggle('card-locked', locked && !isT);
+
+    // ── Done state ──
+    card.classList.toggle('card-done', done && !isExam);
+
+    // ── Check badge ──
+    const check = card.querySelector('.card-check');
+    if (check) check.style.display = done ? '' : 'none';
+
+    // ── Status chip ──
+    const chip = card.querySelector('.card-status');
+    if (chip) {
+      chip.className = 'card-status ' +
+        (locked && !isT ? 'locked' :
+         isExam         ? 'exam'   :
+         done           ? 'done'   : 'open');
+      chip.textContent =
+        locked && !isT ? '🔒 נעול' :
+        isExam         ? '📝 מבחן' :
+        done           ? '✅ בוצע'  : 'פתוח';
+    }
+
+    // ── Done date ──
+    let dateEl = card.querySelector('.card-done-date');
+    if (done && dDate) {
+      if (!dateEl) {
+        dateEl = document.createElement('span');
+        dateEl.className = 'card-done-date';
+        card.querySelector('.card-footer')?.prepend(dateEl);
+      }
+      dateEl.textContent = '✓ ' + dDate;
+    } else if (dateEl) {
+      dateEl.remove();
+    }
+
+    // ── Teacher lock toggle ──
+    const footer = card.querySelector('.card-footer');
+    let lockWrap = card.querySelector('.card-lock-wrap');
+    if (isT) {
+      if (!lockWrap) {
+        lockWrap = document.createElement('div');
+        lockWrap.className = 'card-lock-wrap';
+        lockWrap.onclick = e => e.stopPropagation();
+        lockWrap.innerHTML = `
+          <span class="card-lock-label"></span>
+          <label class="lr-toggle" title="נעל/פתח">
+            <input type="checkbox" onchange="gridSetLock('${key}',!this.checked);renderGrid();toast(this.checked?'🔓 נפתח':'🔒 ננעל')">
+            <span class="lr-slider"></span>
+          </label>`;
+        footer?.appendChild(lockWrap);
+      }
+      const isLockedNow = gridIsLocked(key);
+      const lbl  = lockWrap.querySelector('.card-lock-label');
+      const chk  = lockWrap.querySelector('input[type=checkbox]');
+      if (lbl) lbl.textContent = isLockedNow ? 'נעול' : 'פתוח';
+      if (chk) chk.checked = !isLockedNow;
+    } else if (lockWrap) {
+      lockWrap.remove();
+    }
+
+    // ── Progress counters ──
+    if (!locked || isT) totalOpen++;
+    if (done)            totalDone++;
+  });
+
+  // ── Progress banner (student only) ──
+  if (!isT) {
+    const pct = totalOpen ? Math.round(totalDone / totalOpen * 100) : 0;
+    const fill = document.getElementById('prog-fill');
+    const pctEl = document.getElementById('prog-pct');
+    const stats = document.getElementById('prog-stats');
+    if (fill)  fill.style.width  = pct + '%';
+    if (pctEl) pctEl.textContent = pct + '%';
+    if (stats) stats.innerHTML   =
+      `<span class="prog-stat"><b>${totalOpen}</b> שיעורים פתוחים</span>` +
+      `<span class="prog-stat"><b>${totalDone}</b> הושלמו</span>` +
+      `<span class="prog-stat"><b>${totalOpen - totalDone}</b> נותרו</span>`;
+  }
+
+  // ── Sidebar links ──
+  const sbNav = document.getElementById('sb-nav');
+  if (sbNav) sbNav.innerHTML = `
+    <div class="sb-section-label">יחידות הקורס</div>
+    <button class="sb-link active" onclick="document.getElementById('lessons-grid')?.scrollIntoView({behavior:'smooth'});closeSidebar()">
+      <span class="sb-em">📘</span>
+      <span>יחידה 1 — מערכת הפועל</span>
+    </button>
+    <button class="sb-link" onclick="document.getElementById('unit2-section')?.scrollIntoView({behavior:'smooth'});closeSidebar()" style="opacity:.6">
+      <span class="sb-em">🏷️</span>
+      <span>יחידה 2 — תצורת השם</span>
+    </button>
+    <button class="sb-link" onclick="document.getElementById('unit3-section')?.scrollIntoView({behavior:'smooth'});closeSidebar()" style="opacity:.6">
+      <span class="sb-em">🔗</span>
+      <span>יחידה 3 — תחביר</span>
+    </button>
+    <button class="sb-link" onclick="document.getElementById('unit4-section')?.scrollIntoView({behavior:'smooth'});closeSidebar()" style="opacity:.6">
+      <span class="sb-em">✍️</span>
+      <span>יחידה 4 — הבנה והבעה</span>
+    </button>`;
+}
+
+/* ════════════════════════
+   GRID — settings lock list
+   replaces buildLockList for grid mode
+════════════════════════ */
+function buildGridLockList() {
+  const list = document.getElementById('sm-lock-list');
+  if (!list) return;
+  list.innerHTML = '';
+  const NAMES = {
+    L0: {emoji:'🔤', title:'מבוא וחלקי הדיבר',     short:'שיעור 0'},
+    L1: {emoji:'🌱', title:'שורש ובניינים',          short:'שיעור 1'},
+    L2: {emoji:'💧', title:'בניין קל (פָּעַל)',       short:'שיעור 2'},
+    L3: {emoji:'⚙️', title:'הבניינים הכבדים',        short:'שיעור 3'},
+    L4: {emoji:'🔮', title:'בנייני הגורם',           short:'שיעור 4'},
+    L5: {emoji:'📝', title:'סיכום ומרובעים',          short:'שיעור 5'},
+    L6: {emoji:'🎯', title:'מבחן מסכם',              short:'שיעור 6'},
+  };
+  Object.entries(NAMES).forEach(([key, info]) => {
+    const locked = gridIsLocked(key);
+    list.innerHTML += `
+      <div class="sm-lock-item">
+        <span class="sm-lock-emoji">${info.emoji}</span>
+        <div class="sm-lock-info">
+          <div class="sm-lock-name">${info.title}</div>
+          <div class="sm-lock-unit">יחידה 1 · ${info.short}</div>
+        </div>
+        <label class="sm-toggle" title="${locked?'פתח':'נעל'}">
+          <input type="checkbox" ${!locked?'checked':''}
+                 onchange="gridSetLock('${key}',!this.checked);renderGrid();toast(this.checked?'🔓 נפתח':'🔒 ננעל')">
+          <span class="sm-slider"></span>
+        </label>
+      </div>`;
+  });
+}
+
+const DEFAULT_PASS='1234';
+
+/* ════════════════════════
+   DATA
+════════════════════════ */
+const UNITS=[
+  {
+    id:'u1',emoji:'📘',label:'יחידה 1',title:'מערכת הפועל',color:'#4f46e5',
+    lessons:[
+      {id:'u1_l0',short:'שיעור 0',emoji:'🌟',color:'#6366f1',mins:30,locked:false,exam:false,
+       title:'מבוא למערכת הפועל',desc:'מבנה הפועל העברי — מבוא ויסודות',
+       file:'unit1_lesson0_intro.html'},
+      {id:'u1_l1',short:'שיעור 1',emoji:'🌱',color:'#4f46e5',mins:45,locked:false,exam:false,
+       title:'גזרת השלמים - תרגול והעמקה',desc:'מבנה הפועל העברי ושבעת הבניינים ותפקודיהם',
+       file:'lesson1_shoresh_binyamin_v3.html'},
+      {id:'u1_l2',short:'שיעור 2',emoji:'💧',color:'#0891b2',mins:45,locked:false,exam:false,
+       title:'בניין קַל',desc:'גזרת השלמים — עבר, הווה, עתיד וציווי',
+       file:'lesson2_binyan_kal_v3.html'},
+      {id:'u1_l3',short:'שיעור 3',emoji:'⚡',color:'#059669',mins:45,locked:false,exam:false,
+       title:'הבניינים הכבדים',desc:'פיעל, פועל, התפעל — צורות ומשמעויות',
+       file:'lesson3_binyanim_kvedim_v3.html'},
+      {id:'u1_l4',short:'שיעור 4',emoji:'🔮',color:'#7c3aed',mins:45,locked:false,exam:false,
+       title:'בנייני הגורם',desc:'הפעיל, הופעל — שורשים, צורות ומשמעויות',
+       file:'lesson4_hifil_hufal_v3.html'},
+      {id:'u1_l5',short:'שיעור 5',emoji:'🏙️',color:'#b45309',mins:45,locked:false,exam:false,
+       title:'סיכום + מרובעים',desc:'חזרה על שבעת הבניינים ושורשים מרובעים',
+       file:'lesson5_summary_mruba_v3.html'},
+      {id:'u1_exam',short:'מבחן סיכום',emoji:'🎯',color:'#c9a227',mins:45,locked:false,exam:true,theory:true,
+       title:'מבחן סיכום יחידה 1',desc:'מבחן מסכם — מערכת הפועל ושבעת הבניינים',
+       file:'lesson6_bagrut_exam_v3.html',solFile:'lesson6_bagrut_exam_v3.html?sol=1'},
+    ]
+  },
+  {
+    id:'u2',emoji:'🏷️',label:'יחידה 2',title:'מערכת השם',color:'#0f766e',
+    lessons:[
+      {id:'u2_l1',short:'שיעור 1',emoji:'🏷️',color:'#0f766e',mins:45,locked:false,exam:false,
+       title:'שורש ומשקל',desc:'הקשר בין שורש לצורת המשקל ומשמעויותיו',
+       file:'unit2_lesson1.html'},
+      {id:'u2_l2',short:'שיעור 2',emoji:'🔤',color:'#0284c7',mins:45,locked:false,exam:false,
+       title:'בסיס וסיומת',desc:'מרכיבי המילה — בסיס, סיומת ותפקידם',
+       file:'unit2_lesson2.html'},
+      {id:'u2_l3',short:'שיעור 3',emoji:'🔀',color:'#7c3aed',mins:45,locked:false,exam:false,
+       title:'דרכי תצורה',desc:'גזירה, הרכבה והיתוך — שלוש דרכי יצירת מילים',
+       file:'unit2_lesson3.html'},
+      {id:'u2_l4',short:'שיעור 4',emoji:'🏷️',color:'#b45309',mins:45,locked:false,exam:false,
+       title:'משמעויות ותפקודים',desc:'משמעויות מרובות, הקשר ותפקוד בטקסט',
+       file:'unit2_lesson4.html'},
+      {id:'u2_l5',short:'סיכום',emoji:'⭐',color:'#1a7a3c',mins:45,locked:false,exam:false,
+       title:'סיכום יחידה 2',desc:'חזרה מקיפה על כל נושאי מערכת השם',
+       file:'unit2_lesson5.html'},
+      {id:'u2_exam',short:'מבחן סיכום',emoji:'📝',color:'#c9a227',mins:40,locked:false,exam:true,
+       title:'מבחן סיכום יחידה 2',desc:'מבחן מסכם — מערכת השם',
+       file:'unit2_exam.html',solFile:'unit2_exam.html?sol=1'},
+    ]
+  },
+  {
+    id:'u3',emoji:'🌳',label:'יחידה 3',title:'גזרות הפועל',color:'#15803d',
+    lessons:[
+      {id:'u3_l0',short:'שיעור 0',emoji:'🔊',color:'#be185d',mins:45,locked:false,exam:false,
+       title:'תורת ההגה (מבוא)',
+       desc:'עיצורים גרוניים, תנועות, שווא ודגש — הכלים לגזרות',
+       file:'unit3_lesson0_phonology_v3.html'},
+      {id:'u3_l1',short:'שיעור 1',emoji:'🌳',color:'#16a34a',mins:45,locked:false,exam:false,
+       title:'מבוא למערכת הפועל וגזרת השלמים',
+       desc:'זיהוי שורשים שלמים ומרובעים, הבחנה בין אותיות שורש לאית"ן ומבוא לגזרות',
+       file:'unit3_lesson1_shelamim_v3.html'},
+      {id:'u3_l2',short:'שיעור 2',emoji:'🔡',color:'#9d174d',mins:45,locked:false,exam:false,
+       title:'גזרת הגרוניים',
+       desc:'פעלים עם א ה ח ע — שינויי ניקוד, דגש חסר וחטף',
+       file:'unit3_lesson2.html'},
+      {id:'u3_l3',short:'שיעור 3',emoji:'🔤',color:'#831843',mins:45,locked:false,exam:false,
+       title:'גזרת הנחים (ל"א ו-ל"ה)',
+       desc:'פעלים המסתיימים ב-א׳ או ה׳ — שינויי נטייה וכללי ההבחנה',
+       file:'unit3_lesson3.html'},
+    ]
+  }
+];
+
+/* ════════════════════════
+   STATE & STORAGE
+════════════════════════ */
+const S={role:'',name:'',prog:{}};
+const LS={
+  get(k,fb=null){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):fb;}catch(e){return fb;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}},
+  del(k){try{localStorage.removeItem(k);}catch(e){}}
+};
+
+function isLocked(id,base){
+  const ov=LS.get('lashon_lock_overrides',{});
+  return id in ov ? ov[id] : base;
+}
+function setLockOverride(id,locked){
+  const ov=LS.get('lashon_lock_overrides',{});
+  ov[id]=locked;
+  LS.set('lashon_lock_overrides',ov);
+}
+
+/* ════════════════════════
+   TOAST
+════════════════════════ */
+let _tt;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+/* ════════════════════════
+   PASSWORD
+════════════════════════ */
+async function hashPass(raw){
+  if(!raw)return'';
+  try{
+    const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('lashon_v7_'+raw));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }catch(e){
+    let h=5381;
+    for(let i=0;i<raw.length;i++)h=((h<<5)+h)^raw.charCodeAt(i);
+    return'fb_'+(h>>>0).toString(16);
+  }
+}
+async function verifyPass(raw){
+  const s=LS.get('lashon_tpass','');
+  if(!s)return raw===DEFAULT_PASS;
+  return(await hashPass(raw))===s;
+}
+
+/* ════════════════════════
+   STARFIELD
+════════════════════════ */
+function buildStars(){
+  const c=document.getElementById('ls-stars');
+  if(!c)return;
+  for(let i=0;i<55;i++){
+    const s=document.createElement('span');
+    const sz=Math.random()*2.2+.6;
+    s.style.cssText=`
+      width:${sz}px;height:${sz}px;
+      top:${Math.random()*100}%;
+      left:${Math.random()*100}%;
+      --d:${(Math.random()*4+2.5).toFixed(1)}s;
+      --op:${(Math.random()*.35+.08).toFixed(2)};
+      animation-delay:${(Math.random()*5).toFixed(1)}s;
+    `;
+    c.appendChild(s);
+  }
+}
+
+/* ════════════════════════
+   LOGIN
+════════════════════════ */
+function showTCP(){
+  document.getElementById('ls-cards').style.opacity='.28';
+  document.getElementById('ls-cards').style.pointerEvents='none';
+  const saved=LS.get('lashon_tname','');
+  if(!saved)document.getElementById('tcp-name-row').classList.add('show');
+  document.getElementById('tcp').classList.add('open');
+  setTimeout(()=>{
+    const n=document.getElementById('tname'),p=document.getElementById('tpass');
+    if(!saved&&n)n.focus();else p.focus();
+  },80);
+}
+function hideTCP(){
+  document.getElementById('ls-cards').style.opacity='';
+  document.getElementById('ls-cards').style.pointerEvents='';
+  document.getElementById('tcp').classList.remove('open');
+  document.getElementById('tcp-name-row').classList.remove('show');
+  document.getElementById('tpass').value='';
+}
+
+function doStudentLogin(){
+  LS.del('lashon_tpass');LS.del('lashon_tname');
+  window.history.replaceState({},'',window.location.pathname);
+  LS.set('lashon_role','student');
+  LS.set('lashon_uname','תלמיד/ה');
+  // sync legacy key used by lesson pages
+  localStorage.setItem('userRole','student');
+  fadeOutLogin(()=>enterApp('student','תלמיד/ה'));
+}
+
+async function doTeacherLogin(){
+  const pi=document.getElementById('tpass');
+  const pass=(pi.value||'').trim();
+  if(!pass){
+    pi.classList.add('shake');
+    setTimeout(()=>pi.classList.remove('shake'),360);
+    toast('⚠️ הזינו קוד כניסה');return;
+  }
+  const ok=await verifyPass(pass);
+  if(!ok){toast('❌ קוד שגוי');pi.value='';pi.focus();return;}
+  const nameVal=(document.getElementById('tname').value||'').trim();
+  const tname=nameVal||LS.get('lashon_tname','')||'מורה';
+  const h=await hashPass(pass);
+  LS.set('lashon_tpass',h);LS.set('lashon_tname',tname);
+  LS.set('lashon_role','teacher');LS.set('lashon_uname',tname);
+  // sync legacy key used by lesson pages
+  localStorage.setItem('userRole','teacher');
+  window.location.href=window.location.pathname+'?role=teacher';
+}
+
+function fadeOutLogin(cb){
+  const ls=document.getElementById('login-screen');
+  ls.style.transition='opacity .4s ease';
+  ls.style.opacity='0';
+  setTimeout(()=>{ls.style.display='none';cb();},400);
+}
+
+function doLogout(){
+  ['lashon_role','lashon_uname','lashon_tpass','lashon_tname'].forEach(k=>LS.del(k));
+  localStorage.removeItem('userRole'); // sync legacy key
+  window.history.replaceState({},'',window.location.pathname);
+  document.getElementById('app').classList.remove('on');
+  const ls=document.getElementById('login-screen');
+  ls.style.opacity='0';
+  ls.style.removeProperty('display');
+  requestAnimationFrame(()=>{
+    ls.style.transition='opacity .35s ease';
+    ls.style.opacity='1';
+  });
+  hideTCP();
+  S.role='';S.name='';
+}
+
+/* ════════════════════════
+   INIT
+════════════════════════ */
+function initApp(){
+  buildStars();
+  const params=new URLSearchParams(window.location.search);
+  const urlRole=params.get('role');
+  const savedRole=LS.get('lashon_role','');
+  const tpass=LS.get('lashon_tpass','');
+  if(urlRole==='teacher'&&!tpass){doLogout();return;}
+  if(urlRole==='teacher'){
+    const name=LS.get('lashon_tname','')||'מורה';
+    LS.set('lashon_role','teacher');
+    const ls=document.getElementById('login-screen');
+    ls.style.display='none';
+    enterApp('teacher',name);return;
+  }
+  if(savedRole==='teacher'&&tpass){window.location.href=window.location.pathname+'?role=teacher';return;}
+  if(savedRole==='student'){
+    const name=LS.get('lashon_uname','')||'תלמיד/ה';
+    document.getElementById('login-screen').style.display='none';
+    enterApp('student',name);return;
+  }
+}
+
+/* ════════════════════════
+   ENTER APP
+════════════════════════ */
+function enterApp(role,name){
+  S.role=role;S.name=name;
+  S.prog=LS.get('lashon_prog_'+name,{});
+  document.getElementById('app').classList.add('on');
+  const av=document.getElementById('u-av');
+  av.textContent=name.trim()[0]||(role==='teacher'?'מ':'ת');
+  av.className='u-av '+(role==='teacher'?'t':'s');
+  document.getElementById('u-name').textContent=name;
+  document.getElementById('role-tag').style.display=role==='teacher'?'':'none';
+
+  const tRow=document.getElementById('tb-t-row');
+  if(role==='teacher'){
+    tRow.style.display='flex';
+    document.getElementById('tb-greeting').textContent='שלום, '+name+'!';
+    document.getElementById('tb-title').textContent=name+' — מרכז ניהול';
+  } else {
+    tRow.style.display='none';
+    document.getElementById('tb-title').textContent='לשון עברית — כיתה י׳';
+  }
+  document.getElementById('prog-banner').style.display=role==='teacher'?'none':'';
+  const btnSS = document.getElementById('btn-student-settings');
+  if (btnSS) btnSS.style.display = role === 'student' ? 'inline-flex' : 'none';
+  const strip=document.getElementById('teacher-strip');
+  if(strip){
+    if(role==='teacher'){
+      strip.classList.add('on');
+      document.getElementById('teacher-strip-label').textContent='שלום, '+name+' | מרכז ניהול פעיל — כל הכלים זמינים';
+    } else {
+      strip.classList.remove('on');
+    }
+  }
+  render();
+}
+
+/* ════════════════════════
+   RENDER
+════════════════════════ */
+function render(){
+  const isT=S.role==='teacher';
+  document.getElementById('sb-nav').innerHTML=UNITS.map(u=>`
+    <button class="sb-link" onclick="jumpUnit('${u.id}',this)">
+      <span class="sb-em">${u.emoji}</span>
+      <span>${u.label}: ${u.title}</span>
+    </button>`).join('');
+
+  if(!isT){
+    const all=UNITS.flatMap(u=>u.lessons.filter(l=>!isLocked(l.id,l.locked)));
+    const done=all.filter(l=>S.prog[l.id]?.done);
+    const pct=all.length?Math.round(done.length/all.length*100):0;
+    document.getElementById('prog-fill').style.width=pct+'%';
+    document.getElementById('prog-pct').textContent=pct+'%';
+    document.getElementById('prog-stats').innerHTML=
+      `<span class="prog-stat"><b>${all.length}</b> שיעורים פתוחים</span>`+
+      `<span class="prog-stat"><b>${done.length}</b> הושלמו</span>`+
+      `<span class="prog-stat"><b>${all.length-done.length}</b> נותרו</span>`;
+  }
+
+  const wrap=document.getElementById('units-wrap');
+  wrap.classList.remove('fading');
+  void wrap.offsetWidth;
+  wrap.classList.add('fading');
+  wrap.innerHTML=UNITS.map(u=>buildUnit(u,isT)).join('');
+  const first=wrap.querySelector('.unit-trigger');
+  if(first)openUnit(first);
+}
+
+/* ════════════════════════
+   UNIT COLOR MAP
+════════════════════════ */
+const UNIT_STYLES={
+  u1:{ color:'#4f46e5', colorLt:'#eef2ff' },
+  u2:{ color:'#0f766e', colorLt:'#f0fdfa' },
+  u3:{ color:'#15803d', colorLt:'#f0fdf4' }
+};
+
+/* ════════════════════════
+   BUILD UNIT
+════════════════════════ */
+function buildUnit(u,isT){
+  const open=u.lessons.filter(l=>!isLocked(l.id,l.locked));
+  const done=open.filter(l=>S.prog[l.id]?.done);
+  const pct=open.length?Math.round(done.length/open.length*100):0;
+  const st=UNIT_STYLES[u.id]||{color:'#1a56db',colorLt:'#eff4ff'};
+  return`
+<div class="unit-block" id="ub-${u.id}" style="--ut-color:${st.color};--ut-color-lt:${st.colorLt}">
+  <button class="unit-trigger" onclick="toggleUnit(this)">
+    <div class="ut-em-wrap"><span class="ut-em">${u.emoji}</span></div>
+    <div class="ut-body">
+      <div class="ut-label">${u.label}</div>
+      <div class="ut-name">${u.title}</div>
+      <div class="ut-meta">${open.length} שיעורים פתוחים${!isT?' · '+done.length+' הושלמו':''}</div>
+    </div>
+    <div class="ut-right">
+      ${!isT?`<div class="ut-bar-wrap">
+        <div class="ut-bar-track"><div class="ut-bar-fill" style="width:${pct}%"></div></div>
+        <div class="ut-bar-pct">${pct}%</div>
+      </div>`:''}
+      <span class="ut-chev">▼</span>
+    </div>
+  </button>
+  <div class="unit-body">
+    ${u.lessons.map(l=>buildLessonRow(l,isT)).join('')}
+  </div>
+</div>`;
+}
+
+/* ════════════════════════
+   BUILD LESSON ROW
+════════════════════════ */
+function buildLessonRow(l,isT){
+  const locked=isLocked(l.id,l.locked);
+  const done  =!!S.prog[l.id]?.done;
+  const dDate =S.prog[l.id]?.date||'';
+  const sUrl  =l.file+'?role=student';
+  const tUrl  =isT?l.file+'?role=teacher':null;
+
+  // ── Determine click target ──
+  let clickHandler='';
+  if(isT){
+    const tOpenUrl=l.exam&&l.solFile ? l.solFile : tUrl;
+    clickHandler=`onclick="openLesson('${tOpenUrl}')"`;
+  } else if(!locked){
+    clickHandler=`onclick="openLesson('${sUrl}')"`;
+  }
+
+  // ── Inline indicator: chevron for open, lock for locked ──
+  const indicator=locked
+    ? `<span class="lr-indicator lr-lock-icon">🔒</span>`
+    : `<span class="lr-indicator lr-chevron-icon">‹</span>`;
+
+  // ── Teacher lock toggle (inline, right side) ──
+  let lockToggle='';
+  if(isT){
+    const chkId='lt-'+l.id;
+    lockToggle=`
+      <div class="lr-lock-wrap" onclick="event.stopPropagation()">
+        <span class="lr-lock-label">${locked?'נעול':'פתוח'}</span>
+        <label class="lr-toggle" title="${locked?'לחץ לפתיחה':'לחץ לנעילה'}">
+          <input type="checkbox" id="${chkId}" ${!locked?'checked':''}
+                 onchange="quickToggleLock('${l.id}',this.checked)">
+          <span class="lr-slider"></span>
+        </label>
+      </div>`;
+  }
+
+  const examLabel=l.exam
+    ? (l.theory
+        ? '<div class="theory-label">תיאוריה ופתרונות</div>'
+        : '<div class="exam-label">משימת סיכום</div>')
+    : '';
+
+  const chip=locked?'<span class="chip ch-lock">🔒 נעול</span>'
+            :l.exam ?'<span class="chip ch-exam">📝 מבחן</span>'
+            :done   ?'<span class="chip ch-done">✅ בוצע</span>'
+                    :'<span class="chip ch-open">פתוח</span>';
+
+  return`
+<div class="lesson-row${locked&&!isT?' locked':''}${l.exam?' exam-row':''}${done?' is-done':''}" style="--lr-color:${l.color}" ${clickHandler}>
+  <div class="lr-em-wrap">
+    <div class="lr-em" style="background:${l.color}18">${l.emoji}</div>
+    ${done?'<div class="lr-done-badge">✓</div>':''}
+  </div>
+  <div class="lr-info">
+    ${examLabel}
+    <div class="lr-short">${l.short}</div>
+    <div class="lr-title">${l.title}</div>
+    <div class="lr-desc">${l.desc}</div>
+  </div>
+  <div class="lr-meta">
+    ${chip}
+    <span class="lr-mins">${l.mins}′</span>
+    ${done&&dDate?`<span class="done-stamp">✓ ${dDate}</span>`:''}
+    ${lockToggle}
+  </div>
+  ${indicator}
+</div>`;
+}
+
+/* ════════════════════════
+   SIDEBAR DRAWER
+════════════════════════ */
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sb-backdrop').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-backdrop').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+/* ════════════════════════
+   ACCORDION
+════════════════════════ */
+function toggleUnit(t){t.classList.contains('open')?closeUnit(t):openUnit(t);}
+function openUnit(t){
+  t.classList.add('open');t.nextElementSibling.classList.add('open');
+  const uid=t.closest('.unit-block').id.replace('ub-','');
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.toggle('active',l.getAttribute('onclick')?.includes(uid)));
+}
+function closeUnit(t){t.classList.remove('open');t.nextElementSibling.classList.remove('open');}
+function jumpUnit(uid,sb){
+  const el=document.getElementById('ub-'+uid);if(!el)return;
+  const t=el.querySelector('.unit-trigger');
+  if(!t.classList.contains('open'))openUnit(t);
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.toggle('active',l===sb));
+  closeSidebar();
+}
+function openLesson(url){window.open(url,'_blank');}
+
+/* ════════════════════════
+   INLINE LOCK TOGGLE
+════════════════════════ */
+function quickToggleLock(id,open){
+  setLockOverride(id,!open);
+  toast(open?'🔓 נפתח לתלמידים':'🔒 ננעל');
+  render();
+}
+
+/* ════════════════════════
+   SETTINGS MODAL
+════════════════════════ */
+function openSettings(){
+  if(S.role!=='teacher')return;
+  const name=LS.get('lashon_tname','')||S.name||'מורה';
+  const smName=document.getElementById('sm-name-text');
+  if(smName)smName.textContent='שלום, '+name+'!';
+  const smInput=document.getElementById('sm-tname-input');
+  if(smInput)smInput.value=name;
+  const phone=LS.get('lashon_teacher_phone','')||'';
+  const smPhone=document.getElementById('sm-phone');
+  if(smPhone)smPhone.value=phone;
+  updatePhonePreview(phone);
+  const emailVal=LS.get('lashon_teacher_email','')||LS.get('teacher_email','')||'';
+  const emailInp=document.getElementById('sm-email-input');
+  if(emailInp)emailInp.value=emailVal;
+  ['sm-pass-old','sm-pass-new','sm-pass-confirm'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  buildLockList();
+  loadStudentProgress();
+  const ov=document.getElementById('settings-overlay');
+  if(ov){ov.classList.add('open');document.body.style.overflow='hidden';}
+}
+function closeSettings(){
+  const ov=document.getElementById('settings-overlay');
+  if(ov)ov.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function buildLockList(){
+  const list=document.getElementById('sm-lock-list');if(!list)return;
+  list.innerHTML='';
+  UNITS.forEach(u=>{
+    u.lessons.forEach(l=>{
+      const locked=isLocked(l.id,l.locked);
+      list.innerHTML+=`
+        <div class="sm-lock-item">
+          <span class="sm-lock-emoji">${l.emoji}</span>
+          <div class="sm-lock-info">
+            <div class="sm-lock-name">${l.title}</div>
+            <div class="sm-lock-unit">${u.label} · ${l.short}</div>
+          </div>
+          <label class="sm-toggle" title="${locked?'פתח':'נעל'}">
+            <input type="checkbox" ${!locked?'checked':''}
+                   onchange="toggleLock('${l.id}',this.checked)">
+            <span class="sm-slider"></span>
+          </label>
+        </div>`;
+    });
+  });
+}
+
+function toggleLock(id,open){
+  setLockOverride(id,!open);
+  render();
+  buildLockList();
+  toast(open?'🔓 השיעור נפתח':'🔒 השיעור ננעל');
+}
+
+function saveTeacherName(){
+  const val=(document.getElementById('sm-tname-input').value||'').trim();
+  if(!val){toast('⚠️ הזינו שם');return;}
+  LS.set('lashon_tname',val);LS.set('lashon_uname',val);
+  S.name=val;
+  document.getElementById('sm-name-text').textContent='שלום, '+val+'!';
+  document.getElementById('tb-greeting').textContent='שלום, '+val+'!';
+  document.getElementById('tb-title').textContent=val+' — מרכז ניהול';
+  const sl=document.getElementById('teacher-strip-label');
+  if(sl)sl.textContent='שלום, '+val+' | מרכז ניהול פעיל — כל הכלים זמינים';
+  document.getElementById('u-name').textContent=val;
+  const av=document.getElementById('u-av');av.textContent=val.trim()[0]||'מ';
+  toast('✅ שם עודכן: '+val);
+}
+
+function savePhone(){
+  const val=(document.getElementById('sm-phone').value||'').replace(/\D/g,'');
+  if(val&&val.length<9){toast('⚠️ מספר לא תקין');return;}
+  LS.set('lashon_teacher_phone',val);
+  updatePhonePreview(val);
+  toast(val?'✅ מספר נשמר: '+val:'✅ מספר נמחק');
+}
+function updatePhonePreview(phone){
+  const prev=document.getElementById('sm-phone-preview');if(!prev)return;
+  if(phone){
+    const wa='https://wa.me/972'+phone.replace(/^0/,'');
+    prev.style.display='block';
+    prev.innerHTML='קישור וואטסאפ: <a href="'+wa+'" target="_blank" style="color:var(--blue)">'+wa+'</a>';
+  }else{prev.style.display='none';}
+}
+
+async function changePassword(){
+  const oldV=(document.getElementById('sm-pass-old').value||'').trim();
+  const newV=(document.getElementById('sm-pass-new').value||'').trim();
+  const conf=(document.getElementById('sm-pass-confirm').value||'').trim();
+  if(!oldV||!newV||!conf){toast('⚠️ מלאו את כל השדות');return;}
+  if(newV!==conf){toast('❌ הסיסמאות אינן תואמות');return;}
+  if(newV.length<4){toast('⚠️ סיסמה חייבת להיות לפחות 4 תווים');return;}
+  const ok=await verifyPass(oldV);
+  if(!ok){toast('❌ סיסמה נוכחית שגויה');return;}
+  const h=await hashPass(newV);
+  LS.set('lashon_tpass',h);
+  ['sm-pass-old','sm-pass-new','sm-pass-confirm'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  toast('✅ סיסמה עודכנה בהצלחה!');
+}
+
+function clearAllData(){
+  if(!confirm('האם אתה בטוח? פעולה זו תמחק את כל נתוני ההתקדמות וההגדרות.'))return;
+  const keys=Object.keys(localStorage).filter(k=>k.startsWith('lashon_'));
+  keys.forEach(k=>localStorage.removeItem(k));
+  toast('🗑️ כל הנתונים נמחקו');
+  closeSettings();
+  setTimeout(()=>doLogout(),600);
+}
+
+/* ════════════════════════
+   LESSON DONE
+════════════════════════ */
+window.lessonDone=function(id,date){
+  S.prog[id]={done:true,date:date||new Date().toLocaleDateString('he-IL')};
+  LS.set('lashon_prog_'+S.name,S.prog);
+  render();
+  toast('✅ השיעור הוגש בהצלחה!');
+};
+
+/* ════════════════════════
+   SEND WORK TO TEACHER
+   ── גלובלי — זמין בכל שיעור ──
+════════════════════════ */
+window.sendWorkToTeacher = function(content, lessonTitle) {
+  const email = localStorage.getItem('teacher_email')
+    ? JSON.parse(localStorage.getItem('teacher_email')) : '';
+  const wa    = localStorage.getItem('teacher_whatsapp')
+    ? JSON.parse(localStorage.getItem('teacher_whatsapp')) : '';
+
+  if (!email && !wa) {
+    const go = confirm('לא הוגדרו פרטי מורה.\nלחצו אישור כדי לפתוח הגדרות.');
+    if (go) {
+      // If called from lesson page, open settings URL
+      if (window.opener) { window.opener.postMessage({type:'openStudentSettings'},'*'); }
+      else { alert('כנסו לדף הראשי → הגדרות (⚙️) והזינו פרטי מורה.'); }
+    }
+    return;
+  }
+
+  const title  = lessonTitle || document.title || 'שיעור';
+  const student= localStorage.getItem('lashon_uname')
+    ? JSON.parse(localStorage.getItem('lashon_uname')) : 'תלמיד/ה';
+  const msg    = `📚 ${title}\n👤 תלמיד/ה: ${student}\n\n${content}`;
+
+  if (wa) {
+    const phone = '972' + wa.replace(/^0/, '');
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+  } else if (email) {
+    const subject = encodeURIComponent(`📚 תרגיל: ${title} — ${student}`);
+    const body    = encodeURIComponent(msg);
+    window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
+  }
+};
+
+/* ════════════════════════
+   SAVE CONTACT DETAILS (teacher settings)
+   שומר וואטסאפ + מייל תחת שני מפתחות:
+   lashon_teacher_phone / teacher_whatsapp  (לתאום עם שיעורים)
+   lashon_teacher_email / teacher_email
+════════════════════════ */
+function saveContactDetails() {
+  const phone = (document.getElementById('sm-phone').value||'').replace(/\D/g,'');
+  const email = (document.getElementById('sm-email-input').value||'').trim();
+  if (phone && phone.length < 9) { toast('⚠️ מספר טלפון לא תקין'); return; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('⚠️ כתובת מייל לא תקינה'); return; }
+  // store under both key-names so lesson pages find them
+  LS.set('lashon_teacher_phone', phone);
+  LS.set('teacher_whatsapp',     phone);
+  LS.set('lashon_teacher_email', email);
+  LS.set('teacher_email',        email);
+  updatePhonePreview(phone);
+  const parts = [];
+  if (phone) parts.push('📱 ' + phone);
+  if (email) parts.push('📧 ' + email);
+  toast(parts.length ? '✅ נשמר: ' + parts.join(' | ') : '✅ פרטים נמחקו');
+}
+
+/* ════════════════════════
+   SWITCH USER — איפוס תפקיד
+   מנקה את keys הרלוונטיים וחוזר למסך הכניסה
+════════════════════════ */
+function doSwitchUser() {
+  ['lashon_role','lashon_uname','lashon_tpass','lashon_tname','userRole'].forEach(k => {
+    try { localStorage.removeItem(k); } catch(e) {}
+  });
+  window.history.replaceState({}, '', window.location.pathname);
+  document.getElementById('app').classList.remove('on');
+  const ls = document.getElementById('login-screen');
+  ls.style.opacity = '0';
+  ls.style.removeProperty('display');
+  requestAnimationFrame(() => {
+    ls.style.transition = 'opacity .35s ease';
+    ls.style.opacity = '1';
+  });
+  hideTCP();
+  S.role = ''; S.name = '';
+  toast('🔄 בחרו תפקיד חדש');
+}
+
+
+/* ════════════════════════════════════
+   STUDENT PROGRESS PANEL (TEACHER VIEW)
+   Reads all lashon_prog_* from localStorage
+   and renders table with name / lesson / date / score / answers
+════════════════════════════════════ */
+function _escHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showAnswersToggle(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function loadStudentProgress() {
+  var el = document.getElementById('sm-progress-content');
+  if (!el) return;
+  var LNAMES = {
+    'u1_l0':'מבוא וחלקי הדיבר','u1_l1':'שורש ובניינים','u1_l2':'בניין קל',
+    'u1_l3':'בניינים כבדים','u1_l4':'בנייני הגורם','u1_l5':'סיכום ומרובעים','u1_l6':'מבחן מסכם'
+  };
+  var keys = Object.keys(localStorage).filter(function(k){ return k.startsWith('lashon_prog_'); });
+  if (!keys.length) {
+    el.innerHTML = '<p style="color:var(--muted)">אין הגשות שמורות במכשיר זה.</p>';
+    return;
+  }
+  var rows = '';
+  var total = 0;
+  keys.forEach(function(key) {
+    var student = key.replace('lashon_prog_','');
+    var prog = {};
+    try { prog = JSON.parse(localStorage.getItem(key)) || {}; } catch(e){}
+    Object.keys(prog).forEach(function(lid) {
+      var data = prog[lid];
+      if (!data || !data.done) return;
+      var lname = LNAMES[lid] || lid;
+      var date  = data.date || '—';
+      var perf  = '<span style="color:var(--green);font-weight:700">✅ הוגש</span>';
+      if (typeof data.score === 'number') {
+        var col = data.score >= 80 ? 'var(--green)' : data.score >= 60 ? 'var(--amber)' : 'var(--red)';
+        perf = '<span style="font-weight:800;color:'+col+'">'+data.score+'%</span>';
+      }
+
+      // Answers column: always show preview + expandable full view
+      var answersCell = '<span style="color:var(--muted);font-style:italic">אין תשובות</span>';
+      if (data.content) {
+        var sid = 'ans_'+String(total);
+        var preview = String(data.content).replace(/\n/g,' ').substring(0,50);
+        if (String(data.content).length > 50) preview += '...';
+        answersCell = '<div style="font-size:.7rem;color:var(--text-mid);margin-bottom:3px">'+_escHtml(preview)+'</div>'
+                    + '<button onclick="showAnswersToggle(\''+sid+'\')" style="font-size:.62rem;padding:2px 8px;background:var(--blue-lt);border:1px solid var(--blue);border-radius:4px;cursor:pointer;color:var(--blue);font-weight:700">📋 הצג תשובות מלאות</button>'
+                    + '<div id="'+sid+'" style="display:none;margin-top:6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;max-height:180px;overflow-y:auto;white-space:pre-wrap;font-size:.68rem;direction:rtl;text-align:right;color:var(--text)">'+_escHtml(data.content)+'</div>';
+      }
+
+      var bg = (total % 2 === 1) ? 'background:var(--surface2)' : '';
+      rows += '<tr style="border-bottom:1px solid var(--border);vertical-align:top;'+bg+'">'
+            + '<td style="padding:6px 8px;font-weight:700;white-space:nowrap">'+_escHtml(student)+'</td>'
+            + '<td style="padding:6px 8px;white-space:nowrap">'+_escHtml(lname)+'</td>'
+            + '<td style="padding:6px 8px;white-space:nowrap">'+date+'</td>'
+            + '<td style="padding:6px 8px;white-space:nowrap">'+perf+'</td>'
+            + '<td style="padding:6px 8px;min-width:180px;max-width:320px">'+answersCell+'</td>'
+            + '</tr>';
+      total++;
+    });
+  });
+  if (!total) {
+    el.innerHTML = '<p style="color:var(--muted)">לא נמצאו הגשות שהושלמו.</p>';
+    return;
+  }
+  el.innerHTML = '<div style="overflow-x:auto;max-height:420px;overflow-y:auto"><table style="width:100%;border-collapse:collapse;font-size:.74rem;direction:rtl">'
+    + '<thead><tr style="background:var(--surface3);position:sticky;top:0;z-index:1">'
+    + '<th style="padding:7px 8px;text-align:right;font-weight:800">תלמיד/ה</th>'
+    + '<th style="padding:7px 8px;font-weight:800">שיעור</th>'
+    + '<th style="padding:7px 8px;font-weight:800">תאריך</th>'
+    + '<th style="padding:7px 8px;font-weight:800">ביצועים</th>'
+    + '<th style="padding:7px 8px;font-weight:800">תשובות התלמיד</th>'
+    + '</tr></thead><tbody>'+rows+'</tbody></table></div>'
+    + '<p style="font-size:.66rem;color:var(--muted);margin-top:.4rem">סה״כ '+total+' הגשות | '+keys.length+' תלמידים</p>';
+}
+
+initApp();
+
+/* ════════════════════════
+   LESSON WINDOW LISTENER
+   מאזין לחלונות שיעור שנסגרים
+════════════════════════ */
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
+  if (e.data.type === 'lessonDone' && e.data.id) {
+    window.lessonDone(e.data.id);
+  }
+  if (e.data.type === 'openStudentSettings') {
+    openStudentSettings();
+  }
+});
+
+/* ════════════════════════
+   FIREBASE — לשון Lesson
+════════════════════════ */
+// ── SDK scripts (הוסיפו בתגית <head> לפני שימוש) ──
+// <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+// <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+const FIREBASE_CONFIG = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "lashon-lesson.firebaseapp.com",
+  projectId:         "lashon-lesson",
+  storageBucket:     "lashon-lesson.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+
+// אתחול בטוח — בודק אם כבר אותחל
+let _fbApp = null;
+let _db    = null;
+function getDb() {
+  if (_db) return _db;
+  try {
+    if (typeof firebase === 'undefined') return null;
+    if (!firebase.apps.length) { _fbApp = firebase.initializeApp(FIREBASE_CONFIG); }
+    else                       { _fbApp = firebase.app(); }
+    _db = firebase.firestore();
+    return _db;
+  } catch(e) { console.warn('[Firebase] init failed:', e); return null; }
+}
+
+/**
+ * saveScoreToCloud — שמירת ציון ב-Firestore
+ * @param {string} lessonId   — מזהה שיעור (e.g. 'u1_l1')
+ * @param {number|null} score — ציון (0–100) או null
+ * @param {string} studentName
+ * @param {object} [extra]    — שדות נוספים אופציונליים
+ */
+async function saveScoreToCloud(lessonId, score, studentName, extra = {}) {
+  const db = getDb();
+  if (!db) {
+    console.warn('[Firebase] Firestore not available — score not saved to cloud.');
+    return;
+  }
+  try {
+    await db.collection('student_scores').add({
+      lessonId,
+      score:       score ?? null,
+      studentName: studentName || 'תלמיד/ה',
+      ts:          firebase.firestore.FieldValue.serverTimestamp(),
+      date:        new Date().toLocaleDateString('he-IL'),
+      ...extra
+    });
+    console.log('[Firebase] ✅ Score saved:', { lessonId, score, studentName });
+  } catch(e) {
+    console.error('[Firebase] ❌ Save failed:', e);
+  }
+}
+
+/* ════════════════════════
+   STUDENT SETTINGS MODAL
+════════════════════════ */
+function openStudentSettings() {
+  const email = LS.get('teacher_email', '') || '';
+  const wa    = LS.get('teacher_whatsapp', '') || '';
+  document.getElementById('ss-email').value     = email;
+  document.getElementById('ss-whatsapp').value  = wa;
+  updateStudentSettingsPreview(email, wa);
+  document.getElementById('student-settings-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStudentSettings() {
+  document.getElementById('student-settings-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function saveStudentSettings() {
+  const email = (document.getElementById('ss-email').value || '').trim();
+  const wa    = (document.getElementById('ss-whatsapp').value || '').replace(/\D/g, '');
+  if (!email && !wa) { toast('⚠️ הזינו לפחות אחד מהשדות'); return; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('⚠️ כתובת מייל לא תקינה'); return; }
+  if (wa && wa.length < 9) { toast('⚠️ מספר וואטסאפ לא תקין'); return; }
+  LS.set('teacher_email', email);
+  LS.set('teacher_whatsapp', wa);
+  updateStudentSettingsPreview(email, wa);
+  toast('✅ פרטי המורה נשמרו!');
+}
+
+function updateStudentSettingsPreview(email, wa) {
+  const prev = document.getElementById('ssm-preview');
+  const txt  = document.getElementById('ssm-preview-text');
+  if (email || wa) {
+    const parts = [];
+    if (email) parts.push('מייל: ' + email);
+    if (wa)    parts.push('וואטסאפ: ' + wa);
+    txt.textContent = parts.join(' | ');
+    prev.classList.add('show');
+  } else {
+    prev.classList.remove('show');
+  }
+}
+
+
+/* ════════════════════════
+   PATCHES — wire grid into existing app flow
+════════════════════════ */
+
+// Override render() to use grid
+const _origRender = (typeof render !== 'undefined') ? render : null;
+function render() {
+  renderGrid();
+}
+
+// Override buildLockList() to use grid
+function buildLockList() {
+  buildGridLockList();
+}
+
+// lessonDone — accept both "u1_l0" style and "L0" style ids
+const _origLessonDone = window.lessonDone;
+window.lessonDone = function(id, date) {
+  // If the id is "L0"–"L6", resolve to "u1_l0" etc.
+  const meta = GRID_LESSONS[id];
+  const resolvedId = meta ? meta.id : id;
+  S.prog[resolvedId] = {done:true, date: date || new Date().toLocaleDateString('he-IL')};
+  LS.set('lashon_prog_' + S.name, S.prog);
+  renderGrid();
+  toast('✅ השיעור הוגש בהצלחה!');
+};
+
+</script>
+</body>
+</html>
